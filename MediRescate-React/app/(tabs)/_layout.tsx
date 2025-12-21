@@ -1,11 +1,8 @@
+import { Tabs } from "expo-router";
 import { View, Text } from "react-native";
 
-const _layout = () => {
-  return (
-    <View>
-      <Text></Text>
-    </View>
-  );
+const TabsLayout = () => {
+  return <Tabs />;
 };
 
-export default _layout;
+export default TabsLayout;
