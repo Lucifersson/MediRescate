@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
 
-const _layout = () => {
+const AdminScreen = () => {
   return (
     <View>
-      <Text></Text>
+      <Text>Admin</Text>
     </View>
   );
 };
 
-export default _layout;
+export default AdminScreen;
