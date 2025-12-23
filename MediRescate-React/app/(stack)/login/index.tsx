@@ -26,12 +26,12 @@ const LoginScreen = () => {
                             <Text className="text-3xl mb-2 text-center text-gray-900">
                                 MediRescate
                             </Text>
-                            <View className="justify-center self-center items-center w-96 h-96 bg-gray-500 rounded-xl">
+                            <View className="justify-center self-center items-center w-48 h-52 bg-gray-500 rounded-xl">
                               <Text>logo</Text>
                             </View>
                         </View>
 
-                        <View className="mb-16 w-1/2 self-center">
+                        <View className="mb-16 flex-1 w-full self-center">
                             <View>
                                 <Text className="mb-1 text-xl text-gray-700">
                                     Usuario o email{error ? <Text className="text-red-500">*</Text> : null}
