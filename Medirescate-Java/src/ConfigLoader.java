@@ -1,4 +1,5 @@
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigLoader {
@@ -7,10 +8,19 @@ public class ConfigLoader {
 
     static {
         try {
-            props.load(new FileInputStream("server.properties"));
+            InputStream is = ConfigLoader.class
+                    .getClassLoader()
+                    .getResourceAsStream("server.properties");
+
+            if (is == null) {
+                throw new RuntimeException("server.properties no encontrado");
+            }
+
+            props.load(is);
+
         } catch (Exception e) {
             LogWriter.logError(e);
-            throw new RuntimeException("No se pudo cargar server.properties");
+            throw new RuntimeException("Error crítico cargando configuración");
         }
     }
 
