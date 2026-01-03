@@ -11,6 +11,8 @@ import java.net.Socket;
 public class Main {
     public static void main(String[] args) {
         int port = ConfigLoader.getPort();
+        LogWriter.logError(new Exception("test log"));
+        System.out.println("Si ves esto, el main sigue");
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
