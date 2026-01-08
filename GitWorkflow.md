@@ -13,7 +13,7 @@ Mario Castillo López
 
 ## Branching
 Ramas principales:
-- **Main**: Rama principal donde se meterán las versiones estables.
+- **MainServer**: Rama principal donde se meterán las versiones estables.
 - **Develop**: Rama que se dividirá para llevar a cabo el desarrollo y donde se fusionarán los cambios.
 
 ### Estructura de las ramas
