@@ -1,7 +1,10 @@
+import com.google.gson.JsonObject;
+
 class Request {
-    String type;
-    String data;
+    public String code;
+    public JsonObject data;
 }
+
 
 
 

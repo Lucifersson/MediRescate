@@ -4,6 +4,11 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.*;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Client implements Runnable {
 
@@ -19,6 +24,9 @@ public class Client implements Runnable {
     public void run() {
 
         try (
+                Connection conn = DBConnectionManager
+                        .getInstance()
+                        .getConnection();
                 BufferedReader in = new BufferedReader( //objeto para leer lo que ha llegado
                         new InputStreamReader(socket.getInputStream())
                 );
@@ -27,7 +35,6 @@ public class Client implements Runnable {
                 )
         ) {
             String line;
-
             while ((line = in.readLine()) != null) {
                 System.out.println("JSON recibido: " + line);
 
@@ -35,7 +42,10 @@ public class Client implements Runnable {
                 Request req = gson.fromJson(line, Request.class);
 
                 // Procesar
-                Response resp = process(req);
+                Response resp = process(req, conn);
+
+                System.out.println("JSON respuesta: " + gson.toJson(resp));
+
 
                 // Responder
                 out.println(gson.toJson(resp));
@@ -50,7 +60,45 @@ public class Client implements Runnable {
         }
     }
 
-    private Response process(Request req) {
-        return new Response("ok", "Recibido " + req.type);
+    private Response process(Request req, Connection conn) {
+
+        switch (req.code) {
+            case "0": //ping
+                return new Response("ok", "pong");
+            case "1": //select
+
+                String sql = """
+                        SELECT nombre
+                        FROM Usuario
+                        """;
+
+                try(PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                    ResultSet rs = ps.executeQuery();
+                    ArrayList<String> nombres = new ArrayList<>();
+                    while (rs.next()) {
+                        nombres.add(rs.getString("nombre"));
+
+                    }
+
+                    rs.close();
+
+                    String endNames = "";
+                    for (String i: nombres) {
+                        endNames = endNames+i+";";
+                    }
+
+                    return new Response("ok", endNames);
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            default:
+                LogWriter.logError(new Exception("Codigo de operación no encontrado"));
+                return new Response("error", "\"Codigo de operación no encontrado");
+
+        }
+
+
     }
 }

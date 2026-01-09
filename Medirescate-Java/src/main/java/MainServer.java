@@ -13,15 +13,18 @@ public class MainServer {
         int port = ConfigLoader.getPort();
         System.out.println("Servidor escuchando en puerto: "+port+"...");
 
+        //Descomentar para iniciar un test de conexión local
+        new Thread(new FakeClient(1)).start();
+
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
-            while (true) {
+            //while (true) {
                 Socket clientSocket = serverSocket.accept(); // <-- Espera aquí
                 System.out.println("Cliente conectado: "+clientSocket.getInetAddress());
 
                 Client handler = new Client(clientSocket);
                 new Thread(handler).start();
-            }
+            //}
 
         } catch (Exception e) {
             LogWriter.logError(e);
