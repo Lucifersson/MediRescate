@@ -1,7 +1,3 @@
-Aquí tienes la guía rápida para configurar y ejecutar el socket TCP en tu proyecto de React Native.
-
----
-
 ## 🚀 Guía de Configuración: Sockets TCP en Expo
 
 Sigue estos pasos en orden dentro de la terminal, asegurándote de estar ubicado en la carpeta **`react`** de tu proyecto.
@@ -62,5 +58,3 @@ npx expo run:android
 ---
 
 > **Nota:** Al usar `expo-dev-client`, recuerda que ya no puedes usar la app de "Expo Go" estándar; debes usar la compilación personalizada que generan estos comandos.
-
-¿Te gustaría que cree una tarea en tu lista de **CLASE** para revisar el funcionamiento de estos sockets más tarde?
