@@ -11,7 +11,7 @@ import java.net.Socket;
 public class MainServer {
     public static void main(String[] args) {
         int port = ConfigLoader.getPort();
-        System.out.println("Servidor escuchando en puerto: "+port);
+        System.out.println("Servidor escuchando en puerto: "+port+"...");
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
