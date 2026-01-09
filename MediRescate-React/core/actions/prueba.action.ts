@@ -4,6 +4,7 @@ import TcpSocket from "react-native-tcp-socket";
  * Envía un mensaje JSON específico al servidor Java vía TCP
  */
 export const enviarMensajeServidor = () => {
+  console.log("pulsado");
   const options = {
     port: 7878,
     host: "172.30.77.54",

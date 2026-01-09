@@ -4,3 +4,20 @@
 
 expo-env.d.ts
 # @end expo-cli
+#
+# OSX
+#
+.DS_Store
+
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+
+# Bundle artifacts
+*.jsbundle

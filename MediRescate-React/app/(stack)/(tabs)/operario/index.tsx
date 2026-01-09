@@ -9,7 +9,7 @@ const OperarioScreen = () => {
         className="p-6 bg-purple-800"
         onPress={() => enviarMensajeServidor()}
       >
-        Enviar
+        <Text>Enviar</Text>
       </Pressable>
     </View>
   );
