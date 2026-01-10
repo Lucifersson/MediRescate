@@ -1,9 +1,16 @@
-import { View, Text } from "react-native";
+import { Pressable, View, Text } from "react-native";
+import { enviarMensajeServidor } from "@/core/actions/prueba.action";
 
 const OperarioScreen = () => {
   return (
     <View>
       <Text>Operario</Text>
+      <Pressable
+        className="p-6 bg-purple-800"
+        onPress={() => enviarMensajeServidor()}
+      >
+        <Text>Enviar</Text>
+      </Pressable>
     </View>
   );
 };

@@ -11,16 +11,20 @@ import java.net.Socket;
 public class MainServer {
     public static void main(String[] args) {
         int port = ConfigLoader.getPort();
-        LogWriter.logError(new Exception("test log"));
-        System.out.println("Si ves esto, el main sigue");
+        System.out.println("Servidor escuchando en puerto: "+port+"...");
+
+        //Descomentar para iniciar un test de conexión local
+        new Thread(new FakeClient(1)).start();
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
-            while (true) {
+            //while (true) {
                 Socket clientSocket = serverSocket.accept(); // <-- Espera aquí
+                System.out.println("Cliente conectado: "+clientSocket.getInetAddress());
+
                 Client handler = new Client(clientSocket);
                 new Thread(handler).start();
-            }
+            //}
 
         } catch (Exception e) {
             LogWriter.logError(e);
@@ -28,3 +32,4 @@ public class MainServer {
 
     }
 }
+    
