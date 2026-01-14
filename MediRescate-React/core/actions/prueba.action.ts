@@ -1,8 +1,10 @@
+import { TestResponse } from "@/types/TestResponse";
 import { useState, useCallback } from "react";
 import TcpSocket from "react-native-tcp-socket";
 
 export const useTcpService = () => {
   const [data, setData] = useState<string>("Esperando...");
+  const [objectResponse, setObjectResponse] = useState<TestResponse>();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -26,6 +28,7 @@ export const useTcpService = () => {
 
     client.on("data", (response) => {
       setData(response.toString());
+      setObjectResponse(JSON.parse(data) as TestResponse);
       setLoading(false);
       client.destroy();
     });
@@ -37,5 +40,5 @@ export const useTcpService = () => {
     });
   }, []);
 
-  return { enviarMensajeFijo, data, error, loading };
+  return { enviarMensajeFijo, objectResponse, error, loading };
 };
