@@ -1,37 +1,49 @@
+import { OperariosResponse, TestResponse } from "@/types/TestResponse";
+import { useState, useCallback } from "react";
 import TcpSocket from "react-native-tcp-socket";
 
-/**
- * Envía un mensaje JSON específico al servidor Java vía TCP
- */
-export const enviarMensajeServidor = () => {
-  const options = {
-    port: 7878,
-    host: "192.168.0.227",
-    reuseAddress: true,
-  };
-  console.log(`pulsado ${options.host}`);
+export const useTcpSocket = () => {
+  const [objectResponse, setObjectResponse] = useState<OperariosResponse>();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const client = TcpSocket.createConnection(options, () => {
-    console.log("Conectado al servidor");
+  const enviarMensajeFijo = useCallback(() => {
+    setLoading(true);
+    setError(null);
 
-    // Formato solicitado con el "hola" incluido
-    const payload = {
-      code: "0",
-      data: {
-        message: "hola - ping pong",
-      },
+    const options = {
+      port: 7878,
+      host: "192.168.217.173",
+      reuseAddress: true,
     };
 
-    // Convertimos a string y enviamos
-    client.write(JSON.stringify(payload) + "\n");
-  });
+    const client = TcpSocket.createConnection(options, () => {
+      const payload = {
+        code: "101",
+        data: { message: "hola - ping pong" },
+      };
+      client.write(JSON.stringify(payload) + "\n");
+    });
 
-  client.on("data", (data) => {
-    console.log("Respuesta del servidor:", data.toString());
-    client.destroy(); // Cerramos la conexión tras recibir respuesta
-  });
+    client.on("data", (response) => {
+      const rawData = response.toString();
+      try {
+        const parsed = JSON.parse(rawData) as OperariosResponse;
+        setObjectResponse(parsed);
+      } catch (e) {
+        setError("Error al parsear JSON del servidor");
+      } finally {
+        setLoading(false);
+        client.destroy();
+      }
+    });
 
-  client.on("error", (error) => {
-    console.error("Error en la conexión TCP:", error);
-  });
+    client.on("error", (err) => {
+      setError(err.message);
+      setLoading(false);
+    });
+  }, []);
+
+  return { enviarMensajeFijo, objectResponse, error, loading };
 };
+export default useTcpSocket;
