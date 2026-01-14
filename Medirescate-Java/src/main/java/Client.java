@@ -5,28 +5,26 @@ import java.io.BufferedReader;
 import java.io.*;
 import java.net.Socket;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+
 
 public class Client implements Runnable {
 
     private final Socket socket;
     private final Gson gson = new Gson();
+    private final String inet;
 
 
-    public Client(Socket socket) {
+    public Client(Socket socket, String inet) {
         this.socket = socket;
+        this.inet = inet;
     }
+
 
     @Override
     public void run() {
 
-        try (
-                Connection conn = DBConnectionManager
-                        .getInstance()
-                        .getConnection();
+        try (   Connection conn = DBConnectionManager.getInstance().getConnection();
+
                 BufferedReader in = new BufferedReader( //objeto para leer lo que ha llegado
                         new InputStreamReader(socket.getInputStream())
                 );
@@ -34,18 +32,18 @@ public class Client implements Runnable {
                         socket.getOutputStream(), true
                 )
         ) {
+
             String line;
             while ((line = in.readLine()) != null) {
-                System.out.println("JSON recibido: " + line);
+                System.out.println("[Client "+inet+"] JSON recibido: " + line);
 
                 // Parseo JSON
                 Request req = gson.fromJson(line, Request.class);
 
                 // Procesar
-                Response resp = process(req, conn);
+                Response resp = processRequestCode(req, conn);
 
-                System.out.println("JSON respuesta: " + gson.toJson(resp));
-
+                System.out.println("[Client "+inet+"] - JSON respuesta: " + gson.toJson(resp));
 
                 // Responder
                 out.println(gson.toJson(resp));
@@ -60,42 +58,21 @@ public class Client implements Runnable {
         }
     }
 
-    private Response process(Request req, Connection conn) {
+
+
+
+    private Response processRequestCode(Request req, Connection conn) {
 
         switch (req.code) {
-            case "0": //ping
-                return new Response("ok", "pong");
-            case "1": //select
+            case "100": //ping
+                return Operations.operation100();
 
-                String sql = """
-                        SELECT nombre
-                        FROM Usuario
-                        """;
+            case "101": //select
+                return Operations.operation101(conn);
 
-                try(PreparedStatement ps = conn.prepareStatement(sql)) {
-
-                    ResultSet rs = ps.executeQuery();
-                    ArrayList<String> nombres = new ArrayList<>();
-                    while (rs.next()) {
-                        nombres.add(rs.getString("nombre"));
-
-                    }
-
-                    rs.close();
-
-                    String endNames = "";
-                    for (String i: nombres) {
-                        endNames = endNames+i+";";
-                    }
-
-                    return new Response("ok", endNames);
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
             default:
-                LogWriter.logError(new Exception("Codigo de operación no encontrado"));
-                return new Response("error", "\"Codigo de operación no encontrado");
+                LogWriter.logError(new Exception("[Client] - Codigo de operación no encontrado"));
+                return new ResponseMSG("error", "[Client] - \"Codigo de operación no encontrado");
 
         }
 

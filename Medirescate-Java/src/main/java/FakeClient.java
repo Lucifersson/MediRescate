@@ -37,11 +37,11 @@ public class FakeClient implements Runnable {
         ) {
             String json = "";
             switch (this.code) {
-                case 0: //ping
-                    json = "{\"code\":\"0\",\"data\":{\"message\":\"ping\" }}";
+                case 100: //ping
+                    json = "{\"code\":\"100\",\"data\":{\"message\":\"Ping\" }}";
                     break;
-                case 1: //select
-                    json = "{\"code\":\"1\",\"data\":{\"message\":\"Pido users\" }}";
+                case 101: //select
+                    json = "{\"code\":\"101\",\"data\":{\"message\":\"Pido users\" }}";
                     break;
                 default:
                     LogWriter.logError(new Exception("[FakeClient] Codigo de operación no encontrado"));
