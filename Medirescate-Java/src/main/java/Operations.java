@@ -1,3 +1,5 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import java.sql.Connection;
@@ -5,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Operations {
@@ -14,25 +17,30 @@ public class Operations {
     }
 
     public static Response operation101(Connection conn) {
+
         String sql = """
-                        SELECT nombre
-                        FROM Usuario
-                        """;
+        SELECT nombre, cargo
+        FROM Usuario
+                    """;
 
-        try(PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-            ResultSet rs = ps.executeQuery();
-            ArrayList<String> nombres = new ArrayList<>();
+            List<Usuario> usuarios = new ArrayList<>();
+
             while (rs.next()) {
-                nombres.add(rs.getString("nombre"));
+                usuarios.add(
+                        new Usuario(
+                                rs.getString("nombre"),
+                                rs.getString("cargo")
+                        )
+                );
             }
 
-            rs.close();
 
-            Map<String, Object> data = new HashMap<>();
-            data.put("nombres", nombres);
 
-            return new ResponseDATA(data);
+
+            return new ResponseDATA(usuarios);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
