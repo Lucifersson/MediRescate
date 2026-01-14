@@ -1,0 +1,6 @@
+id_emergencia,emergencia,latitud,longitud,hora_emergencia,estado
+1,Accidente Trafico,40.41677500,-3.70379000,2024-05-20,Finalizado
+2,Infarto Miocardio,40.42330000,-3.69120000,2024-05-20,En curso
+3,Caida altura,40.45300000,-3.68830000,2024-05-20,Pendiente
+4,Quemaduras graves,40.39800000,-3.71200000,2024-05-19,Finalizado
+5,Atragantamiento,40.40200000,-3.70000000,2024-05-20,En curso

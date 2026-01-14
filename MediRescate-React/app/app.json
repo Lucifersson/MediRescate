@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Tu Proyecto",
+    "slug": "tu-proyecto",
+    "version": "1.0.0",
+    "android": {
+      "package": "com.tuusuario.proyectotcp"
+    },
+    "ios": {
+      "bundleIdentifier": "com.tuusuario.proyectotcp"
+    }
+  }
+}
