@@ -3,3 +3,12 @@ export interface TestResponse {
     nombres: string[];
   };
 }
+
+export interface Operario {
+  nombre: string;
+  cargo: string;
+}
+
+export interface OperariosResponse {
+  data: Operario[];
+}
