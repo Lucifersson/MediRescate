@@ -1,5 +1,5 @@
 import { Pressable, View, Text } from "react-native";
-import { enviarMensajeServidor } from "@/core/actions/prueba.action";
+import useTcpSocket from "@/core/actions/prueba.action";
 
 const OperarioScreen = () => {
   return (
