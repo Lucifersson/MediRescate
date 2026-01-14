@@ -13,13 +13,13 @@ export const useTcpSocket = () => {
 
     const options = {
       port: 7878,
-      host: "192.168.0.227",
+      host: "192.168.217.173",
       reuseAddress: true,
     };
 
     const client = TcpSocket.createConnection(options, () => {
       const payload = {
-        code: "1",
+        code: "101",
         data: { message: "hola - ping pong" },
       };
       client.write(JSON.stringify(payload) + "\n");
@@ -46,5 +46,4 @@ export const useTcpSocket = () => {
 
   return { enviarMensajeFijo, objectResponse, error, loading };
 };
-
 export default useTcpSocket;
