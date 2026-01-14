@@ -20,11 +20,15 @@ class ResponseMSG extends Response {
     }
 }
 
-class ResponseDATA extends Response {
-    Map<String, Object> data;
+class ResponseDATA extends Response{
+    private Object data;
 
-    public ResponseDATA(Map<String, Object> data) {
+    public ResponseDATA(Object data) {
         this.data = data;
+    }
+
+    public Object getData() {
+        return data;
     }
 }
 

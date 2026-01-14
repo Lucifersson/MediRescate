@@ -11,7 +11,7 @@ import { useTcpSocket } from "@/core/actions/prueba.action";
 const OperarioScreen = () => {
   const { enviarMensajeFijo, objectResponse, error, loading } = useTcpSocket();
 
-  const nombresArray = objectResponse?.data?.nombres ?? [];
+  const operariosArray = objectResponse?.data ?? [];
 
   return (
     <View className="flex-1 p-4 bg-gray-100">
@@ -47,11 +47,14 @@ const OperarioScreen = () => {
           Usuarios en el sistema:
         </Text>
         <FlatList
-          data={nombresArray}
+          data={operariosArray}
           keyExtractor={(item, index) => `${item}-${index}`}
           renderItem={({ item }) => (
-            <View className="p-4 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm">
-              <Text className="text-gray-800 font-medium">👤 {item}</Text>
+            <View className="p-4 mb-2 flex-row bg-white border border-gray-200 rounded-lg shadow-sm">
+              <Text className="text-gray-800 font-medium mr-auto">
+                👤 {item.nombre}
+              </Text>
+              <Text className="text-red-600 font-bold">{item.cargo}</Text>
             </View>
           )}
         />

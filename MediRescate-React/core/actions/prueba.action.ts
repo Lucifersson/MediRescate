@@ -1,9 +1,9 @@
-import { TestResponse } from "@/types/TestResponse";
+import { OperariosResponse, TestResponse } from "@/types/TestResponse";
 import { useState, useCallback } from "react";
 import TcpSocket from "react-native-tcp-socket";
 
 export const useTcpSocket = () => {
-  const [objectResponse, setObjectResponse] = useState<TestResponse>();
+  const [objectResponse, setObjectResponse] = useState<OperariosResponse>();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -28,7 +28,7 @@ export const useTcpSocket = () => {
     client.on("data", (response) => {
       const rawData = response.toString();
       try {
-        const parsed = JSON.parse(rawData) as TestResponse;
+        const parsed = JSON.parse(rawData) as OperariosResponse;
         setObjectResponse(parsed);
       } catch (e) {
         setError("Error al parsear JSON del servidor");

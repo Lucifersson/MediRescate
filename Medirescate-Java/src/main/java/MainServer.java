@@ -16,8 +16,7 @@ public class MainServer {
         System.out.println("Servidor escuchando en puerto: "+port+"...");
 
         //Descomentar para iniciar un test de conexión local
-        new Thread(new FakeClient(101)).start();
-
+//        new Thread(new FakeClient(101)).start();
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
             while (true) {
