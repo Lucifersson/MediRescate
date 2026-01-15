@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const LoginScreen = () => {
 
-  const { username, password, error, setUsernameValue, setPasswordValue, onLoginPress } = useAuth();
+  const { username, password, errorCamposVacios, errorUsuario, setUsernameValue, setPasswordValue, onLoginPress } = useAuth();
 
 
   return (
@@ -34,7 +34,7 @@ const LoginScreen = () => {
                         <View className="mb-16 flex-1 w-full self-center">
                             <View>
                                 <Text className="mb-1 text-xl text-gray-700">
-                                    Usuario o email{error ? <Text className="text-red-500">*</Text> : null}
+                                    Usuario o email{errorCamposVacios ? <Text className="text-red-500">*</Text> : null}
                                 </Text>
                                 <TextInput
                                     value={username}
@@ -49,7 +49,7 @@ const LoginScreen = () => {
 
                             <View className='my-4'>
                                 <Text className="mb-1 text-xl text-gray-700">
-                                    Contraseña{error ? <Text className="text-red-500">*</Text> : null}
+                                    Contraseña{errorCamposVacios ? <Text className="text-red-500">*</Text> : null}
                                 </Text>
                                 <TextInput
                                     value={password}
@@ -62,8 +62,12 @@ const LoginScreen = () => {
                                 />
                             </View>
 
-                            {error ? (
-                                <Text className="mt-1 text-lg text-red-500">{error}</Text>
+                            {errorCamposVacios ? (
+                                <Text className="mt-1 text-lg text-red-500">{errorCamposVacios}</Text>
+                            ) : null}
+
+                               {errorUsuario ? (
+                                <Text className="mt-1 text-lg text-red-500">{errorUsuario}</Text>
                             ) : null}
 
                             <Pressable className="mt-4 bg-red-500 rounded-xl p-3" onPress={onLoginPress}>
