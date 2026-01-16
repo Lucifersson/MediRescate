@@ -1,33 +1,35 @@
+import { useTcpSocket } from "@/core/actions/prueba.action";
+import { Operario } from "@/types/types";
 import { router } from "expo-router";
 import { useState } from "react";
 
-
 export const useAuth = () => {
+  const { enviarPeticion, response, error } = useTcpSocket<Operario[]>();
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [errorCamposVacios, setErrorCamposVacios] = useState<String>();
-    const [errorUsuario, setErrorUsuario] = useState<String>(); //Errores del servidor para usuario no encontrado o contraseña incorrecta
-    const [usuario, setUsuario] = useState(null)  //Es tipo usuario
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorCamposVacios, setErrorCamposVacios] = useState<string>();
+  const [errorUsuario, setErrorUsuario] = useState<string>(); //Errores del servidor para usuario no encontrado o contraseña incorrecta
+  const [usuario, setUsuario] = useState(null); //Es tipo usuario
 
-    const setUsernameValue = (value: string) => {
-        setUsername(value)
+  const setUsernameValue = (value: string) => {
+    setUsername(value);
+  };
+
+  const setPasswordValue = (value: string) => {
+    setPassword(value);
+  };
+
+  const onLoginPress = () => {
+    if (username == "" || password == "") {
+      setErrorCamposVacios("Rellena usuario y contraseña");
+      return;
     }
+    const fetchOperarios = () =>
+      enviarPeticion("1", { user: username, password: password });
 
-    const setPasswordValue = (value: string) => {
-        setPassword(value)
-    }
-
-
-
-    const onLoginPress = () => {
-        if (username == '' || password == '') {
-            setErrorCamposVacios('Rellena usuario y contraseña');
-            return;
-        }
-
-
-        {/* 
+    {
+      /* 
             llama a servidor y comprueba campos
 
             if (username no existe){
@@ -39,13 +41,15 @@ export const useAuth = () => {
                 setErrorUsuario(Mensaje de servidor || "Contraseña incorrecta");
                 return;
             }
-            */}        
+            */
+    }
 
-        setErrorCamposVacios('');
-        //setUsuario()  
-        router.replace("/(stack)/(tabs)/operario"); //Remplazar por lo de abajo
+    setErrorCamposVacios("");
+    //setUsuario()
+    router.replace("/(stack)/(tabs)/operario"); //Remplazar por lo de abajo
 
-        {/* 
+    {
+      /* 
            if (usuario.cargo == "operario") {
             router.replace("/(stack)/(tabs)/operario");
            }
@@ -57,20 +61,19 @@ export const useAuth = () => {
            if (usuario.cargo == "teleoperador") {
             router.replace("/(stack)/(tabs)/teleoperador");
            }
-            */}  
-
-
-
+            */
     }
+  };
 
-    return {
-        username,
-        password,
-        errorCamposVacios,
-        errorUsuario,
+  return {
+    username,
+    password,
+    errorCamposVacios,
+    errorUsuario,
 
-        setUsernameValue,
-        setPasswordValue,
-        onLoginPress
-    }
-}
+    setUsernameValue,
+    setPasswordValue,
+    onLoginPress,
+  };
+};
+
