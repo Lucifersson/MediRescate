@@ -17,18 +17,14 @@ const OperarioScreen = () => {
 
   if (!user) return <Text>No hay usuario identificado</Text>;
 
-  const operario = response?.data ?? [];
+  const operariosArray = response?.data ?? [];
 
   return (
     <View className="flex-1 p-4 bg-gray-100">
       <View className="m-6 flex-row justify-center">
         <View className="p-5 flex-1 w-100 bg-gray-300 ">
-          <Text>
-            {user.nombre}
-
-            <Ionicons />
-          </Text>
-          <Text>{/*Usuario.ambulancia*/}Ambulancia</Text>
+          <Text>{user.nombre}</Text>
+          <Text>{user.cargo}</Text>
         </View>
 
         <Ionicons
@@ -41,13 +37,6 @@ const OperarioScreen = () => {
       <Text className="text-2xl font-bold mb-4 text-center">
         Panel de Operario
       </Text>
-
-      {/* Manejo de Errores */}
-      {error && (
-        <Text className="text-red-600 mb-4 bg-red-100 p-2 rounded">
-          {error}
-        </Text>
-      )}
     </View>
   );
 };

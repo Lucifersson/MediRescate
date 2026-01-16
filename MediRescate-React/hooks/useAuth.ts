@@ -71,7 +71,7 @@ export const useAuth = () => {
     console.log("Iniciando petición de login para:", username);
     enviarPeticion("1", {
       user: username,
-      password: password, // Aquí deberías pasar la variable 'password' del estado
+      password: "$2b$10$wq9k8KJp6zRzV0wQZx4V9e4sQy1JZ7qZqQ5Z0dXk1XyZ0N0X9e1uG", // Aquí deberías pasar la variable 'password' del estado
     });
   };
 

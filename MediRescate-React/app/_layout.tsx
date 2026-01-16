@@ -6,7 +6,7 @@ import { AuthProvider } from "@/core/context/UseAuthContext";
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <Slot />;
+      <Slot />
     </AuthProvider>
   );
 }
