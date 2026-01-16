@@ -1,5 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
@@ -23,11 +23,10 @@ const LoginScreen = () => {
                 >
                     <View className="flex-1 mx-2" >
                         <View className="flex-1 justify-center px-1">
-                            <Text className="text-3xl mb-2 text-center text-gray-900">
-                                MediRescate
-                            </Text>
-                            <View className="justify-center self-center items-center w-48 h-52 bg-gray-500 rounded-xl">
-                              <Text>logo</Text>
+                            
+                            <View className="justify-center self-center items-center w-48 h-52">
+                               <Image source={require('@/assets/images/logo_MediRescate.png')} style={style.image} />
+                              
                             </View>
                         </View>
 
@@ -80,6 +79,14 @@ const LoginScreen = () => {
             </KeyboardAvoidingView>
         </SafeAreaView >
   );
+  
 };
+  const style = StyleSheet.create({
+    image: {
+        width: 600,
+        height: 600
+    }
+  })
+
 
 export default LoginScreen;
