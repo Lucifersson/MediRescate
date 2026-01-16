@@ -21,9 +21,11 @@ class ResponseMSG extends Response {
 }
 
 class ResponseDATA extends Response{
+    String status;
     private Object data;
 
-    public ResponseDATA(Object data) {
+    public ResponseDATA(String status, Object data) {
+        this.status = status;
         this.data = data;
     }
 

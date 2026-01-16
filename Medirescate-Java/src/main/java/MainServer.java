@@ -13,15 +13,27 @@ import java.net.Socket;
 public class MainServer {
     public static void main(String[] args) {
         int port = ConfigLoader.getPort();
-        System.out.println("Servidor escuchando en puerto: "+port+"...");
+        System.out.println(AnsiColors.YELLOW+"[MAINSERVER]"+AnsiColors.RESET+" Escuchando en puerto: "+port+"...");
 
-        //Descomentar para iniciar un test de conexión local
-//        new Thread(new FakeClient(101)).start();
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /*
+         * Un solo cliente
+         */
+
+        new Thread(new FakeClient(1, 1)).start();
+
+        /*
+         * Prueba de carga
+         */
+
+//        new Thread(new ConstantFlow(2, 20, 500, 2000)).start();
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
             while (true) {
                 Socket clientSocket = serverSocket.accept(); // <-- Espera aquí
-                System.out.println("[MainServer] - Cliente conectado: "+clientSocket.getInetAddress()+"\n");
+                System.out.println("\n"+AnsiColors.YELLOW+"[MAINSERVER]"+AnsiColors.RESET+" Conectado cliente en: "+clientSocket.getInetAddress()+"\n");
 
                 Client handler = new Client(clientSocket, clientSocket.getInetAddress()+"");
                 new Thread(handler).start();
@@ -30,7 +42,6 @@ public class MainServer {
         } catch (Exception e) {
             LogWriter.logError(e);
         }
-
     }
 }
     

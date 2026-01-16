@@ -35,7 +35,7 @@ public class Client implements Runnable {
 
             String line;
             while ((line = in.readLine()) != null) {
-                System.out.println("[Client "+inet+"] JSON recibido: " + line);
+                System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON recibido "+AnsiColors.GREEN_BRIGHT+"[<<] "+AnsiColors.RESET + line);
 
                 // Parseo JSON
                 Request req = gson.fromJson(line, Request.class);
@@ -43,7 +43,7 @@ public class Client implements Runnable {
                 // Procesar
                 Response resp = processRequestCode(req, conn);
 
-                System.out.println("[Client "+inet+"] - JSON respuesta: " + gson.toJson(resp));
+                System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + gson.toJson(resp));
 
                 // Responder
                 out.println(gson.toJson(resp));
@@ -56,6 +56,8 @@ public class Client implements Runnable {
                 socket.close();
             } catch (IOException ignored) {}
         }
+
+        System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RED+" Conexión cerrada"+AnsiColors.RESET);
     }
 
 
@@ -63,18 +65,17 @@ public class Client implements Runnable {
 
     private Response processRequestCode(Request req, Connection conn) {
 
-        switch (req.code) {
-            case "100": //ping
-                return Operations.operation100();
+        return switch (req.code) {
+            case "100" -> Operations.operation100();
+            case "101" -> Operations.operation101(conn);
+            case "1" -> Operations.operation1(conn, req);
 
-            case "101": //select
-                return Operations.operation101(conn);
 
-            default:
+            default -> {
                 LogWriter.logError(new Exception("[Client] - Codigo de operación no encontrado"));
-                return new ResponseMSG("error", "[Client] - \"Codigo de operación no encontrado");
-
-        }
+                yield new ResponseMSG("error", "[Client] - \"Codigo de operación no encontrado");
+            }
+        };
 
 
     }

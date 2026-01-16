@@ -1,5 +1,5 @@
-import { OperariosResponse, TestResponse } from "@/types/TestResponse";
-import { useState, useCallback } from "react";
+import { OperariosResponse } from "@/types/TestResponse";
+import { useCallback, useState } from "react";
 import TcpSocket from "react-native-tcp-socket";
 
 export const useTcpSocket = () => {
@@ -13,7 +13,7 @@ export const useTcpSocket = () => {
 
     const options = {
       port: 7878,
-      host: "192.168.217.173",
+      host: "192.168.1.144",
       reuseAddress: true,
     };
 
