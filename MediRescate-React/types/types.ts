@@ -5,8 +5,12 @@ export interface TestResponse {
 }
 
 export interface Operario {
+  idEmpleado: number;
   nombre: string;
-  cargo: string;
+  cargo: "administrador" | "teleoperador" | "operario"; // Tipado estricto para tus rutas
+  ultimaConexion: string; // Viene como "Jan 4, 2024..."
+  user: string;
+  password: string;
 }
 
 export interface OperariosResponse {

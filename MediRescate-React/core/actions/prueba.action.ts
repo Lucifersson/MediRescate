@@ -20,7 +20,9 @@ export const useTcpSocket = <T>() => {
 
     const client = TcpSocket.createConnection(options, () => {
       const payload = { code, data: dataBody };
+      console.log("Enviando peticion...");
       client.write(JSON.stringify(payload) + "\n");
+      console.log("Peticion enviada.");
     });
 
     client.on("data", (rawData) => {
