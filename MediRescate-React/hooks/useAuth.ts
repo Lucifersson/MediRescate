@@ -46,15 +46,15 @@ export const useAuth = () => {
         router.replace("/(stack)/(tabs)/operario"); //Remplazar por lo de abajo
 
         {/* 
-           if (usuari.cargo == "operario") {
+           if (usuario.cargo == "operario") {
             router.replace("/(stack)/(tabs)/operario");
            }
             
-           if (usuari.cargo == "administrador") {
+           if (usuario.cargo == "administrador") {
             router.replace("/(stack)/(tabs)/admin");
            }
 
-           if (usuari.cargo == "teleoperador") {
+           if (usuario.cargo == "teleoperador") {
             router.replace("/(stack)/(tabs)/teleoperador");
            }
             */}  
