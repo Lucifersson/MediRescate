@@ -9,18 +9,24 @@ import {
 import { useTcpSocket } from "@/core/actions/prueba.action";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useAuthContext } from "@/core/context/UseAuthContext";
 
 const OperarioScreen = () => {
   const { enviarPeticion, response, error, loading } = useTcpSocket();
+  const { user } = useAuthContext(); // 👈 Accedemos al usuario global
 
-  const operarios = response?.data ?? [];
+  if (!user) return <Text>No hay usuario identificado</Text>;
+
+  const operario = response?.data ?? [];
 
   return (
     <View className="flex-1 p-4 bg-gray-100">
       <View className="m-6 flex-row justify-center">
         <View className="p-5 flex-1 w-100 bg-gray-300 ">
           <Text>
-            {/*Usuario.nombre*/}Nombre <Ionicons />
+            {user.nombre}
+
+            <Ionicons />
           </Text>
           <Text>{/*Usuario.ambulancia*/}Ambulancia</Text>
         </View>

@@ -1,53 +1,77 @@
 import { useTcpSocket } from "@/core/actions/prueba.action";
+import { useAuthContext } from "@/core/context/UseAuthContext";
 import { Operario } from "@/types/types";
 import { router } from "expo-router";
 import { useState, useEffect } from "react";
 
 export const useAuth = () => {
-  // Usamos el hook modular que creamos antes
+  // Hook del Socket con el tipo Operario
   const { enviarPeticion, response, error, loading } = useTcpSocket<Operario>();
+
+  // Acceso al contexto global
+  const { login } = useAuthContext();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorCamposVacios, setErrorCamposVacios] = useState<string>();
   const [errorUsuario, setErrorUsuario] = useState<string>();
 
-  // 1. Efecto para manejar la respuesta del servidor cuando cambie
+  // 1. Manejo de la respuesta del servidor
   useEffect(() => {
     if (response) {
       if (response.status === "success") {
         const usuario = response.data;
+
+        // Guardamos los datos en el contexto global
+        login(usuario);
         console.log("Login exitoso para:", usuario.nombre);
-        router.replace("/(stack)/(tabs)/operario");
+
+        // Redirección dinámica según el cargo que viene del servidor
+        if (usuario.cargo === "administrador") {
+          router.replace("/(stack)/(tabs)/admin");
+        } else if (usuario.cargo === "operario") {
+          router.replace("/(stack)/(tabs)/operario");
+        } else if (usuario.cargo === "teleoperador") {
+          router.replace("/(stack)/(tabs)/teleoperador");
+        } else {
+          // Si no tiene un cargo definido, enviamos a una ruta por defecto
+          router.replace("/(stack)/(tabs)/operario");
+        }
       } else {
-        // Si el status es 'error', mostramos el mensaje que viene en data
+        // El servidor devolvió un error (Usuario no encontrado, etc.)
+        // Convertimos 'data' a string ya que en caso de error el servidor envía el mensaje ahí
         setErrorUsuario(
-          (response.data as unknown as string) || "Error de autenticación",
+          (response.data as unknown as string) || "Credenciales incorrectas",
         );
       }
     }
   }, [response]);
 
-  // 2. Efecto para manejar errores de conexión TCP
+  // 2. Manejo de errores de conexión TCP (Server caído, IP incorrecta)
   useEffect(() => {
-    if (error) setErrorUsuario(error);
+    if (error) {
+      setErrorUsuario("Error de conexión con el servidor");
+      console.error("TCP Error:", error);
+    }
   }, [error]);
 
   const onLoginPress = () => {
-    // Validación básica
+    // Limpieza de estados de error previos
+    setErrorCamposVacios("");
+    setErrorUsuario("");
+
+    // Validación de campos
     if (username.trim() === "" || password.trim() === "") {
       setErrorCamposVacios("Rellena usuario y contraseña");
       return;
     }
 
-    setErrorCamposVacios("");
-    setErrorUsuario("");
-
-    // 🚀 CORRECCIÓN: Llamamos directamente a la función del socket
-    console.log("Iniciando petición de login...");
+    // Petición al servidor (Código "1" para Login)
+    // Nota: El password aquí se envía tal cual lo espera tu lógica de backend
+    console.log("Iniciando petición de login para:", username);
     enviarPeticion("1", {
       user: username,
-      password: "$2b$10$wq9k8KJp6zRzV0wQZx4V9e4sQy1JZ7qZqQ5Z0dXk1XyZ0N0X9e1uG",
+      password: password, // Aquí deberías pasar la variable 'password' del estado
     });
   };
 
@@ -56,7 +80,7 @@ export const useAuth = () => {
     password,
     errorCamposVacios,
     errorUsuario,
-    loading, // Es útil devolver loading para deshabilitar el botón
+    loading,
     setUsernameValue: setUsername,
     setPasswordValue: setPassword,
     onLoginPress,
