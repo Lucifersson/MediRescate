@@ -18,3 +18,7 @@ export interface Response {
   data: string;
 }
 
+export interface ApiResponse<T> {
+  status: "success" | "error"; // Usar literales ayuda a TS a filtrar mejor
+  data: T; // Aquí T puede ser string, Operario[], etc.
+}
