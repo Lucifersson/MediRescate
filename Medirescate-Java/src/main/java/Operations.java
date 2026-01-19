@@ -1,4 +1,3 @@
-import BdClasses.Operario;
 import BdClasses.Usuario;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -21,9 +20,9 @@ public class Operations {
     public static Response operation101(Connection conn) {
 
         String sql = """
-        SELECT nombre, cargo
-        FROM Usuario
-                    """;
+            SELECT nombre, cargo
+            FROM Usuario
+            """;
 
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -39,9 +38,6 @@ public class Operations {
                 );
             }
 
-
-
-
             return new ResponseDATA("ok", usuarios);
 
         } catch (Exception e) {
@@ -53,27 +49,24 @@ public class Operations {
     //APP OPERATIONS
     public static Response operation1(Connection conn, Request req) {
         String sql = """
-    SELECT usu.*
-    FROM Usuario usu
-    WHERE usu.user = ?;
-    """;
+            SELECT usu.*
+            FROM Usuario usu
+            WHERE usu.user = ?;
+            """;
 
         String userGotten = req.data.get("user").getAsString();
         String passwordGotten = req.data.get("password").getAsString();
 
-        String status = "";
-        JsonObject json = null;
+        String status;
+        JsonObject json;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-
 
             ps.setString(1, userGotten);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-
                 String passwordBD = rs.getString("password");
-
                 if (passwordBD.equals(passwordGotten)) {
 
                     BdClasses.Usuario user = new Usuario(
@@ -88,17 +81,17 @@ public class Operations {
                     json = gson.toJsonTree(user).getAsJsonObject();
 
                     status = "success";
-                } else {
+                } else { //contraseña incorrecta
                     JsonObject errorData = new JsonObject();
                     errorData.addProperty("message", "Contraseña incorrecta");
 
-                    Response response = new ResponseDATA("error", errorData);
+                    return new ResponseDATA("error", errorData);
                 }
-            } else {
+            } else { //usuario no encontrado
                 JsonObject errorData = new JsonObject();
                 errorData.addProperty("message", "Usuario no encontrado");
 
-                Response response = new ResponseDATA("error", errorData);
+                return new ResponseDATA("error", errorData);
             }
 
         return new ResponseDATA(status, json);
@@ -106,7 +99,46 @@ public class Operations {
         } catch (SQLException e) {
             LogWriter.logError(e);
             throw new RuntimeException(e);
-
         }
+    }
+
+
+    public static Response operation2(Connection conn, Request req) {
+        String sql = """
+                SELECT estado
+                FROM Operario
+                WHERE id_empleado = ?;
+                """;
+        String idGotten = req.data.get("id_empleado").getAsString();
+
+        String status;
+        JsonObject json = new JsonObject();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, idGotten);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String estado = rs.getString("estado");
+
+                    json.addProperty("estado", estado);
+
+                    status = "success";
+
+            } else {
+                JsonObject errorData = new JsonObject();
+                errorData.addProperty("message", "Operario no encontrado");
+                return new ResponseDATA("error", errorData);
+            }
+
+            return new ResponseDATA(status, json);
+
+        } catch (SQLException e) {
+            LogWriter.logError(e);
+            throw new RuntimeException(e);
+        }
+
+
     }
 }

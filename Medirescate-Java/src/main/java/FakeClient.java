@@ -41,18 +41,17 @@ public class FakeClient implements Runnable {
         ) {
             String json = "";
             switch (this.code) {
-                case 100: //ping
-                    json = "{\"code\":\"100\",\"data\":{\"message\":\"Ping\" }}";
-                    break;
-                case 101: //select
-                    json = "{\"code\":\"101\",\"data\":{\"message\":\"Pido users\" }}";
-                    break;
-                case 1:
-                    json = "{\"code\":\"1\",\"data\":{\"user\":\"pedros\",\"password\":\"$2b$10$wq9k8KJp6zRzV0wQZx4V9e4sQy1JZ7qZqQ5Z0dXk1XyZ0N0X9e1uG\"}}";
-                    break;
-                default:
-                    LogWriter.logError(new Exception(AnsiColors.PURPLE_BRIGHT+"[FakeClient]"+AnsiColors.RESET+" Codigo de operación no encontrado"));
+                case 100 -> //ping
+                        json = "{\"code\":\"100\",\"data\":{\"message\":\"Ping\"}}";
+                case 101 -> //select
+                        json = "{\"code\":\"101\",\"data\":{\"message\":\"Pido users\"}}";
+                case 1 ->
+                        json = "{\"code\":\"1\",\"data\":{\"user\":\"pedros\",\"password\":\"$2b$10$wq9k8KJp6zRzV0wQZx4V9e4sQy1JZ7qZqQ5Z0dXk1XyZ0N0X9e1uG\"}}";
+                case 2 ->
+                        json = "{\"code\":\"2\",\"data\":{\"id_empleado\":\"1\"}}";
 
+                default ->
+                        LogWriter.logError(new Exception(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + " Codigo de operación no encontrado"));
             }
 
             if (!json.isEmpty()) {

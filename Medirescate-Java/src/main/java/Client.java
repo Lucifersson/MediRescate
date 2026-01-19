@@ -69,6 +69,7 @@ public class Client implements Runnable {
             case "100" -> Operations.operation100();
             case "101" -> Operations.operation101(conn);
             case "1" -> Operations.operation1(conn, req);
+            case "2" -> Operations.operation2(conn, req);
 
 
             default -> {

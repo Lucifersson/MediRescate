@@ -20,13 +20,13 @@ public class MainServer {
          * Un solo cliente
          */
 
-        new Thread(new FakeClient(1, 1)).start();
+        new Thread(new FakeClient(2, 1)).start();
 
         /*
          * Prueba de carga
          */
 
-//        new Thread(new ConstantFlow(2, 20, 500, 2000)).start();
+//        new Thread(new ConstantFlow(2, 20, 1, 1)).start();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {

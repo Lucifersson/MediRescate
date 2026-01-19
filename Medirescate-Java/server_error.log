@@ -45,3 +45,8 @@
 2026-01-19T09:31:29.802935788 - [Client] - Codigo de operación no encontrado
 2026-01-19T09:32:23.256571543 - Column 'estado' not found.
 2026-01-19T09:32:23.264845888 - java.sql.SQLException: Column 'estado' not found.
+2026-01-19T10:40:10.871579646 - [Client] - Codigo de operación no encontrado
+2026-01-19T10:44:28.101328487 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-19T10:44:45.000000561 - Not a JSON Object: "libre"
+2026-01-19T11:25:04.725683197 - Not a JSON Object: "libre"
+2026-01-19T11:25:56.863529813 - Cannot invoke "com.google.gson.JsonObject.addProperty(String, String)" because "json" is null
