@@ -62,7 +62,7 @@ public class Operations {
         String passwordGotten = req.data.get("password").getAsString();
 
         String status = "";
-        String json = "";
+        JsonObject json = null;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -85,7 +85,8 @@ public class Operations {
                             passwordBD
                     );
 
-                    json = gson.toJson(user);
+                    json = gson.toJsonTree(user).getAsJsonObject();
+
                     status = "success";
                 } else {
                     JsonObject errorData = new JsonObject();
