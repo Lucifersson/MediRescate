@@ -38,3 +38,10 @@
 2026-01-16T12:59:15.468075741 - [95m[FakeClient][0m Codigo de operación no encontrado
 2026-01-16T12:59:32.489163841 - [95m[FakeClient][0m Codigo de operación no encontrado
 2026-01-16T13:06:49.007095245 - [95m[FakeClient][0m Codigo de operación no encontrado
+2026-01-17T16:02:42.387778333 - [Client] - Codigo de operación no encontrado
+2026-01-18T15:16:27.727082944 - [Client] - Codigo de operación no encontrado
+2026-01-18T15:16:28.287122746 - La dirección ya se está usando
+2026-01-18T15:16:32.873392524 - [Client] - Codigo de operación no encontrado
+2026-01-19T09:31:29.802935788 - [Client] - Codigo de operación no encontrado
+2026-01-19T09:32:23.256571543 - Column 'estado' not found.
+2026-01-19T09:32:23.264845888 - java.sql.SQLException: Column 'estado' not found.
