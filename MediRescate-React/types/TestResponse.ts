@@ -12,3 +12,9 @@ export interface Operario {
 export interface OperariosResponse {
   data: Operario[];
 }
+
+export interface Response {
+  status: string;
+  data: string;
+}
+
