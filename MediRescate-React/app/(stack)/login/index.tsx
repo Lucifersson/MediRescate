@@ -25,96 +25,95 @@ const LoginScreen = () => {
   } = useAuth();
 
   return (
-<SafeAreaView className="flex-1 bg-white px-6">
-  <KeyboardAvoidingView
-    className="flex-1"
-    behavior={Platform.OS === "ios" ? "padding" : "height"}
-  >
-    <ScrollView
-      className="flex-1"
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
-    >
-      <View className="flex-1 justify-center">
-        {/* LOGO */}
-        <View className="items-center ">
-          <Image
-            source={require("@/assets/images/logo_MediRescate.png")}
-            style={style.image}
-            resizeMode="contain"
-          />
-        </View>
+    <SafeAreaView className="flex-1 bg-white px-6">
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          className="flex-1"
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View className="flex-1 justify-center">
+            {/* LOGO */}
+            <View className="items-center ">
+              <Image
+                source={require("@/assets/images/logo_MediRescate.png")}
+                style={style.image}
+                resizeMode="contain"
+              />
+            </View>
 
-        {/* FORM */}
-        <View className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-          {/* USER */}
-          <View className="mb-4">
-            <Text className="mb-2 text-base font-semibold text-gray-700">
-              Usuario o email
+            {/* FORM */}
+            <View className="bg-white rounded-3xl p-6 border-r-8 border-b-8 border-gray-300">
+              {/* USER */}
+              <View className="mb-4">
+                <Text className="mb-2 text-base font-semibold text-gray-700">
+                  Usuario o email
+                  {errorCamposVacios && (
+                    <Text className="text-red-500"> *</Text>
+                  )}
+                </Text>
+                <TextInput
+                  value={username}
+                  onChangeText={setUsernameValue}
+                  placeholder="tucorreo@ejemplo.com"
+                  autoCapitalize="characters"
+                  keyboardType="email-address"
+                  className="border border-gray-300 rounded-2xl px-4 py-3 text-base bg-gray-50"
+                  placeholderTextColor="#9CA3AF"
+                />
+              </View>
+
+              {/* PASSWORD */}
+              <View className="mb-4">
+                <Text className="mb-2 text-base font-semibold text-gray-700">
+                  Contraseña
+                  {errorCamposVacios && (
+                    <Text className="text-red-500"> *</Text>
+                  )}
+                </Text>
+                <TextInput
+                  value={password}
+                  onChangeText={setPasswordValue}
+                  placeholder="••••••••"
+                  secureTextEntry
+                  autoCapitalize="none"
+                  className="border border-gray-300 rounded-2xl px-4 py-3 text-base bg-gray-50"
+                  placeholderTextColor="#9CA3AF"
+                />
+              </View>
+
+              {/* ERRORS */}
               {errorCamposVacios && (
-                <Text className="text-red-500"> *</Text>
+                <Text className="mb-2 text-sm text-red-500 text-center">
+                  {errorCamposVacios}
+                </Text>
               )}
-            </Text>
-            <TextInput
-              value={username}
-              onChangeText={setUsernameValue}
-              placeholder="tucorreo@ejemplo.com"
-              autoCapitalize="characters"
-              keyboardType="email-address"
-              className="border border-gray-300 rounded-2xl px-4 py-3 text-base bg-gray-50"
-              placeholderTextColor="#9CA3AF"
-            />
-          </View>
 
-          {/* PASSWORD */}
-          <View className="mb-4">
-            <Text className="mb-2 text-base font-semibold text-gray-700">
-              Contraseña
-              {errorCamposVacios && (
-                <Text className="text-red-500"> *</Text>
+              {errorUsuario && (
+                <Text className="mb-2 text-sm text-red-500 text-center">
+                  {errorUsuario}
+                </Text>
               )}
-            </Text>
-            <TextInput
-              value={password}
-              onChangeText={setPasswordValue}
-              placeholder="••••••••"
-              secureTextEntry
-              autoCapitalize="none"
-              className="border border-gray-300 rounded-2xl px-4 py-3 text-base bg-gray-50"
-              placeholderTextColor="#9CA3AF"
-            />
+
+              {/* BUTTON */}
+              <Pressable
+                className="mt-4 bg-red-500 rounded-2xl py-4 shadow-md active:opacity-80"
+                onPress={onLoginPress}
+                onLongPress={() => router.replace("/operario")}
+              >
+                <Text className="text-lg font-semibold text-white text-center">
+                  Entrar
+                </Text>
+              </Pressable>
+            </View>
           </View>
-
-          {/* ERRORS */}
-          {errorCamposVacios && (
-            <Text className="mb-2 text-sm text-red-500 text-center">
-              {errorCamposVacios}
-            </Text>
-          )}
-
-          {errorUsuario && (
-            <Text className="mb-2 text-sm text-red-500 text-center">
-              {errorUsuario}
-            </Text>
-          )}
-
-          {/* BUTTON */}
-          <Pressable
-            className="mt-4 bg-red-500 rounded-2xl py-4 shadow-md active:opacity-80"
-            onPress={onLoginPress}
-            onLongPress={() => router.replace("/operario")}
-          >
-            <Text className="text-lg font-semibold text-white text-center">
-              Entrar
-            </Text>
-          </Pressable>
-          
-        </View>
-      </View>
-    </ScrollView>
-  </KeyboardAvoidingView>
-</SafeAreaView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 const style = StyleSheet.create({
