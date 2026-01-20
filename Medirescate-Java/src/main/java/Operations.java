@@ -2,6 +2,7 @@ import BdClasses.Usuario;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.net.ConnectException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +134,35 @@ public class Operations {
         return new ResponseDATA(status, data);
     }
 
+    public static Response operation5(Connection conn, Request req) {
+        String idGotten = req.data.get("id_empleado").getAsString();
+        String prevState = req.data.get("prevState").getAsString();
+        String newState = req.data.get("newState").getAsString();
+
+        String sql = """
+                UPDATE Operario
+                SET estado = ?
+                WHERE id_empleado = ?
+                """;
+
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newState);
+            ps.setString(2, idGotten);
+
+            ps.executeUpdate();
+
+            JsonObject data = new JsonObject();
+            data.addProperty("newState", newState);
+
+            return new ResponseDATA("success", data);
+
+        } catch (SQLException e) {
+            LogWriter.logError(e);
+            return new ResponseMSG("error", "Error al actualizar el estado del operario");
+        }
+    }
+
 
     //OPERACIONES PRIVADAS
 
@@ -160,4 +190,6 @@ public class Operations {
             throw new RuntimeException(e);
         }
     }
+
+
 }
