@@ -59,6 +59,5 @@
 2026-01-20T11:49:45.852018235 - La dirección ya se está usando
 2026-01-20T11:50:39.354715380 - La dirección ya se está usando
 2026-01-20T11:51:15.018457724 - La dirección ya se está usando
-2026-01-20T20:03:52.331774805 - java.io.EOFException: End of input at line 1 column 78 path $.data
-2026-01-20T20:04:33.303707435 - java.io.EOFException: End of input at line 1 column 78 path $.data
-2026-01-20T20:06:11.425940500 - java.io.EOFException: End of input at line 1 column 78 path $.data
+2026-01-20T19:15:26.709418820 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-20T19:22:02.335376233 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null

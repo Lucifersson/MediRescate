@@ -1,80 +1,101 @@
-import React from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
-import { useTcpSocket } from "@/core/actions/prueba.action";
+import { useTcpSocket } from "@/core/actions/core.action";
+import { useAuthContext } from "@/core/context/UseAuthContext";
+import { useOperario } from "@/hooks/useOperario";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { Image, Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Operario } from "@/types/types";
 
 const OperarioScreen = () => {
-  const { enviarMensajeFijo, objectResponse, error, loading } = useTcpSocket();
-
-  const operariosArray = objectResponse?.data ?? [];
+  const { user } = useAuthContext();
+  const { estado, color, cambioEstado } = useOperario({ operario: user });
 
   return (
-    <View className="flex-1 p-4 bg-gray-100">
-      <View className="m-6 flex-row justify-center">
-        <View className="p-5 flex-1 w-100 bg-gray-300 ">
-          <Text>{/*Usuario.nombre*/}Nombre <Ionicons  /></Text>
-          <Text>{/*Usuario.ambulancia*/}Ambulancia</Text>
-        </View>
-        
-        <Ionicons name="person-circle-outline" size={60} style = {{alignItems: 'flex-end'}} />
-        
-          
-      </View>
-
-      <Text className="text-2xl font-bold mb-4 text-center">
-        Panel de Operario
-      </Text>
-
-      
-
-      {/* Botón de envío */}
-      <Pressable
-        className={`p-6 rounded-xl mb-6 ${loading ? "bg-purple-400" : "bg-purple-800"}`}
-        onPress={enviarMensajeFijo}
-        disabled={loading}
+    <SafeAreaView className={`flex-1 bg-gray-50 border${color}`}>
+      {/* Header con Perfil y Logo */}
+      <View
+        className={`mx-4 mt-4 flex-row justify-between bg${color} p-4 items-center rounded-2xl shadow-md`}
       >
-        {loading ? (
-          <ActivityIndicator color="white" />
-        ) : (
-          <Text className="text-white text-center font-bold">
-            Enviar Petición TCP
+        <View className="bg-white/80 p-2 rounded-xl">
+          <Image
+            source={require("@/assets/images/logo_MediRescate.png")}
+            className="w-[60px] h-[60px]" // Traducido estilo inline a NativeWind
+            resizeMode="contain"
+            style={{ height: 60, width: 60, transform: [{ scale: 2 }] }}
+          />
+        </View>
+
+        <View className="flex-1 mx-4 my-8 ">
+          <Text className="text-white font-bold text-lg leading-5">
+            {user?.nombre || "Nombre operario"}
           </Text>
-        )}
-      </Pressable>
+          <Text className="text-white/90 text-xs uppercase tracking-widest font-semibold">
+            {user?.cargo || "Ambulancia Operario"}
+          </Text>
+          <Text className="text-white/90 text-xs uppercase tracking-widest font-semibold">
+            {user?.estado || "Ambulancia Operario"}
+          </Text>
+        </View>
 
-      {/* Manejo de Errores */}
-      {error && (
-        <Text className="text-red-600 mb-4 bg-red-100 p-2 rounded">
-          {error}
-        </Text>
-      )}
-
-      {/* Lista de Resultados */}
-      <View className="flex-1">
-        <Text className="text-lg font-semibold mb-2">
-          Usuarios en el sistema:
-        </Text>
-        <FlatList
-          data={operariosArray}
-          keyExtractor={(item, index) => `${item}-${index}`}
-          renderItem={({ item }) => (
-            <View className="p-4 mb-2 flex-row bg-white border border-gray-200 rounded-lg shadow-sm">
-              <Text className="text-gray-800 font-medium mr-auto">
-                👤 {item.nombre}
-              </Text>
-              <Text className="text-red-600 font-bold">{item.cargo}</Text>
-            </View>
-          )}
-        />
+        <Ionicons name="person-circle-outline" size={50} color="white" />
       </View>
-    </View>
+
+      {/* Datos de la emergencia (Tarjeta Central) */}
+      <View className="flex-1 justify-center px-6">
+        <View
+          // Traducido cardShadow: shadow-black, shadow-offset, opacity, radius y elevation
+          className="bg-white h-72 w-full rounded-3xl items-center justify-center border border-gray-100 shadow-xl shadow-black/10 elevation-10"
+        >
+          <Ionicons name="warning-outline" size={40} color="#374151" />
+          <Text className="text-gray-400 font-medium mt-2 uppercase tracking-tighter">
+            Sin avisos activos
+          </Text>
+          <Text className="text-gray-800 text-center font-bold text-xl px-4 mt-2">
+            Datos de la emergencia
+          </Text>
+        </View>
+      </View>
+
+      {/* TODO: Implementar campo de error */}
+      {/* Botones cambio de estado */}
+      <View className="p-6 bg-white rounded-t-[40px] shadow-2xl elevation-20">
+        <Text className="text-center text-gray-400 font-bold mb-4 uppercase text-xs">
+          Cambiar mi estado actual
+        </Text>
+
+        <Pressable
+          className="bg-red-600 w-full h-24 mb-4 rounded-2xl flex-row items-center justify-center shadow-lg shadow-red-900/40 border-r-4 border-b-4 border-red-800 active:opacity-80"
+          onPress={() => cambioEstado("ocupado")}
+        >
+          <Ionicons name="close-circle" size={28} color="white" />
+          <Text className="text-white font-black text-xl ml-2 uppercase">
+            Ocupado
+          </Text>
+        </Pressable>
+
+        <View className="flex-row justify-between">
+          <Pressable
+            className="bg-orange-500 w-[48%] h-24 rounded-2xl items-center justify-center shadow-lg shadow-orange-900/40 border-r-4 border-b-4 border-orange-800 active:opacity-80"
+            onPress={() => cambioEstado("en_marcha")}
+          >
+            <Ionicons name="navigate" size={24} color="white" />
+            <Text className="text-white font-black text-base uppercase mt-1">
+              En camino
+            </Text>
+          </Pressable>
+
+          <Pressable
+            className="bg-green-600 w-[48%] h-24 rounded-2xl items-center justify-center shadow-lg shadow-green-900/40 border-r-4 border-b-4 border-green-800 active:opacity-80"
+            onPress={() => cambioEstado("libre")}
+          >
+            <Ionicons name="checkmark-circle" size={24} color="white" />
+            <Text className="text-white font-black text-base uppercase mt-1">
+              Libre
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 

@@ -1,76 +1,88 @@
+import { useTcpSocket } from "@/core/actions/core.action";
+import { useAuthContext } from "@/core/context/UseAuthContext";
+import { Operario } from "@/types/types";
 import { router } from "expo-router";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 
 export const useAuth = () => {
+  // Hook del Socket con el tipo Operario
+  const { enviarPeticion, response, error, loading } = useTcpSocket<Operario>();
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [errorCamposVacios, setErrorCamposVacios] = useState<String>();
-    const [errorUsuario, setErrorUsuario] = useState<String>(); //Errores del servidor para usuario no encontrado o contraseña incorrecta
-    const [usuario, setUsuario] = useState(null)  //Es tipo usuario
+  // Acceso al contexto global
+  const { login } = useAuthContext();
 
-    const setUsernameValue = (value: string) => {
-        setUsername(value)
-    }
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorCamposVacios, setErrorCamposVacios] = useState<string>();
+  const [errorUsuario, setErrorUsuario] = useState<string>();
 
-    const setPasswordValue = (value: string) => {
-        setPassword(value)
-    }
+  // 1. Manejo de la respuesta del servidor
+  useEffect(() => {
+    if (response) {
+      if (response.status === "success") {
+        const usuario = response.data;
 
+        // Guardamos los datos en el contexto global
+        login(usuario);
+        console.log("Login exitoso para:", usuario.nombre);
 
-
-    const onLoginPress = () => {
-        if (username == '' || password == '') {
-            setErrorCamposVacios('Rellena usuario y contraseña');
-            return;
+        // Redirección dinámica según el cargo que viene del servidor
+        if (usuario.cargo === "administrador") {
+          router.replace("/(stack)/(tabs)/admin");
+        } else if (usuario.cargo === "operario") {
+          router.replace("/(stack)/(tabs)/operario");
+        } else if (usuario.cargo === "teleoperador") {
+          router.replace("/(stack)/(tabs)/teleoperador");
+        } else {
+          // Si no tiene un cargo definido, enviamos a una ruta por defecto
+          router.replace("/(stack)/(tabs)/operario");
         }
+      } else {
+        // El servidor devolvió un error (Usuario no encontrado, etc.)
+        // Convertimos 'data' a string ya que en caso de error el servidor envía el mensaje ahí
+        setErrorUsuario(
+          (response.data as unknown as string) || "Credenciales incorrectas",
+        );
+      }
+    }
+  }, [response]);
 
+  // 2. Manejo de errores de conexión TCP (Server caído, IP incorrecta)
+  useEffect(() => {
+    if (error) {
+      setErrorUsuario("Error de conexión con el servidor");
+      console.error("TCP Error:", error);
+    }
+  }, [error]);
 
-        {/* 
-            llama a servidor y comprueba campos
+  const onLoginPress = () => {
+    // Limpieza de estados de error previos
+    setErrorCamposVacios("");
+    setErrorUsuario("");
 
-            if (username no existe){
-                setErrorUsuario(Mensaje de servidor || "Usuario no encontrado");
-                return;
-            }
-
-            if (contraseña no coincide){
-                setErrorUsuario(Mensaje de servidor || "Contraseña incorrecta");
-                return;
-            }
-            */}        
-
-        setErrorCamposVacios('');
-        //setUsuario()  
-        router.replace("/(stack)/(tabs)/operario"); //Remplazar por lo de abajo
-
-        {/* 
-           if (usuario.cargo == "operario") {
-            router.replace("/(stack)/(tabs)/operario");
-           }
-            
-           if (usuario.cargo == "administrador") {
-            router.replace("/(stack)/(tabs)/admin");
-           }
-
-           if (usuario.cargo == "teleoperador") {
-            router.replace("/(stack)/(tabs)/teleoperador");
-           }
-            */}  
-
-
-
+    // Validación de campos
+    if (username.trim() === "" || password.trim() === "") {
+      setErrorCamposVacios("Rellena usuario y contraseña");
+      return;
     }
 
-    return {
-        username,
-        password,
-        errorCamposVacios,
-        errorUsuario,
+    // Petición al servidor (Código "1" para Login)
+    // Nota: El password aquí se envía tal cual lo espera tu lógica de backend
+    console.log("Iniciando petición de login para:", username);
+    enviarPeticion("1", {
+      user: username,
+      password: "$2b$10$wq9k8KJp6zRzV0wQZx4V9e4sQy1JZ7qZqQ5Z0dXk1XyZ0N0X9e1uG", // Aquí deberías pasar la variable 'password' del estado
+    });
+  };
 
-        setUsernameValue,
-        setPasswordValue,
-        onLoginPress
-    }
-}
+  return {
+    username,
+    password,
+    errorCamposVacios,
+    errorUsuario,
+    loading,
+    setUsernameValue: setUsername,
+    setPasswordValue: setPassword,
+    onLoginPress,
+  };
+};
