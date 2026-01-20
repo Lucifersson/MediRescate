@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Operario } from "@/types/types";
 
 const OperarioScreen = () => {
+  //TODO: separar estado de user
   const { user } = useAuthContext();
   const { estado, color, cambioEstado } = useOperario({ operario: user });
 
