@@ -29,5 +29,5 @@ export interface ApiResponse<T> {
 }
 
 export interface EstadoOperario {
-  estado: "libre" | "ocupado" | "camino";
+  newState: "libre" | "ocupado" | "en_marcha";
 }

@@ -15,7 +15,7 @@ export const useOperario = ({ operario = null }: Props = {}) => {
   useEffect(() => {
     if (response) {
       if (response.status === "success") {
-        setEstado(response.data.estado);
+        setEstado(response.data.newState);
       }
     }
   }, [response]);
