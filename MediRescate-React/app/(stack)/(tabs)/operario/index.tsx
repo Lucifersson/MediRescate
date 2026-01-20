@@ -1,4 +1,4 @@
-import { useTcpSocket } from "@/core/actions/prueba.action";
+import { useTcpSocket } from "@/core/actions/core.action";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperario } from "@/hooks/useOperario";
 import { Ionicons } from "@expo/vector-icons";
@@ -30,6 +30,9 @@ const OperarioScreen = () => {
           </Text>
           <Text className="text-white/90 text-xs uppercase tracking-widest font-semibold">
             {user?.cargo || "Ambulancia Operario"}
+          </Text>
+          <Text className="text-white/90 text-xs uppercase tracking-widest font-semibold">
+            {user?.estado || "Ambulancia Operario"}
           </Text>
         </View>
 

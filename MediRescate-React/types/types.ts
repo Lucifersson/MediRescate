@@ -11,6 +11,7 @@ export interface Operario {
   ultimaConexion: string; // Viene como "Jan 4, 2024..."
   user: string;
   password: string;
+  estado: string | null;
 }
 
 export interface OperariosResponse {

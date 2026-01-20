@@ -1,4 +1,4 @@
-import { useTcpSocket } from "@/core/actions/prueba.action";
+import { useTcpSocket } from "@/core/actions/core.action";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { Operario } from "@/types/types";
 import { router } from "expo-router";
@@ -86,4 +86,3 @@ export const useAuth = () => {
     onLoginPress,
   };
 };
-
