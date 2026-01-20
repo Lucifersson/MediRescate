@@ -76,7 +76,7 @@ const OperarioScreen = () => {
         <View className="flex-row justify-between">
           <Pressable
             className="bg-orange-500 w-[48%] h-24 rounded-2xl items-center justify-center shadow-lg shadow-orange-900/40 border-r-4 border-b-4 border-orange-800 active:opacity-80"
-            onPress={() => cambioEstado("camino")}
+            onPress={() => cambioEstado("en_marcha")}
           >
             <Ionicons name="navigate" size={24} color="white" />
             <Text className="text-white font-black text-base uppercase mt-1">

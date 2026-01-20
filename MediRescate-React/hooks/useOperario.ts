@@ -36,7 +36,7 @@ export const useOperario = ({ operario = null }: Props = {}) => {
       case "ocupado":
         setColor("-red-600");
         break;
-      case "camino":
+      case "en_marcha":
         setColor("-orange-500");
         break;
       case "libre":
