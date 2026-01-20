@@ -7,7 +7,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Operario } from "@/types/types";
 
 const OperarioScreen = () => {
-  //TODO: separar estado de user
   const { user } = useAuthContext();
   const { estado, color, cambioEstado } = useOperario({ operario: user });
 
@@ -34,7 +33,7 @@ const OperarioScreen = () => {
             {user?.cargo || "Ambulancia Operario"}
           </Text>
           <Text className="text-white/90 text-xs uppercase tracking-widest font-semibold">
-            {user?.estado || "Ambulancia Operario"}
+            {estado || "Estado no disponible"}
           </Text>
         </View>
 
