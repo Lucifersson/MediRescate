@@ -10,7 +10,7 @@ const OperarioScreen = () => {
   const { estado, color, cambioEstado } = useOperario();
 
   return (
-    <SafeAreaView className={`flex-1 bg-gray-50 border-[6px] border${color}`}>
+    <SafeAreaView className={`flex-1 bg-gray-50 border${color}`}>
       {/* Header con Perfil y Logo */}
       <View
         className={`mx-4 mt-4 flex-row justify-between bg${color} p-4 items-center rounded-2xl shadow-md`}

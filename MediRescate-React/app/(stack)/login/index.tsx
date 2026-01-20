@@ -98,7 +98,6 @@ const LoginScreen = () => {
               <Pressable
                 className="mt-4 bg-red-500 rounded-xl p-3"
                 onPress={onLoginPress}
-                onLongPress={() => router.replace('/operario')}  //BORRAR: función temporal para ir a operario sin necesidad de hacer login
               >
                 <Text className="text-xl text-white text-center">Entrar</Text>
               </Pressable>
