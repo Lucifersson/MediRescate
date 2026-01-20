@@ -4,10 +4,11 @@ import { useOperario } from "@/hooks/useOperario";
 import { Ionicons } from "@expo/vector-icons";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Operario } from "@/types/types";
 
 const OperarioScreen = () => {
   const { user } = useAuthContext();
-  const { estado, color, cambioEstado } = useOperario();
+  const { estado, color, cambioEstado } = useOperario({ operario: user });
 
   return (
     <SafeAreaView className={`flex-1 bg-gray-50 border${color}`}>
@@ -24,7 +25,7 @@ const OperarioScreen = () => {
           />
         </View>
 
-        <View className="flex-1 mx-4">
+        <View className="flex-1 mx-4 my-8 ">
           <Text className="text-white font-bold text-lg leading-5">
             {user?.nombre || "Nombre operario"}
           </Text>
