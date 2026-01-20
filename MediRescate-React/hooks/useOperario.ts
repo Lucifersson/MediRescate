@@ -7,12 +7,12 @@ export const useOperario = () => {
         setEstado(valor);
     }
 
-    const [color, setColor] = useState('bg-red-500')
+    const [color, setColor] = useState('bg-red-600')
 
     useEffect(() => { // En los cases hay que cambiar los nombres por los que lleguen de la base de datos
         switch (estado) {
             case "ocupado":
-                setColor('bg-red-500');
+                setColor('bg-red-600');
                 break;
             case "camino":
                 setColor('bg-orange-500');

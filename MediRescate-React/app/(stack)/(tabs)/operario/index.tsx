@@ -3,7 +3,9 @@ import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperario } from "@/hooks/useOperario";
 import { Ionicons } from "@expo/vector-icons";
 import {
+  Image,
   Pressable,
+  StyleSheet,
   Text,
   View
 } from "react-native";
@@ -13,19 +15,26 @@ const OperarioScreen = () => {
   const { enviarPeticion, response, error, loading } = useTcpSocket();
   const { user } = useAuthContext(); // 👈 Accedemos al usuario global
 
-  // if (!user) return <Text>No hay usuario identificado</Text>;                                         QUITAR COMENTARIO
+  // if (!user) return <Text>No hay usuario identificado</Text>;         QUITAR COMENTARIO
 
   const { estado, color, cambioEstado } = useOperario()
   const operariosArray = response?.data ?? [];
 
- 
+
 
   return (
     <SafeAreaView className="flex-1 p-4 bg-gray-100">
-      <View className="m-6 flex-row justify-center">
-        <View className= {`mx-5 flex-1 w-100 ${color} justify-center`}>
-          <View className="m-3 bg-gray-300">
-            <Text>{/* user.nombre */}Nombre operario</Text>                                                                     {/* QUITAR COMENTARIOS Y TEXTO TEMPORAL*/}
+      <View className={`m-6 flex-row justify-center ${color} p-5 items-center`}>
+        <View className="w-20 h-20 justify-center bg-gray-300 items-center">
+          <Image
+            source={require("@/assets/images/logo_MediRescate.png")}
+            style={style.image}
+          />
+        </View>
+
+        <View className={`mx-5 flex-1 w-auto h-auto justify-center`}>
+          <View className=" bg-gray-300 h-auto w-auto">
+            <Text>{/* user.nombre */}Nombre operario</Text>           {/* QUITAR COMENTARIOS Y TEXTO TEMPORAL*/}
             <Text>{/* user.cargo */}Ambulancia Operario</Text>
           </View>
         </View>
@@ -33,7 +42,7 @@ const OperarioScreen = () => {
         <Ionicons
           name="person-circle-outline"
           size={60}
-          style={{ alignItems: "flex-end" }}
+          style={{ alignItems: "flex-end", justifyContent: 'center' }}
         />
       </View>
 
@@ -70,5 +79,12 @@ const OperarioScreen = () => {
     </SafeAreaView>
   );
 };
+
+const style = StyleSheet.create({
+  image: {
+    width: 150,
+    height: 150,
+  },
+});
 
 export default OperarioScreen;
