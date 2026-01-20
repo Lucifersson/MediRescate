@@ -21,7 +21,7 @@ export const useOperario = ({ operario = null }: Props = {}) => {
   }, [response]);
 
   const cambioEstado = (valor: string) => {
-    enviarPeticion("1", {
+    enviarPeticion("2", {
       prevState: estado,
       newState: valor,
     });
