@@ -50,3 +50,12 @@
 2026-01-19T10:44:45.000000561 - Not a JSON Object: "libre"
 2026-01-19T11:25:04.725683197 - Not a JSON Object: "libre"
 2026-01-19T11:25:56.863529813 - Cannot invoke "com.google.gson.JsonObject.addProperty(String, String)" because "json" is null
+2026-01-20T11:38:29.524344269 - La dirección ya se está usando
+2026-01-20T11:45:15.323210331 - La dirección ya se está usando
+2026-01-20T11:46:05.342965224 - La dirección ya se está usando
+2026-01-20T11:46:21.373924437 - La dirección ya se está usando
+2026-01-20T11:48:13.720842019 - La dirección ya se está usando
+2026-01-20T11:49:25.110785811 - La dirección ya se está usando
+2026-01-20T11:49:45.852018235 - La dirección ya se está usando
+2026-01-20T11:50:39.354715380 - La dirección ya se está usando
+2026-01-20T11:51:15.018457724 - La dirección ya se está usando

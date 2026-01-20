@@ -19,7 +19,7 @@ public class FakeClient implements Runnable {
 
     @Override
     public void run() {
-        if (silent<1) {
+        if (silent<1) { // Cuenta atrás
             System.out.println(AnsiColors.PURPLE_BRIGHT+"[FakeClient]"+AnsiColors.RESET+" Enviando petición en\n"+AnsiColors.PURPLE_BRIGHT+"[FakeClient]"+AnsiColors.RESET+" 3...");
             try {
                 Thread.sleep(1000);
