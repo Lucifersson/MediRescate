@@ -9,14 +9,6 @@ const OperarioScreen = () => {
   const { user } = useAuthContext();
   const { estado, color, cambioEstado } = useOperario();
 
-  // Mapeo de colores hexadecimales para el borde dinámico
-  // const getGlowColor = () => {
-  //   if (color.includes("red")) return "-red-600";
-  //   if (color.includes("orange")) return "-orange-500";
-  //   if (color.includes("green")) return "-green-600";
-  //   return "-gray-500";
-  // };
-
   return (
     <SafeAreaView className={`flex-1 bg-gray-50 border-[6px] border${color}`}>
       {/* Header con Perfil y Logo */}
@@ -28,7 +20,7 @@ const OperarioScreen = () => {
             source={require("@/assets/images/logo_MediRescate.png")}
             className="w-[60px] h-[60px]" // Traducido estilo inline a NativeWind
             resizeMode="contain"
-            style={{ height: 60, width: 60 }}
+            style={{ height: 60, width: 60, transform: [{ scale: 2 }] }}
           />
         </View>
 
