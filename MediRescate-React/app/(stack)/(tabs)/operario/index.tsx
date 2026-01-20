@@ -56,6 +56,7 @@ const OperarioScreen = () => {
         </View>
       </View>
 
+      {/* TODO: Implementar campo de error */}
       {/* Botones cambio de estado */}
       <View className="p-6 bg-white rounded-t-[40px] shadow-2xl elevation-20">
         <Text className="text-center text-gray-400 font-bold mb-4 uppercase text-xs">

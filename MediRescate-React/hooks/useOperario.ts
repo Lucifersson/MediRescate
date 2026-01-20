@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Operario } from "@/types/types";
+import { EstadoOperario, Operario } from "@/types/types";
+import { useTcpSocket } from "@/core/actions/core.action";
 
 interface Props {
   operario?: Operario | null;
@@ -8,8 +9,22 @@ interface Props {
 export const useOperario = ({ operario = null }: Props = {}) => {
   const [estado, setEstado] = useState(operario?.estado ?? null); // El valor inicial es el que llegue de la base de datos. Los nombres de los estados se pueden retocar en el useEffect
 
+  const { enviarPeticion, response, error, loading } =
+    useTcpSocket<EstadoOperario>();
+
+  useEffect(() => {
+    if (response) {
+      if (response.status === "success") {
+        setEstado(response.data.estado);
+      }
+    }
+  }, [response]);
+
   const cambioEstado = (valor: string) => {
-    setEstado(valor);
+    enviarPeticion("1", {
+      prevState: estado,
+      newState: valor,
+    });
   };
 
   const [color, setColor] = useState("bg-red-600");
