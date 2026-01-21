@@ -1,85 +1,126 @@
 import { useAuth } from "@/hooks/useAuth";
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { router } from "expo-router";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
-
 const LoginScreen = () => {
-
-  const { username, password, errorCamposVacios, errorUsuario, setUsernameValue, setPasswordValue, onLoginPress } = useAuth();
-
+  const {
+    username,
+    password,
+    errorCamposVacios,
+    errorUsuario,
+    setUsernameValue,
+    setPasswordValue,
+    onLoginPress,
+  } = useAuth();
 
   return (
-        <SafeAreaView className="flex-1 ml-10 mr-10">
-            <KeyboardAvoidingView
-                className="flex-1"
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
-            >
-                <ScrollView
-                    className="flex-1"
-                    contentContainerStyle={{ flexGrow: 1 }}
-                    keyboardShouldPersistTaps="handled"
-                >
-                    <View className="flex-1 mx-2" >
-                        <View className="flex-1 justify-center px-1">
-                            <Text className="text-3xl mb-2 text-center text-gray-900">
-                                MediRescate
-                            </Text>
-                            <View className="justify-center self-center items-center w-48 h-52 bg-gray-500 rounded-xl">
-                              <Text>logo</Text>
-                            </View>
-                        </View>
+    <SafeAreaView className="flex-1 bg-white px-6">
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          className="flex-1"
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View className="flex-1 justify-center">
+            {/* LOGO */}
+            <View className="items-center ">
+              <Image
+                source={require("@/assets/images/logo_MediRescate.png")}
+                style={style.image}
+                resizeMode="contain"
+              />
+            </View>
 
-                        <View className="mb-16 flex-1 w-full self-center">
-                            <View>
-                                <Text className="mb-1 text-xl text-gray-700">
-                                    Usuario o email{errorCamposVacios ? <Text className="text-red-500">*</Text> : null}
-                                </Text>
-                                <TextInput
-                                    value={username}
-                                    onChangeText={setUsernameValue}
-                                    placeholder="tucorreo@ejemplo.com"
-                                    autoCapitalize="characters"
-                                    keyboardType="email-address"
-                                    className="border border-gray-300 rounded-xl px-4 py-3 text-base bg-gray-50"
-                                    placeholderTextColor="#9CA3AF"
-                                />
-                            </View>
+            {/* FORM */}
+            <View className="bg-white rounded-3xl p-6 border-r-8 border-b-8 border-gray-300">
+              {/* USER */}
+              <View className="mb-4">
+                <Text className="mb-2 text-base font-semibold text-gray-700">
+                  Usuario o email
+                  {errorCamposVacios && (
+                    <Text className="text-red-500"> *</Text>
+                  )}
+                </Text>
+                <TextInput
+                  value={username}
+                  onChangeText={setUsernameValue}
+                  placeholder="tucorreo@ejemplo.com"
+                  autoCapitalize="characters"
+                  keyboardType="email-address"
+                  className="border border-gray-300 rounded-2xl px-4 py-3 text-base bg-gray-50"
+                  placeholderTextColor="#9CA3AF"
+                />
+              </View>
 
-                            <View className='my-4'>
-                                <Text className="mb-1 text-xl text-gray-700">
-                                    Contraseña{errorCamposVacios ? <Text className="text-red-500">*</Text> : null}
-                                </Text>
-                                <TextInput
-                                    value={password}
-                                    onChangeText={setPasswordValue}
-                                    placeholder="••••••••"
-                                    secureTextEntry
-                                    autoCapitalize="none"
-                                    className="border border-gray-300 rounded-xl px-4 py-3 text-base bg-gray-50"
-                                    placeholderTextColor="#9CA3AF"
-                                />
-                            </View>
+              {/* PASSWORD */}
+              <View className="mb-4">
+                <Text className="mb-2 text-base font-semibold text-gray-700">
+                  Contraseña
+                  {errorCamposVacios && (
+                    <Text className="text-red-500"> *</Text>
+                  )}
+                </Text>
+                <TextInput
+                  value={password}
+                  onChangeText={setPasswordValue}
+                  placeholder="••••••••"
+                  secureTextEntry
+                  autoCapitalize="none"
+                  className="border border-gray-300 rounded-2xl px-4 py-3 text-base bg-gray-50"
+                  placeholderTextColor="#9CA3AF"
+                />
+              </View>
 
-                            {errorCamposVacios ? (
-                                <Text className="mt-1 text-lg text-red-500">{errorCamposVacios}</Text>
-                            ) : null}
+              {/* ERRORS */}
+              {errorCamposVacios && (
+                <Text className="mb-2 text-sm text-red-500 text-center">
+                  {errorCamposVacios}
+                </Text>
+              )}
 
-                               {errorUsuario ? (
-                                <Text className="mt-1 text-lg text-red-500">{errorUsuario}</Text>
-                            ) : null}
+              {errorUsuario && (
+                <Text className="mb-2 text-sm text-red-500 text-center">
+                  {errorUsuario}
+                </Text>
+              )}
 
-                            <Pressable className="mt-4 bg-red-500 rounded-xl p-3" onPress={onLoginPress}>
-                                <Text className='text-xl text-white text-center'>Entrar</Text>
-                            </Pressable>
-                            <Text>¿No tienes cuenta? Registrate</Text>
-                        </View>
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
-        </SafeAreaView >
+              {/* BUTTON */}
+              <Pressable
+                className="mt-4 bg-red-500 rounded-2xl py-4 shadow-md active:opacity-80"
+                onPress={onLoginPress}
+                onLongPress={() => router.replace("/operario")}
+              >
+                <Text className="text-lg font-semibold text-white text-center">
+                  Entrar
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
+const style = StyleSheet.create({
+  image: {
+    width: 400,
+    height: 400,
+  },
+});
 
 export default LoginScreen;
