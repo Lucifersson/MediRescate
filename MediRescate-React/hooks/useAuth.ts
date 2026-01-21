@@ -1,4 +1,5 @@
 import { useTcpSocket } from "@/core/actions/core.action";
+import { sha256 } from "js-sha256";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { Operario } from "@/types/types";
 import { router } from "expo-router";
@@ -69,9 +70,12 @@ export const useAuth = () => {
     // Petición al servidor (Código "1" para Login)
     // Nota: El password aquí se envía tal cual lo espera tu lógica de backend
     console.log("Iniciando petición de login para:", username);
+    const hashedPass = sha256(password);
+    console.log(hashedPass);
+
     enviarPeticion("1", {
       user: username,
-      password: "$2b$10$wq9k8KJp6zRzV0wQZx4V9e4sQy1JZ7qZqQ5Z0dXk1XyZ0N0X9e1uG", // Aquí deberías pasar la variable 'password' del estado
+      password: hashedPass,
     });
   };
 
