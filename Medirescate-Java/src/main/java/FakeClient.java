@@ -46,7 +46,7 @@ public class FakeClient implements Runnable {
                 case 101 -> //select
                         json = "{\"code\":\"101\",\"data\":{\"message\":\"Pido users\"}}";
                 case 1 ->
-                        json = "{\"code\":\"1\",\"data\":{\"user\":\"pedros\",\"password\":\"$2b$10$wq9k8KJp6zRzV0wQZx4V9e4sQy1JZ7qZqQ5Z0dXk1XyZ0N0X9e1uG\"}}";
+                        json = "{\"code\":\"1\",\"data\":{\"user\":\"pedros\",\"password\":\"9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c\"}}";
                 case 2 ->
                         json = "{\"code\":\"2\",\"data\":{\"id_empleado\":\"1\"}}";
                 case 5 ->

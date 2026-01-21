@@ -20,7 +20,7 @@ public class MainServer {
          * Un solo cliente
          */
 
-        new Thread(new FakeClient(5, 1)).start();
+        new Thread(new FakeClient(1, 1)).start();
 
         /*
          * Prueba de carga
