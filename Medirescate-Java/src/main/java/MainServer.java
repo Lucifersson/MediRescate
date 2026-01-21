@@ -15,6 +15,8 @@ public class MainServer {
         int port = ConfigLoader.getPort();
         System.out.println(AnsiColors.YELLOW+"[MAINSERVER]"+AnsiColors.RESET+" Escuchando en puerto: "+port+"...");
 
+//        new Thread(new FakeClient(1, 1)).start();
+
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
             while (true) {

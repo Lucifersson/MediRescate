@@ -114,21 +114,109 @@ public class Lanzador {
         }
     }
 
-    private static void launchFakeClient() {
+    private static void launchFakeClient() throws IOException, InterruptedException {
 
         if (serverUp) {
-            Thread thr = new Thread(new FakeClient(1, 1));
-            thr.start();
 
-            try {
-                thr.join();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+
+            fakeClientMenu();
+            selectFCOption();
+
         } else {
             System.out.println("Encienda el servidor para hacer un test.");
         }
 
+    }
+
+    private static void fakeClientMenu() {
+        if (serverUp) {
+            System.out.println( AnsiColors.PURPLE_BRIGHT+
+            "╔══════════════════════════════════════════════╗\n" +
+                    "║                                              ║\n" +
+                    "║     " + AnsiColors.CYAN_BRIGHT + "🖧  LANZAR FAKECLIENT – MAIN SERVER" + AnsiColors.PURPLE_BRIGHT + "      ║\n" +
+                    "║                                              ║\n" +
+                    "╠══════════════════════════════════════════════╣\n" +
+                    "║                                              ║\n" +
+
+                    "╠══ "+ AnsiColors.CYAN_BRIGHT +
+                    "1) Operación ping (100)" + AnsiColors.PURPLE_BRIGHT + "                    ║\n" +
+
+                    "╠══ " + AnsiColors.CYAN_BRIGHT +
+                    "2) Operación users (101)" + AnsiColors.PURPLE_BRIGHT + "                   ║\n" +
+
+                    "╠══ " + AnsiColors.CYAN_BRIGHT +
+                    "3) Operación Login (1)"+ AnsiColors.PURPLE_BRIGHT + "                      ║\n" +
+
+                    "╠══ " + AnsiColors.CYAN_BRIGHT +
+                    "4) Operación estado (2)" + AnsiColors.PURPLE_BRIGHT + "                    ║\n" +
+
+                    "╠══ " + AnsiColors.CYAN_BRIGHT +
+                    "5) Operación cambiar estado (5)" + AnsiColors.PURPLE_BRIGHT + "            ║\n" +
+
+                    "║                                              ║\n" +
+                    "╠══════════════════════════════════════════════╣\n" +
+                    "║                                              ║\n" +
+                    "║   " + AnsiColors.YELLOW_BRIGHT +
+                    "Selecciona una opción y pulsa ENTER" +
+                    AnsiColors.PURPLE_BRIGHT + "        ║\n" +
+                    "║                                              ║\n" +
+                    "╠══════════════════════════════════════════════╝\n" +
+                    AnsiColors.YELLOW_BRIGHT + "╚═══ >> "
+        );
+
+        } else {
+            System.out.println("Encienda el servidor para hacer un test.");
+        }
+    }
+
+    private static void selectFCOption() throws IOException, InterruptedException {
+        Scanner sc = new Scanner(System.in);
+        String option;
+        boolean valid;
+
+        do {
+            option = sc.nextLine();
+            valid = option.matches("[1-5]");
+
+            if (!valid) {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+                System.out.println(
+                        AnsiColors.RED + "Opción no válida seleccionada" + AnsiColors.RESET
+                );
+            }
+
+        } while (!valid);
+
+
+
+        switch (option) {
+            case "1" -> {
+                Thread thr = new Thread(new FakeClient(100, 1));
+                thr.start();
+                thr.join();
+            }
+            case "2" -> {
+                Thread thr = new Thread(new FakeClient(101, 1));
+                thr.start();
+                thr.join();
+            }
+            case "3" -> {
+                Thread thr = new Thread(new FakeClient(1, 1));
+                thr.start();
+                thr.join();
+            }
+            case "4" -> {
+                Thread thr = new Thread(new FakeClient(2, 1));
+                thr.start();
+                thr.join();
+            }
+            case "5" -> {
+                Thread thr = new Thread(new FakeClient(5, 1));
+                thr.start();
+                thr.join();
+            }
+        }
     }
 
     private static void launchConstantFlow() {
@@ -149,28 +237,32 @@ public class Lanzador {
     }
 
     private static void launchMainServer() throws IOException {
-        String javaPath = "/home/marcos/.jdks/openjdk-25.0.1/bin/java";
+        if (!serverUp) {
+            String javaPath = "/home/marcos/.jdks/openjdk-25.0.1/bin/java";
 
-        String classpath =
-                "target/classes:" +
-                        "/home/marcos/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
-                        "/home/marcos/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
-                        "/home/marcos/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
+            String classpath =
+                    "target/classes:" +
+                            "/home/marcos/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
+                            "/home/marcos/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
+                            "/home/marcos/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
 
-        String command = javaPath +
-                " -cp \"" + classpath + "\" " +
-                "MainServer";
+            String command = javaPath +
+                    " -cp \"" + classpath + "\" " +
+                    "MainServer";
 
-        ProcessBuilder pb = new ProcessBuilder(
-                "/usr/bin/kitty",
-                "zsh", "-c",
-                command + "; read '?Pulsa ENTER para salir...'"
-        );
+            ProcessBuilder pb = new ProcessBuilder(
+                    "/usr/bin/kitty",
+                    "zsh", "-c",
+                    command + "; read '?Pulsa ENTER para salir...'"
+            );
 
-        pb.directory(new File(System.getProperty("user.dir")));
+            pb.directory(new File(System.getProperty("user.dir")));
 
-        mainServerProcess = pb.start();
-        serverUp = true;
+            mainServerProcess = pb.start();
+            serverUp = true;
+        } else {
+            System.out.println("El servidor ya está encendido");
+        }
     }
 
     public static void stopMainServer() {
