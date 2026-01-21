@@ -61,3 +61,22 @@
 2026-01-20T11:51:15.018457724 - La dirección ya se está usando
 2026-01-20T19:15:26.709418820 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
 2026-01-20T19:22:02.335376233 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-21T10:08:16.798296804 - La dirección ya se está usando
+2026-01-21T10:09:58.075437275 - Conexión rehusada
+2026-01-21T10:19:03.185591370 - La dirección ya se está usando
+2026-01-21T11:03:00.510576491 - Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+2026-01-21T11:06:16.602378868 - Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+2026-01-21T11:43:30.083448814 - Conexión rehusada
+2026-01-21T11:45:19.981691439 - Conexión rehusada
+2026-01-21T11:45:20.743333717 - Conexión rehusada
+2026-01-21T11:45:22.164330821 - Conexión rehusada
+2026-01-21T11:45:23.231067220 - Conexión rehusada
+2026-01-21T11:45:24.108747201 - Conexión rehusada
+2026-01-21T11:45:25.540693543 - Conexión rehusada
+2026-01-21T11:45:26.043145848 - Conexión rehusada
+2026-01-21T11:45:27.486984204 - Conexión rehusada
+2026-01-21T11:45:28.072268809 - Conexión rehusada
