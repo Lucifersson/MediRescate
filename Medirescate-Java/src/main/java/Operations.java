@@ -111,7 +111,6 @@ public class Operations {
         }
     }
 
-
     public static Response operation2(Connection conn, Request req) {
 
         String idGotten = req.data.get("id_empleado").getAsString();
@@ -163,8 +162,13 @@ public class Operations {
         }
     }
 
+    //EMERGENCY OPERATIONS
+    public static Response operation200(Connection conn, Request request) {
+        return null;
+    }
 
-    //OPERACIONES PRIVADAS
+
+    //PRIVATE OPERATIONS
 
     private static String getEstado(String idEmpleado, Connection conn) {
         String sql = """

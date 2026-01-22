@@ -4,8 +4,10 @@ import java.util.Scanner;
 
 public class Lanzador {
     private static Process mainServerProcess;
+    private static Process secServerProcess;
     private static boolean salir = false;
-    private static boolean serverUp = false;
+    private static boolean mainServerUp = false;
+    private static boolean secServerUp = false;
 
     void main() throws IOException, InterruptedException {
         while (!salir) {
@@ -21,8 +23,14 @@ public class Lanzador {
 
 
         System.out.print(
-                "Estado del servidor: " +
-                        (serverUp
+                "Estado del servidor principal: " +
+                        (mainServerUp
+                                ? AnsiColors.GREEN_BRIGHT + "encendido"
+                                : AnsiColors.RED_BRIGHT + "detenido") +
+                        reset + "\n" +
+
+                "Estado del servidor secundario: " +
+                        (secServerUp
                                 ? AnsiColors.GREEN_BRIGHT + "encendido"
                                 : AnsiColors.RED_BRIGHT + "detenido") +
                         reset + "\n" +
@@ -35,23 +43,26 @@ public class Lanzador {
                         "╠══════════════════════════════════════════════╣\n" +
                         "║                                              ║\n" +
 
-                        "╠══ " + (!serverUp ? disabled : "") + AnsiColors.PURPLE +
+                        "╠══ " + (!mainServerUp ? disabled : "") + AnsiColors.PURPLE +
                         "1) Lanzar FakeClient" + reset + AnsiColors.CYAN_BRIGHT + "                       ║\n" +
 
-                        "╠══ " + (!serverUp ? disabled : "") + AnsiColors.PURPLE +
+                        "╠══ " + (!mainServerUp ? disabled : "") + AnsiColors.PURPLE +
                         "2) Lanzar prueba de carga" + reset + AnsiColors.CYAN_BRIGHT + "                  ║\n" +
 
-                        "╠══ " +(serverUp ? disabled : "")+ AnsiColors.GREEN_BRIGHT +
+                        "╠══ " +(mainServerUp ? disabled : "")+ AnsiColors.GREEN_BRIGHT +
                         "3) Encender servidor"+ reset + AnsiColors.CYAN_BRIGHT + "                       ║\n" +
 
-                        "╠══ " + (!serverUp ? disabled : "") + AnsiColors.RED_BRIGHT +
+                        "╠══ " + (!mainServerUp ? disabled : "") + AnsiColors.RED_BRIGHT +
                         "4) Apagar servidor" + reset + AnsiColors.CYAN_BRIGHT + "                         ║\n" +
 
-                        "╠══ " + (!serverUp ? disabled : "") + AnsiColors.RED +
+                        "╠══ " + (!mainServerUp ? disabled : "") + AnsiColors.RED +
                         "5) Reset servidor" + reset + AnsiColors.CYAN_BRIGHT + "                          ║\n" +
 
                         "╠══ " + AnsiColors.YELLOW +
                         "6) Salir" + AnsiColors.CYAN_BRIGHT + "                                   ║\n" +
+
+                        "╠══ " + AnsiColors.YELLOW +
+                        "7) Test sec_serv" + AnsiColors.CYAN_BRIGHT + "                                   ║\n" +
 
                         "║                                              ║\n" +
                         "╠══════════════════════════════════════════════╣\n" +
@@ -75,7 +86,7 @@ public class Lanzador {
 
         do {
             option = sc.nextLine();
-            valid = option.matches("[1-6]");
+            valid = option.matches("[1-7]");
 
             if (!valid) {
                 System.out.print("\033[H\033[2J");
@@ -92,14 +103,14 @@ public class Lanzador {
             case "2" -> launchConstantFlow();
             case "3" -> launchMainServer();
             case "4" -> {
-                if (serverUp) {
+                if (mainServerUp) {
                     stopMainServer();
                 } else {
                     System.out.println("El servidor no está encendido");
                 }
             }
             case "5" -> {
-                if (serverUp) {
+                if (mainServerUp) {
                     stopMainServer();
                     launchMainServer();
                     Thread.sleep(1000);
@@ -111,12 +122,15 @@ public class Lanzador {
                 stopMainServer();
                 salir=true;
             }
+            case "7" -> {
+                launchSecServer();
+            }
         }
     }
 
     private static void launchFakeClient() throws IOException, InterruptedException {
 
-        if (serverUp) {
+        if (mainServerUp) {
 
 
             fakeClientMenu();
@@ -129,7 +143,7 @@ public class Lanzador {
     }
 
     private static void fakeClientMenu() {
-        if (serverUp) {
+        if (mainServerUp) {
             System.out.println( AnsiColors.PURPLE_BRIGHT+
             "╔══════════════════════════════════════════════╗\n" +
                     "║                                              ║\n" +
@@ -221,7 +235,7 @@ public class Lanzador {
 
     private static void launchConstantFlow() {
 
-        if (serverUp) {
+        if (mainServerUp) {
             Thread thr = new Thread(new ConstantFlow(1, 10, 500, 1500));
             thr.start();
 
@@ -237,7 +251,7 @@ public class Lanzador {
     }
 
     private static void launchMainServer() throws IOException {
-        if (!serverUp) {
+        if (!mainServerUp) {
             String javaPath = "/home/marcos/.jdks/openjdk-25.0.1/bin/java";
 
             String classpath =
@@ -259,7 +273,36 @@ public class Lanzador {
             pb.directory(new File(System.getProperty("user.dir")));
 
             mainServerProcess = pb.start();
-            serverUp = true;
+            mainServerUp = true;
+        } else {
+            System.out.println("El servidor ya está encendido");
+        }
+    }
+
+    private static void launchSecServer() throws IOException {
+        if (!secServerUp) {
+            String javaPath = "/home/marcos/.jdks/openjdk-25.0.1/bin/java";
+
+            String classpath =
+                    "target/classes:" +
+                            "/home/marcos/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
+                            "/home/marcos/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
+                            "/home/marcos/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
+
+            String command = javaPath +
+                    " -cp \"" + classpath + "\" " +
+                    "SecondaryServer";
+
+            ProcessBuilder pb = new ProcessBuilder(
+                    "/usr/bin/kitty",
+                    "zsh", "-c",
+                    command + "; read '?Pulsa ENTER para salir...'"
+            );
+
+            pb.directory(new File(System.getProperty("user.dir")));
+
+            secServerProcess = pb.start();
+            secServerUp = true;
         } else {
             System.out.println("El servidor ya está encendido");
         }
@@ -283,7 +326,7 @@ public class Lanzador {
             Thread.currentThread().interrupt();
         }
 
-        serverUp = false;
+        mainServerUp = false;
 
     }
 

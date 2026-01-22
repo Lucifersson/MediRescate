@@ -46,7 +46,7 @@ public class ConfigLoader {
         return props.getProperty("db.database");
     }
 
-    public static String getSecPort() {
-        return props.getProperty("secondaryServer.port");
+    public static int getSecPort() {
+        return Integer.parseInt(props.getProperty("secondaryServer.port"));
     }
 }
