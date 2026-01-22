@@ -10,11 +10,6 @@ public class ConfigLoader {
             InputStream is = ConfigLoader.class
                     .getClassLoader()
                     .getResourceAsStream("config/server.properties");
-
-
-
-
-
             if (is == null) {
                 throw new RuntimeException("server.properties no encontrado");
             }
@@ -49,5 +44,9 @@ public class ConfigLoader {
 
     public static String getDbDb() {
         return props.getProperty("db.database");
+    }
+
+    public static String getSecPort() {
+        return props.getProperty("secondaryServer.port");
     }
 }
