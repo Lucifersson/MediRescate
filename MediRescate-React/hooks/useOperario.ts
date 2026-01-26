@@ -23,7 +23,7 @@ export const useOperario = ({ operario = null }: Props = {}) => {
   //TODO: implementar mensajes de error
   const cambioEstado = (valor: string) => {
     enviarPeticion("5", {
-      id_empleado: operario?.idEmpleado,
+      id_operario: operario?.idEmpleado,
       prevState: estado,
       newState: valor,
     });
