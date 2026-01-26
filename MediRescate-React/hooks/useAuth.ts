@@ -17,8 +17,6 @@ export const useAuth = () => {
   const [password, setPassword] = useState("");
   const [errorCamposVacios, setErrorCamposVacios] = useState<string>();
   const [errorUsuario, setErrorUsuario] = useState<string>();
-  
-  
 
   // 1. Manejo de la respuesta del servidor
   useEffect(() => {
@@ -34,11 +32,10 @@ export const useAuth = () => {
         if (usuario.cargo === "administrador") {
           router.replace("/(stack)/(tabs)/admin");
         } else if (usuario.cargo === "operario") {
-
           // PARA MARIO: Solo he cosneguido hacerlo creando antes el operario ya que hasta aqui solo tienes un user que no puede utilizaar cambioEstado. Comprueba que funciona correctamente.
-          const [operario] = useState<Operario | null>(response.data);
-          const { cambioEstado } = useOperario({operario}) 
-          cambioEstado("libre")
+          // const [operario] = useState<Operario | null>(response.data);
+          // const { cambioEstado } = useOperario({operario})
+          // cambioEstado("libre")
           router.replace("/(stack)/(tabs)/operario");
         } else if (usuario.cargo === "teleoperador") {
           router.replace("/(stack)/(tabs)/teleoperador");

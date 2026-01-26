@@ -5,10 +5,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Operario } from "@/types/types";
+import { useEffect } from "react";
 
 const OperarioScreen = () => {
   const { user } = useAuthContext();
   const { estado, color, cambioEstado } = useOperario({ operario: user });
+
+  //TEST: probando si funciona el campo de estado asi
+  useEffect(() => {
+    cambioEstado("libre");
+  }, []);
 
   return (
     <SafeAreaView className={`flex-1 bg-gray-50 border${color}`}>
