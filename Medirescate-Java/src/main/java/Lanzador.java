@@ -115,7 +115,7 @@ public class Lanzador {
         }
     }
 
-    private static void stopServers() {
+    private static void stopServers() throws InterruptedException {
         stopMainServer();
         stopSecServer();
     }
@@ -126,7 +126,7 @@ public class Lanzador {
         startServers();
     }
 
-    private static void exit() {
+    private static void exit() throws InterruptedException {
         stopServers();
         salir = true;
     }
@@ -161,14 +161,21 @@ public class Lanzador {
         System.out.println("Servidor secundario arrancado");
     }
 
-    private static void stopMainServer() {
-        stopProcess(mainServerProcess, "Servidor principal");
+    private static void stopMainServer() throws InterruptedException {
+//        stopProcess(mainServerProcess, "Servidor principal");
+        Thread t = new Thread(new FakeClient(-1, 1, 1));
+        t.join();
+        t.start();
         mainServerProcess = null;
         mainServerUp = false;
     }
 
-    private static void stopSecServer() {
-        stopProcess(secServerProcess, "Servidor secundario");
+    private static void stopSecServer() throws InterruptedException {
+//        stopProcess(secServerProcess, "Servidor secundario");
+        Thread t = new Thread(new FakeClient(-1, 1, 2));
+        t.start();
+        t.join();
+
         secServerProcess = null;
         secServerUp = false;
     }
@@ -189,20 +196,20 @@ public class Lanzador {
                 .start();
     }
 
-    private static void stopProcess(Process process, String name) {
-        if (process == null || !process.isAlive()) return;
-
-        process.destroy();
-        try {
-            if (!process.waitFor(3, TimeUnit.SECONDS)) {
-                process.destroyForcibly();
-            }
-            System.out.println(name + " detenido");
-        } catch (InterruptedException e) {
-            process.destroyForcibly();
-            Thread.currentThread().interrupt();
-        }
-    }
+//    private static void stopProcess(Process process, String name) {
+//        if (process == null || !process.isAlive()) return;
+//
+//        process.destroy();
+//        try {
+//            if (!process.waitFor(3, TimeUnit.SECONDS)) {
+//                process.destroyForcibly();
+//            }
+//            System.out.println(name + " detenido");
+//        } catch (InterruptedException e) {
+//            process.destroyForcibly();
+//            Thread.currentThread().interrupt();
+//        }
+//    }
 
     private static String buildJavaCommand(String mainClass) {
         String userHome = System.getProperty("user.home");
@@ -226,7 +233,7 @@ public class Lanzador {
             return;
         }
 
-        Thread t = new Thread(new FakeClient(1, 1));
+        Thread t = new Thread(new FakeClient(1, 1, 1));
         t.start();
         t.join();
     }
@@ -237,7 +244,7 @@ public class Lanzador {
             return;
         }
 
-        new Thread(new ConstantFlow(1, 10, 500, 1500)).start();
+        new Thread(new ConstantFlow(1, 10, 500, 1500, 1)).start();
     }
 
     private static void openLogTail(String logFile, String title) {

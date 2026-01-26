@@ -12,11 +12,13 @@ public class Client implements Runnable {
     private final Socket socket;
     private final Gson gson = new Gson();
     private final String inet;
+    private final Request req;
 
 
-    public Client(Socket socket, String inet) {
+    public Client(Socket socket, String inet, Request req) {
         this.socket = socket;
         this.inet = inet;
+        this.req = req;
     }
 
 
@@ -33,12 +35,13 @@ public class Client implements Runnable {
                 )
         ) {
 
-            String line;
-            while ((line = in.readLine()) != null) {
-                System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON recibido "+AnsiColors.GREEN_BRIGHT+"[<<] "+AnsiColors.RESET + line);
+//            while ((line = in.readLine()) != null) {
+                System.out.println("Comprobacion");
+
+                System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON recibido "+AnsiColors.GREEN_BRIGHT+"[<<] "+AnsiColors.RESET + req);
 
                 // Parseo JSON
-                Request req = gson.fromJson(line, Request.class);
+//                Request req = gson.fromJson(line, Request.class);
 
                 // Procesar
                 Response resp = processRequestCode(req, conn);
@@ -47,12 +50,13 @@ public class Client implements Runnable {
 
                 // Responder
                 out.println(gson.toJson(resp));
-            }
+//            }
 
         } catch (Exception e) {
             LogWriter.logError(e);
         } finally {
             try {
+                System.out.printf("Sdas");
                 socket.close();
             } catch (IOException ignored) {}
         }
