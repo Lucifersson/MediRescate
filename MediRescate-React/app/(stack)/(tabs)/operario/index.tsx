@@ -12,8 +12,10 @@ const OperarioScreen = () => {
 
   //TEST: probando si funciona el campo de estado asi
   useEffect(() => {
-    cambioEstado("libre");
-  }, []);
+    if (user?.idUsuario) {
+      cambioEstado("libre");
+    }
+  }, [user?.idUsuario]);
 
   return (
     <SafeAreaView className={`flex-1 bg-gray-50 border${color}`}>

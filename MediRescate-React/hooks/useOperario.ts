@@ -3,11 +3,13 @@ import { EstadoOperario, Operario } from "@/types/types";
 import { useTcpSocket } from "@/core/actions/core.action";
 
 interface Props {
-  operario?: Operario | null;
+  operario: Operario | null;
 }
 
-export const useOperario = ({ operario = null }: Props = {}) => {
-  const [estado, setEstado] = useState(operario?.estado ?? null); // El valor inicial es el que llegue de la base de datos. Los nombres de los estados se pueden retocar en el useEffect
+//NOTE: se asume que operario no puede ser null por ningun motivo
+export const useOperario = ({ operario }: Props) => {
+  console.log("Estado operario al cargar useOperario ", operario);
+  const [estado, setEstado] = useState(operario?.estado); // El valor inicial es el que llegue de la base de datos. Los nombres de los estados se pueden retocar en el useEffect
 
   const { enviarPeticion, response, error, loading } =
     useTcpSocket<EstadoOperario>();
@@ -21,9 +23,10 @@ export const useOperario = ({ operario = null }: Props = {}) => {
   }, [response]);
 
   //TODO: implementar mensajes de error
+
   const cambioEstado = (valor: string) => {
     enviarPeticion("5", {
-      id_operario: operario?.idEmpleado,
+      id_operario: operario?.idUsuario,
       prevState: estado,
       newState: valor,
     });

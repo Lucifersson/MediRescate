@@ -1,5 +1,5 @@
 import { Operario } from "@/types/types";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextProps {
   user: Operario | null;
@@ -11,6 +11,10 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<Operario | null>(null);
+
+  useEffect(() => {
+    console.log("Valor idEmpleado al cargar AuthProvider", user?.idUsuario);
+  }, [user]);
 
   const login = (userData: Operario) => setUser(userData);
   const logout = () => setUser(null);
