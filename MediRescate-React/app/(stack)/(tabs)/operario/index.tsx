@@ -2,6 +2,7 @@ import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperario } from "@/hooks/useOperario";
 import { Ionicons } from "@expo/vector-icons";
+import { useEffect } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -10,11 +11,9 @@ const OperarioScreen = () => {
   const { estado, color, cambioEstado } = useOperario({ operario: user });
 
   //TEST: probando si funciona el campo de estado asi
-  {/* 
   useEffect(() => {
     cambioEstado("libre");
   }, []);
-  */}
 
   return (
     <SafeAreaView className={`flex-1 bg-gray-50 border${color}`}>
@@ -43,7 +42,7 @@ const OperarioScreen = () => {
           </Text>
         </View>
 
-        <LogOutComponent operario={user} />
+        <LogOutComponent onPress={() => cambioEstado("ocupado")} />
       </View>
 
       {/* Datos de la emergencia (Tarjeta Central) */}
