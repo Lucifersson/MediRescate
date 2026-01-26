@@ -264,22 +264,23 @@ public class Lanzador {
     private static void launchMainServer() throws IOException {
         if (!mainServerUp) {
             String javaPath = "java";
+            String userHome = System.getProperty("user.home");
 
             String classpath =
                     "target/classes:" +
-                            "/home/marcos/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
-                            "/home/marcos/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
-                            "/home/marcos/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
+                            userHome + "/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
+                            userHome + "/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
+                            userHome + "/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
 
             String command = javaPath +
                     " -cp \"" + classpath + "\" " +
                     "MainServer";
 
             ProcessBuilder pb = new ProcessBuilder(
-                    "/usr/bin/kitty",
-                    "zsh", "-c",
-                    command + "; read '?Pulsa ENTER para salir...'"
-            );
+                    "x-terminal-emulator",
+                    "-e",
+                    "bash", "-c",
+                    command + "; read -p 'Pulsa ENTER para salir...'");
 
             pb.directory(new File(System.getProperty("user.dir")));
 
@@ -297,19 +298,19 @@ public class Lanzador {
 
             String classpath =
                     "target/classes:" +
-                            userHome+"/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
-                            userHome+"/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
-                            userHome+"/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
+                            userHome + "/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
+                            userHome + "/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
+                            userHome + "/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
 
             String command = javaPath +
                     " -cp \"" + classpath + "\" " +
                     "SecondaryServer";
 
             ProcessBuilder pb = new ProcessBuilder(
-                    "/usr/bin/kitty",
-                    "zsh", "-c",
-                    command + "; read '?Pulsa ENTER para salir...'"
-            );
+                    "x-terminal-emulator",
+                    "-e",
+                    "bash", "-c",
+                    command + "; read -p 'Pulsa ENTER para salir...'");
 
             pb.directory(new File(System.getProperty("user.dir")));
 
