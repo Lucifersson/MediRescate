@@ -69,7 +69,7 @@ public class Operations {
                 if (passwordBD.equals(passwordGotten)) {
 
                     BdClasses.Usuario user = new Usuario(
-                            rs.getInt("id_empleado"),
+                            rs.getInt("id_usuario"),
                             rs.getString("nombre"),
                             rs.getString("cargo"),
                             rs.getTimestamp("ultima_conexion"),
@@ -81,7 +81,7 @@ public class Operations {
 
                     status = "success";
 
-                    String estado = getEstado(user.getIdEmpleado()+"", conn);
+                    String estado = getEstado(user.getIdUsuario()+"", conn);
                     if (estado!=null){
                         data.addProperty("estado", estado);
                     } else {
@@ -111,7 +111,6 @@ public class Operations {
         }
     }
 
-
     public static Response operation2(Connection conn, Request req) {
 
         String idGotten = req.data.get("id_empleado").getAsString();
@@ -135,14 +134,14 @@ public class Operations {
     }
 
     public static Response operation5(Connection conn, Request req) {
-        String idGotten = req.data.get("id_empleado").getAsString();
+        String idGotten = req.data.get("id_operario").getAsString();
         String prevState = req.data.get("prevState").getAsString();
         String newState = req.data.get("newState").getAsString();
 
         String sql = """
                 UPDATE Operario
                 SET estado = ?
-                WHERE id_empleado = ?
+                WHERE id_operario = ?
                 """;
 
 
@@ -163,18 +162,23 @@ public class Operations {
         }
     }
 
+    //EMERGENCY OPERATIONS
+    public static Response operation200(Connection conn, Request request) {
+        return null;
+    }
 
-    //OPERACIONES PRIVADAS
 
-    private static String getEstado(String idEmpleado, Connection conn) {
+    //PRIVATE OPERATIONS
+
+    private static String getEstado(String idOperario, Connection conn) {
         String sql = """
                 SELECT estado
                 FROM Operario
-                WHERE id_empleado = ?;
+                WHERE id_operario = ?;
                 """;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, idEmpleado);
+            ps.setString(1, idOperario);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {

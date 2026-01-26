@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 public class Usuario {
 
-    private int idEmpleado;
+    private int idUsuario;
     private String nombre;
     private String cargo;
     private Timestamp ultimaConexion;
@@ -14,7 +14,7 @@ public class Usuario {
     // Constructor completo
     public Usuario(int idEmpleado, String nombre, String cargo,
                    Timestamp ultimaConexion, String user, String password) {
-        this.idEmpleado = idEmpleado;
+        this.idUsuario = idEmpleado;
         this.nombre = nombre;
         this.cargo = cargo;
         this.ultimaConexion = ultimaConexion;
@@ -30,8 +30,8 @@ public class Usuario {
     }
 
     // Getters
-    public int getIdEmpleado() {
-        return idEmpleado;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
     public String getNombre() {

@@ -81,3 +81,14 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 2026-01-21T11:45:27.486984204 - Conexión rehusada
 2026-01-21T11:45:28.072268809 - Conexión rehusada
 2026-01-21T12:31:47.041907316 - La dirección ya se está usando
+2026-01-22T14:21:47.591359701 - java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 1 path $
+2026-01-22T14:22:37.647383566 - Cannot invoke "com.google.gson.JsonObject.get(String)" because "req.data" is null
+2026-01-22T14:23:00.344395809 - com.google.gson.stream.MalformedJsonException: Unterminated object at line 1 column 10 path $.code
+2026-01-22T14:23:27.935495833 - com.google.gson.stream.MalformedJsonException: Unterminated object at line 1 column 10 path $.code
+2026-01-22T14:23:44.401254380 - Cannot read field "code" because "req" is null
+2026-01-26T10:15:11.054990771 - Column 'id_empleado' not found.
+2026-01-26T10:15:11.059460896 - java.sql.SQLException: Column 'id_empleado' not found.
+2026-01-26T10:17:39.776648651 - Unknown column 'id_empleado' in 'where clause'
+2026-01-26T10:17:39.782435125 - java.sql.SQLSyntaxErrorException: Unknown column 'id_empleado' in 'where clause'
+2026-01-26T10:21:25.505291997 - Unknown column 'id_empleado' in 'where clause'
+2026-01-26T10:23:18.178564421 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
