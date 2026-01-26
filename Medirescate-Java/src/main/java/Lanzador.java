@@ -50,19 +50,19 @@ public class Lanzador {
                         "2) Lanzar prueba de carga" + reset + AnsiColors.CYAN_BRIGHT + "                  ║\n" +
 
                         "╠══ " +(mainServerUp ? disabled : "")+ AnsiColors.GREEN_BRIGHT +
-                        "3) Encender servidor"+ reset + AnsiColors.CYAN_BRIGHT + "                       ║\n" +
+                        "3) Encender servidores"+ reset + AnsiColors.CYAN_BRIGHT + "                     ║\n" +
 
                         "╠══ " + (!mainServerUp ? disabled : "") + AnsiColors.RED_BRIGHT +
-                        "4) Apagar servidor" + reset + AnsiColors.CYAN_BRIGHT + "                         ║\n" +
+                        "4) Apagar servidores" + reset + AnsiColors.CYAN_BRIGHT + "                       ║\n" +
 
                         "╠══ " + (!mainServerUp ? disabled : "") + AnsiColors.RED +
-                        "5) Reset servidor" + reset + AnsiColors.CYAN_BRIGHT + "                          ║\n" +
+                        "5) Reset servidores" + reset + AnsiColors.CYAN_BRIGHT + "                        ║\n" +
 
                         "╠══ " + AnsiColors.YELLOW +
                         "6) Salir" + AnsiColors.CYAN_BRIGHT + "                                   ║\n" +
 
-                        "╠══ " + AnsiColors.YELLOW +
-                        "7) Test sec_serv" + AnsiColors.CYAN_BRIGHT + "                                   ║\n" +
+                        "╠══ " + AnsiColors.BLUE +
+                        "7) Pantalla Administrador" + AnsiColors.CYAN_BRIGHT + "                                   ║\n" +
 
                         "║                                              ║\n" +
                         "╠══════════════════════════════════════════════╣\n" +
@@ -101,29 +101,40 @@ public class Lanzador {
         switch (option) {
             case "1" -> launchFakeClient();
             case "2" -> launchConstantFlow();
-            case "3" -> launchMainServer();
-            case "4" -> {
+            case "3" -> { //encender servidores
+                launchMainServer();
+                launchSecServer();
+            }
+            case "4" -> { //apagar servidores
                 if (mainServerUp) {
                     stopMainServer();
                 } else {
-                    System.out.println("El servidor no está encendido");
+                    System.out.println("El servidor principal no está encendido");
+                }
+                if (secServerUp) {
+                    stopSecServer();
+                } else {
+                    System.out.println("El servidor secundario no está encendido");
                 }
             }
-            case "5" -> {
+            case "5" -> { //resetear servidores
                 if (mainServerUp) {
                     stopMainServer();
-                    launchMainServer();
+                    stopSecServer();
                     Thread.sleep(1000);
+                    launchMainServer();
+                    launchSecServer();
                 } else {
                     System.out.println("El servidor no está encendido");
                 }
             }
-            case "6" -> {
+            case "6" -> { //salir
                 stopMainServer();
+                stopSecServer();
                 salir=true;
             }
-            case "7" -> {
-                launchSecServer();
+            case "7" -> { //pantalla administrador
+                //TODO
             }
         }
     }
@@ -314,7 +325,6 @@ public class Lanzador {
             return;
         }
 
-
         mainServerProcess.destroy();
 
         try {
@@ -329,6 +339,28 @@ public class Lanzador {
         mainServerUp = false;
 
     }
+
+    public static void stopSecServer() {
+
+        if (secServerProcess == null || !secServerProcess.isAlive()) {
+            return;
+        }
+
+        secServerProcess.destroy();
+
+        try {
+            if (!secServerProcess.waitFor(3, java.util.concurrent.TimeUnit.SECONDS)) {
+                secServerProcess.destroyForcibly();
+            }
+        } catch (InterruptedException e) {
+            secServerProcess.destroyForcibly();
+            Thread.currentThread().interrupt();
+        }
+
+        secServerUp = false;
+
+    }
+
 
 }
 

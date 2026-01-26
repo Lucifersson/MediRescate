@@ -66,7 +66,7 @@ public class EmergencyHandler implements Runnable {
     private Response processRequestCode(Request req, Connection conn) {
 
         return switch (req.code) {
-            case "" -> {}
+//            case "" -> {}
 
 
             default -> {
