@@ -92,3 +92,6 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 2026-01-26T10:17:39.782435125 - java.sql.SQLSyntaxErrorException: Unknown column 'id_empleado' in 'where clause'
 2026-01-26T10:21:25.505291997 - Unknown column 'id_empleado' in 'where clause'
 2026-01-26T10:23:18.178564421 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-26T14:13:31.248103416 - La dirección ya se está usando
+2026-01-26T14:14:13.352043142 - La dirección ya se está usando
+2026-01-26T14:29:59.571326269 - La dirección ya se está usando
