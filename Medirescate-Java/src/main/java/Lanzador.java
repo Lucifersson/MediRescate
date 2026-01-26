@@ -263,7 +263,7 @@ public class Lanzador {
 
     private static void launchMainServer() throws IOException {
         if (!mainServerUp) {
-            String javaPath = "/home/marcos/.jdks/openjdk-25.0.1/bin/java";
+            String javaPath = "java";
 
             String classpath =
                     "target/classes:" +
@@ -292,13 +292,14 @@ public class Lanzador {
 
     private static void launchSecServer() throws IOException {
         if (!secServerUp) {
-            String javaPath = "/home/marcos/.jdks/openjdk-25.0.1/bin/java";
+            String javaPath = "java";
+            String userHome = System.getProperty("user.home");
 
             String classpath =
                     "target/classes:" +
-                            "/home/marcos/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
-                            "/home/marcos/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
-                            "/home/marcos/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
+                            userHome+"/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
+                            userHome+"/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
+                            userHome+"/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
 
             String command = javaPath +
                     " -cp \"" + classpath + "\" " +
