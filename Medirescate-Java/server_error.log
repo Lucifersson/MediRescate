@@ -81,3 +81,38 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 2026-01-21T11:45:27.486984204 - Conexión rehusada
 2026-01-21T11:45:28.072268809 - Conexión rehusada
 2026-01-21T12:31:47.041907316 - La dirección ya se está usando
+2026-01-22T14:21:47.591359701 - java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 1 path $
+2026-01-22T14:22:37.647383566 - Cannot invoke "com.google.gson.JsonObject.get(String)" because "req.data" is null
+2026-01-22T14:23:00.344395809 - com.google.gson.stream.MalformedJsonException: Unterminated object at line 1 column 10 path $.code
+2026-01-22T14:23:27.935495833 - com.google.gson.stream.MalformedJsonException: Unterminated object at line 1 column 10 path $.code
+2026-01-22T14:23:44.401254380 - Cannot read field "code" because "req" is null
+2026-01-26T10:15:11.054990771 - Column 'id_empleado' not found.
+2026-01-26T10:15:11.059460896 - java.sql.SQLException: Column 'id_empleado' not found.
+2026-01-26T10:17:39.776648651 - Unknown column 'id_empleado' in 'where clause'
+2026-01-26T10:17:39.782435125 - java.sql.SQLSyntaxErrorException: Unknown column 'id_empleado' in 'where clause'
+2026-01-26T10:21:25.505291997 - Unknown column 'id_empleado' in 'where clause'
+2026-01-26T10:23:18.178564421 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-26T14:13:31.248103416 - La dirección ya se está usando
+2026-01-26T14:14:13.352043142 - La dirección ya se está usando
+2026-01-26T14:29:59.571326269 - La dirección ya se está usando
+2026-01-26T14:38:49.517254981 - La dirección ya se está usando
+2026-01-26T14:38:49.521520490 - La dirección ya se está usando
+2026-01-26T14:42:41.129303602 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-26T14:44:17.768201757 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-26T14:44:18.273205449 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-26T14:44:29.049540534 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-26T14:44:35.586360979 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-26T14:45:49.347917243 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-26T14:46:05.503345074 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-26T14:46:59.516444663 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-26T14:48:44.106631528 - La dirección ya se está usando
+2026-01-26T14:48:44.108057554 - La dirección ya se está usando
+2026-01-26T14:48:46.733514364 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-26T14:49:27.959156411 - La dirección ya se está usando
+2026-01-26T14:49:27.962394409 - La dirección ya se está usando
+2026-01-26T14:50:37.384603359 - Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+2026-01-26T18:47:56.157970839 - La dirección ya se está usando
+2026-01-26T18:54:08.450388094 - La dirección ya se está usando
+2026-01-26T18:54:15.908905731 - La dirección ya se está usando
