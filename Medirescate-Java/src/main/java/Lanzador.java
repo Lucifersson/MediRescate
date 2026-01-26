@@ -1,21 +1,27 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Lanzador {
+
     private static Process mainServerProcess;
     private static Process secServerProcess;
-    private static boolean salir = false;
+
     private static boolean mainServerUp = false;
     private static boolean secServerUp = false;
+    private static boolean salir = false;
 
-    void main() throws IOException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         while (!salir) {
             printMenu();
-            Lanzador.selectOption();
+            selectOption();
         }
     }
 
+    /* =========================
+       MENÚ
+       ========================= */
 
     private static void printMenu() {
         String disabled = "\u001B[9m";
@@ -78,348 +84,172 @@ public class Lanzador {
 
 
     }
-
-    private static void selectOption() throws IOException, InterruptedException {
+    private static void selectOption() throws Exception {
         Scanner sc = new Scanner(System.in);
-        String option;
-        boolean valid;
-
-        do {
-            option = sc.nextLine();
-            valid = option.matches("[1-7]");
-
-            if (!valid) {
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-                System.out.println(
-                        AnsiColors.RED + "Opción no válida seleccionada" + AnsiColors.RESET
-                );
-            }
-
-        } while (!valid);
+        String option = sc.nextLine();
 
         switch (option) {
             case "1" -> launchFakeClient();
             case "2" -> launchConstantFlow();
-            case "3" -> { //encender servidores
-                launchMainServer();
-                launchSecServer();
-            }
-            case "4" -> { //apagar servidores
-                if (mainServerUp) {
-                    stopMainServer();
-                } else {
-                    System.out.println("El servidor principal no está encendido");
-                }
-                if (secServerUp) {
-                    stopSecServer();
-                } else {
-                    System.out.println("El servidor secundario no está encendido");
-                }
-            }
-            case "5" -> { //resetear servidores
-                if (mainServerUp) {
-                    stopMainServer();
-                    stopSecServer();
-                    Thread.sleep(1000);
-                    launchMainServer();
-                    launchSecServer();
-                } else {
-                    System.out.println("El servidor no está encendido");
-                }
-            }
-            case "6" -> { //salir
-                stopMainServer();
-                stopSecServer();
-                salir=true;
-            }
-            case "7" -> { //pantalla administrador
-                //TODO
-            }
+            case "3" -> startServers();
+            case "4" -> stopServers();
+            case "5" -> resetServers();
+            case "6" -> exit();
+            default -> System.out.println("Opción no válida");
         }
     }
 
-    private static void launchFakeClient() throws IOException, InterruptedException {
+    /* =========================
+       SERVIDORES
+       ========================= */
 
-        if (mainServerUp) {
+    private static void startServers() throws IOException {
+        if (!mainServerUp) {
+            launchMainServer();
+            openLogTail("logs/mainserver.log", "MainServer LOG");
 
-
-            fakeClientMenu();
-            selectFCOption();
-
-        } else {
-            System.out.println("Encienda el servidor para hacer un test.");
         }
-
-    }
-
-    private static void fakeClientMenu() {
-        if (mainServerUp) {
-            System.out.println( AnsiColors.PURPLE_BRIGHT+
-                    "╔══════════════════════════════════════════════╗\n" +
-                    "║                                              ║\n" +
-                    "║     " + AnsiColors.CYAN_BRIGHT + "🖧  LANZAR FAKECLIENT – MAIN SERVER" + AnsiColors.PURPLE_BRIGHT + "      ║\n" +
-                    "║                                              ║\n" +
-                    "╠══════════════════════════════════════════════╣\n" +
-                    "║                                              ║\n" +
-
-                    "╠══ "+ AnsiColors.CYAN_BRIGHT +
-                    "1) Operación ping (100)" + AnsiColors.PURPLE_BRIGHT + "                    ║\n" +
-
-                    "╠══ " + AnsiColors.CYAN_BRIGHT +
-                    "2) Operación users (101)" + AnsiColors.PURPLE_BRIGHT + "                   ║\n" +
-
-                    "╠══ " + AnsiColors.CYAN_BRIGHT +
-                    "3) Operación Login (1)"+ AnsiColors.PURPLE_BRIGHT + "                      ║\n" +
-
-                    "╠══ " + AnsiColors.CYAN_BRIGHT +
-                    "4) Operación estado (2)" + AnsiColors.PURPLE_BRIGHT + "                    ║\n" +
-
-                    "╠══ " + AnsiColors.CYAN_BRIGHT +
-                    "5) Operación cambiar estado (5)" + AnsiColors.PURPLE_BRIGHT + "            ║\n" +
-
-                    "║                                              ║\n" +
-                    "╠══════════════════════════════════════════════╣\n" +
-                    "║                                              ║\n" +
-                    "║   " + AnsiColors.YELLOW_BRIGHT +
-                    "Selecciona una opción y pulsa ENTER" +
-                    AnsiColors.PURPLE_BRIGHT + "        ║\n" +
-                    "║                                              ║\n" +
-                    "╠══════════════════════════════════════════════╝\n" +
-                    AnsiColors.YELLOW_BRIGHT + "╚═══ >> "
-            );
-
-        } else {
-            System.out.println("Encienda el servidor para hacer un test.");
+        if (!secServerUp) {
+            launchSecServer();
+            openLogTail("logs/secserver.log", "SecondaryServer LOG");
         }
     }
 
-    private static void selectFCOption() throws IOException, InterruptedException {
-        Scanner sc = new Scanner(System.in);
-        String option;
-        boolean valid;
+    private static void stopServers() {
+        stopMainServer();
+        stopSecServer();
+    }
 
-        do {
-            option = sc.nextLine();
-            valid = option.matches("[1-5]");
+    private static void resetServers() throws Exception {
+        stopServers();
+        Thread.sleep(1000);
+        startServers();
+    }
 
-            if (!valid) {
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-                System.out.println(
-                        AnsiColors.RED + "Opción no válida seleccionada" + AnsiColors.RESET
-                );
-            }
+    private static void exit() {
+        stopServers();
+        salir = true;
+    }
 
-        } while (!valid);
+    /* =========================
+       LANZADO DE SERVIDORES
+       ========================= */
 
+    private static void launchMainServer() throws IOException {
+        String command = buildJavaCommand("MainServer");
 
+        mainServerProcess = launchWithLogs(
+                command,
+                "logs/mainserver.log",
+                "logs/mainserver.err"
+        );
 
-        switch (option) {
-            case "1" -> {
-                Thread thr = new Thread(new FakeClient(100, 1));
-                thr.start();
-                thr.join();
+        mainServerUp = true;
+        System.out.println("Servidor principal arrancado");
+    }
+
+    private static void launchSecServer() throws IOException {
+        String command = buildJavaCommand("SecondaryServer");
+
+        secServerProcess = launchWithLogs(
+                command,
+                "logs/secserver.log",
+                "logs/secserver.err"
+        );
+
+        secServerUp = true;
+        System.out.println("Servidor secundario arrancado");
+    }
+
+    private static void stopMainServer() {
+        stopProcess(mainServerProcess, "Servidor principal");
+        mainServerProcess = null;
+        mainServerUp = false;
+    }
+
+    private static void stopSecServer() {
+        stopProcess(secServerProcess, "Servidor secundario");
+        secServerProcess = null;
+        secServerUp = false;
+    }
+
+    /* =========================
+       UTILIDADES
+       ========================= */
+
+    private static Process launchWithLogs(String command, String outLog, String errLog)
+            throws IOException {
+
+        File logsDir = new File("logs");
+        if (!logsDir.exists()) logsDir.mkdirs();
+
+        return new ProcessBuilder("sh", "-c", "exec " + command)
+                .redirectOutput(new File(outLog))
+                .redirectError(new File(errLog))
+                .start();
+    }
+
+    private static void stopProcess(Process process, String name) {
+        if (process == null || !process.isAlive()) return;
+
+        process.destroy();
+        try {
+            if (!process.waitFor(3, TimeUnit.SECONDS)) {
+                process.destroyForcibly();
             }
-            case "2" -> {
-                Thread thr = new Thread(new FakeClient(101, 1));
-                thr.start();
-                thr.join();
-            }
-            case "3" -> {
-                Thread thr = new Thread(new FakeClient(1, 1));
-                thr.start();
-                thr.join();
-            }
-            case "4" -> {
-                Thread thr = new Thread(new FakeClient(2, 1));
-                thr.start();
-                thr.join();
-            }
-            case "5" -> {
-                Thread thr = new Thread(new FakeClient(5, 1));
-                thr.start();
-                thr.join();
-            }
+            System.out.println(name + " detenido");
+        } catch (InterruptedException e) {
+            process.destroyForcibly();
+            Thread.currentThread().interrupt();
         }
+    }
+
+    private static String buildJavaCommand(String mainClass) {
+        String userHome = System.getProperty("user.home");
+
+        String classpath =
+                "target/classes:" +
+                        userHome + "/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
+                        userHome + "/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
+                        userHome + "/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
+
+        return "java -cp \"" + classpath + "\" " + mainClass;
+    }
+
+    /* =========================
+       CLIENTES
+       ========================= */
+
+    private static void launchFakeClient() throws Exception {
+        if (!mainServerUp) {
+            System.out.println("El servidor no está encendido");
+            return;
+        }
+
+        Thread t = new Thread(new FakeClient(1, 1));
+        t.start();
+        t.join();
     }
 
     private static void launchConstantFlow() {
-
-        if (mainServerUp) {
-            Thread thr = new Thread(new ConstantFlow(1, 10, 500, 1500));
-            thr.start();
-
-            try {
-                thr.join();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        } else {
-            System.out.println("Encienda el servidor para hacer un test.");
-        }
-
-    }
-
-    private static void launchMainServer() throws IOException {
-        if (mainServerUp) {
-            System.out.println("El servidor principal ya está encendido");
+        if (!mainServerUp) {
+            System.out.println("El servidor no está encendido");
             return;
         }
 
-        String userHome = System.getProperty("user.home");
-
-        String classpath =
-                "target/classes:" +
-                        userHome + "/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
-                        userHome + "/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
-                        userHome + "/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
-
-        String command = "java -cp \"" + classpath + "\" MainServer";
-
-        mainServerProcess = launchInTerminal(command);
-        mainServerUp = true;
+        new Thread(new ConstantFlow(1, 10, 500, 1500)).start();
     }
 
-
-
-    private static void launchSecServer() throws IOException {
-        if (secServerUp) {
-            System.out.println("El servidor secundario ya está encendido");
-            return;
-        }
-
-        String userHome = System.getProperty("user.home");
-
-        String classpath =
-                "target/classes:" +
-                        userHome + "/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
-                        userHome + "/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
-                        userHome + "/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
-
-        String command = "java -cp \"" + classpath + "\" SecondaryServer";
-
-        secServerProcess = launchInTerminal(command);
-        secServerUp = true;
-    }
-
-    public static void stopMainServer() {
-
-//        if (mainServerProcess == null || !mainServerProcess.isAlive()) {
-//            return;
-//        }
-
-        mainServerProcess.destroy();
-
+    private static void openLogTail(String logFile, String title) {
         try {
-            if (!mainServerProcess.waitFor(3, java.util.concurrent.TimeUnit.SECONDS)) {
-                mainServerProcess.destroyForcibly();
-            }
-        } catch (InterruptedException e) {
-            mainServerProcess.destroyForcibly();
-            Thread.currentThread().interrupt();
+            new ProcessBuilder(
+                    "sh", "-c",
+                    "x-terminal-emulator -T \"" + title +
+                            "\" -e sh -c \"tail -f " + logFile + "\""
+            ).start();
+        } catch (IOException e) {
+            System.out.println("No se pudo abrir terminal para " + logFile);
         }
-
-        mainServerUp = false;
-
     }
-
-    public static void stopSecServer() {
-
-        if (secServerProcess == null || !secServerProcess.isAlive()) {
-            return;
-        }
-
-        secServerProcess.destroy();
-
-        try {
-            if (!secServerProcess.waitFor(3, java.util.concurrent.TimeUnit.SECONDS)) {
-                secServerProcess.destroyForcibly();
-            }
-        } catch (InterruptedException e) {
-            secServerProcess.destroyForcibly();
-            Thread.currentThread().interrupt();
-        }
-
-        secServerUp = false;
-
-    }
-
-    private static boolean hasGui() {
-        return System.getenv("DISPLAY") != null ||
-                System.getenv("WAYLAND_DISPLAY") != null;
-    }
-
-    private static String detectTerminal() {
-        String[] terminals = {
-                "gnome-terminal",
-                "konsole",
-                "xfce4-terminal",
-                "alacritty",
-                "kitty",
-                "xterm"
-        };
-
-        for (String t : terminals) {
-            try {
-                Process p = new ProcessBuilder("sh", "-c", "command -v " + t).start();
-                if (p.waitFor() == 0) return t;
-            } catch (Exception ignored) {}
-        }
-        return null;
-    }
-
-    private static Process launchInTerminal(String command) throws IOException {
-
-        String execCommand = "exec " + command;
-
-        if (!hasGui()) {
-            System.out.println("Sin entorno gráfico, ejecutando en background");
-            return new ProcessBuilder("sh", "-c", execCommand).start();
-        }
-
-        String terminal = detectTerminal();
-
-        if (terminal == null) {
-            System.out.println("⚠ No se detectó terminal, ejecutando en background");
-            return new ProcessBuilder("sh", "-c", execCommand).start();
-        }
-
-        return switch (terminal) {
-            case "gnome-terminal" ->
-                    new ProcessBuilder(
-                            "gnome-terminal", "--",
-                            "sh", "-c", execCommand
-                    ).start();
-
-            case "konsole" ->
-                    new ProcessBuilder(
-                            "konsole", "-e",
-                            "sh", "-c", execCommand
-                    ).start();
-
-            case "xfce4-terminal" ->
-                    new ProcessBuilder(
-                            "xfce4-terminal", "-e",
-                            "sh", "-c", execCommand
-                    ).start();
-
-            case "alacritty", "kitty" ->
-                    new ProcessBuilder(
-                            terminal, "-e",
-                            "sh", "-c", execCommand
-                    ).start();
-
-            default ->
-                    new ProcessBuilder(
-                            "xterm", "-e",
-                            "sh", "-c", execCommand
-                    ).start();
-        };
-    }
-
-
 
 }
-
-
