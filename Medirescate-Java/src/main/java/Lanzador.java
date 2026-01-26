@@ -29,7 +29,7 @@ public class Lanzador {
                                 : AnsiColors.RED_BRIGHT + "detenido") +
                         reset + "\n" +
 
-                "Estado del servidor secundario: " +
+                        "Estado del servidor secundario: " +
                         (secServerUp
                                 ? AnsiColors.GREEN_BRIGHT + "encendido"
                                 : AnsiColors.RED_BRIGHT + "detenido") +
@@ -156,7 +156,7 @@ public class Lanzador {
     private static void fakeClientMenu() {
         if (mainServerUp) {
             System.out.println( AnsiColors.PURPLE_BRIGHT+
-            "╔══════════════════════════════════════════════╗\n" +
+                    "╔══════════════════════════════════════════════╗\n" +
                     "║                                              ║\n" +
                     "║     " + AnsiColors.CYAN_BRIGHT + "🖧  LANZAR FAKECLIENT – MAIN SERVER" + AnsiColors.PURPLE_BRIGHT + "      ║\n" +
                     "║                                              ║\n" +
@@ -187,7 +187,7 @@ public class Lanzador {
                     "║                                              ║\n" +
                     "╠══════════════════════════════════════════════╝\n" +
                     AnsiColors.YELLOW_BRIGHT + "╚═══ >> "
-        );
+            );
 
         } else {
             System.out.println("Encienda el servidor para hacer un test.");
@@ -262,70 +262,52 @@ public class Lanzador {
     }
 
     private static void launchMainServer() throws IOException {
-        if (!mainServerUp) {
-            String javaPath = "java";
-            String userHome = System.getProperty("user.home");
-
-            String classpath =
-                    "target/classes:" +
-                            userHome + "/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
-                            userHome + "/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
-                            userHome + "/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
-
-            String command = javaPath +
-                    " -cp \"" + classpath + "\" " +
-                    "MainServer";
-
-            ProcessBuilder pb = new ProcessBuilder(
-                    "x-terminal-emulator",
-                    "-e",
-                    "bash", "-c",
-                    command + "; read -p 'Pulsa ENTER para salir...'");
-
-            pb.directory(new File(System.getProperty("user.dir")));
-
-            mainServerProcess = pb.start();
-            mainServerUp = true;
-        } else {
-            System.out.println("El servidor ya está encendido");
+        if (mainServerUp) {
+            System.out.println("El servidor principal ya está encendido");
+            return;
         }
+
+        String userHome = System.getProperty("user.home");
+
+        String classpath =
+                "target/classes:" +
+                        userHome + "/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
+                        userHome + "/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
+                        userHome + "/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
+
+        String command = "java -cp \"" + classpath + "\" MainServer";
+
+        mainServerProcess = launchInTerminal(command);
+        mainServerUp = true;
     }
 
+
+
     private static void launchSecServer() throws IOException {
-        if (!secServerUp) {
-            String javaPath = "java";
-            String userHome = System.getProperty("user.home");
-
-            String classpath =
-                    "target/classes:" +
-                            userHome + "/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
-                            userHome + "/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
-                            userHome + "/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
-
-            String command = javaPath +
-                    " -cp \"" + classpath + "\" " +
-                    "SecondaryServer";
-
-            ProcessBuilder pb = new ProcessBuilder(
-                    "x-terminal-emulator",
-                    "-e",
-                    "bash", "-c",
-                    command + "; read -p 'Pulsa ENTER para salir...'");
-
-            pb.directory(new File(System.getProperty("user.dir")));
-
-            secServerProcess = pb.start();
-            secServerUp = true;
-        } else {
-            System.out.println("El servidor ya está encendido");
+        if (secServerUp) {
+            System.out.println("El servidor secundario ya está encendido");
+            return;
         }
+
+        String userHome = System.getProperty("user.home");
+
+        String classpath =
+                "target/classes:" +
+                        userHome + "/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:" +
+                        userHome + "/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar:" +
+                        userHome + "/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar";
+
+        String command = "java -cp \"" + classpath + "\" SecondaryServer";
+
+        secServerProcess = launchInTerminal(command);
+        secServerUp = true;
     }
 
     public static void stopMainServer() {
 
-        if (mainServerProcess == null || !mainServerProcess.isAlive()) {
-            return;
-        }
+//        if (mainServerProcess == null || !mainServerProcess.isAlive()) {
+//            return;
+//        }
 
         mainServerProcess.destroy();
 
@@ -362,6 +344,80 @@ public class Lanzador {
         secServerUp = false;
 
     }
+
+    private static boolean hasGui() {
+        return System.getenv("DISPLAY") != null ||
+                System.getenv("WAYLAND_DISPLAY") != null;
+    }
+
+    private static String detectTerminal() {
+        String[] terminals = {
+                "gnome-terminal",
+                "konsole",
+                "xfce4-terminal",
+                "alacritty",
+                "kitty",
+                "xterm"
+        };
+
+        for (String t : terminals) {
+            try {
+                Process p = new ProcessBuilder("sh", "-c", "command -v " + t).start();
+                if (p.waitFor() == 0) return t;
+            } catch (Exception ignored) {}
+        }
+        return null;
+    }
+
+    private static Process launchInTerminal(String command) throws IOException {
+
+        String execCommand = "exec " + command;
+
+        if (!hasGui()) {
+            System.out.println("Sin entorno gráfico, ejecutando en background");
+            return new ProcessBuilder("sh", "-c", execCommand).start();
+        }
+
+        String terminal = detectTerminal();
+
+        if (terminal == null) {
+            System.out.println("⚠ No se detectó terminal, ejecutando en background");
+            return new ProcessBuilder("sh", "-c", execCommand).start();
+        }
+
+        return switch (terminal) {
+            case "gnome-terminal" ->
+                    new ProcessBuilder(
+                            "gnome-terminal", "--",
+                            "sh", "-c", execCommand
+                    ).start();
+
+            case "konsole" ->
+                    new ProcessBuilder(
+                            "konsole", "-e",
+                            "sh", "-c", execCommand
+                    ).start();
+
+            case "xfce4-terminal" ->
+                    new ProcessBuilder(
+                            "xfce4-terminal", "-e",
+                            "sh", "-c", execCommand
+                    ).start();
+
+            case "alacritty", "kitty" ->
+                    new ProcessBuilder(
+                            terminal, "-e",
+                            "sh", "-c", execCommand
+                    ).start();
+
+            default ->
+                    new ProcessBuilder(
+                            "xterm", "-e",
+                            "sh", "-c", execCommand
+                    ).start();
+        };
+    }
+
 
 
 }

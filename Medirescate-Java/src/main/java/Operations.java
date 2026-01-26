@@ -138,6 +138,7 @@ public class Operations {
         String prevState = req.data.get("prevState").getAsString();
         String newState = req.data.get("newState").getAsString();
 
+
         String sql = """
                 UPDATE Operario
                 SET estado = ?
