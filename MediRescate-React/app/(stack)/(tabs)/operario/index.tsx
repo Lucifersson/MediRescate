@@ -1,20 +1,20 @@
-import { useTcpSocket } from "@/core/actions/core.action";
+import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperario } from "@/hooks/useOperario";
 import { Ionicons } from "@expo/vector-icons";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Operario } from "@/types/types";
-import { useEffect } from "react";
 
 const OperarioScreen = () => {
   const { user } = useAuthContext();
   const { estado, color, cambioEstado } = useOperario({ operario: user });
 
   //TEST: probando si funciona el campo de estado asi
+  {/* 
   useEffect(() => {
     cambioEstado("libre");
   }, []);
+  */}
 
   return (
     <SafeAreaView className={`flex-1 bg-gray-50 border${color}`}>
@@ -43,7 +43,7 @@ const OperarioScreen = () => {
           </Text>
         </View>
 
-        <Ionicons name="person-circle-outline" size={50} color="white" />
+        <LogOutComponent operario={user} />
       </View>
 
       {/* Datos de la emergencia (Tarjeta Central) */}
