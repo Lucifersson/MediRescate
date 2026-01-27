@@ -3,6 +3,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.math.BigDecimal;
 import java.net.ConnectException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -203,6 +204,50 @@ public class Operations {
             JsonObject errorData = new JsonObject();
             errorData.addProperty("message", "Error conectando con la base de datos");
             return new ResponseDATA("error", errorData);
+        }
+    }
+
+    public static Response operation7(Connection conn, Request req) throws SQLException {
+        String sql = """
+                INSERT INTO Emergencia (emergencia, latitud, longitud, hora_emergencia, estado, id_teleoperador)
+                VALUES (?, ?, ?, ?, ?, ?);
+                """;
+
+        String sql2 = """
+                INSERT INTO AsignarEmergencia (id_emergencia, id_operario)
+                VALUES (?, ?);
+                """;
+
+        try (PreparedStatement ps = conn.prepareStatement(
+                sql, Statement.RETURN_GENERATED_KEYS
+        );
+             PreparedStatement ps2 = conn.prepareStatement(sql2)) {
+
+            ps.setString(1, req.data.get("descripcion").getAsString());
+            ps.setBigDecimal(2, BigDecimal.ONE);
+            ps.setBigDecimal(3, BigDecimal.ONE);
+            ps.setTimestamp(4, Timestamp.valueOf("2000-01-01 00:00:00"));
+            ps.setString(5, "activa");
+            ps.setInt(6, 2);
+
+            ps.executeUpdate();
+
+            int idEmergencia = -1;
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    idEmergencia = rs.getInt(1);
+                }
+            }
+
+            ps2.setInt(1, idEmergencia);
+            ps2.setInt(2, req.data.get("id_operario").getAsInt());
+
+            ps2.executeUpdate();
+
+            String status = "success";
+            JsonObject data = new JsonObject();
+
+            return new ResponseDATA(status, data);
         }
     }
 

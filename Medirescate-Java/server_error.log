@@ -125,3 +125,8 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 2026-01-27T11:46:31.152584442 - Conexión rehusada
 2026-01-27T11:49:23.278300953 - Conexión rehusada
 2026-01-27T18:31:17.290436163 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null
+2026-01-27T20:36:47.681630300 - Conexión rehusada
+2026-01-27T20:38:27.602274139 - La dirección ya se está usando
+2026-01-27T21:34:44.884065770 - Cannot add or update a child row: a foreign key constraint fails (`medirescate`.`emergencia`, CONSTRAINT `fk_teleoperador_emergencia` FOREIGN KEY (`id_teleoperador`) REFERENCES `teleoperador` (`id_teleoperador`))
+2026-01-27T21:35:41.833848628 - Generated keys not requested. You need to specify Statement.RETURN_GENERATED_KEYS to Statement.executeUpdate(), Statement.executeLargeUpdate() or Connection.prepareStatement().
+2026-01-27T21:36:56.889727657 - Cannot add or update a child row: a foreign key constraint fails (`medirescate`.`asignaremergencia`, CONSTRAINT `fk_operario_asignaremergencia` FOREIGN KEY (`id_operario`) REFERENCES `operario` (`id_operario`))
