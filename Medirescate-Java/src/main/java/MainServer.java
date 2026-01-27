@@ -21,7 +21,7 @@ public class MainServer {
         int port = ConfigLoader.getPort();
         System.out.println(AnsiColors.YELLOW+"\n[MAINSERVER]"+AnsiColors.GREEN_BRIGHT+"SERVIDOR ENCENDIDO Escuchando en puerto: "+port+"...");
 
-//        new Thread(new FakeClient(1, 1)).start();
+        new Thread(new FakeClient(6, 1, 1)).start();
 
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
@@ -29,8 +29,6 @@ public class MainServer {
             Gson gson = new Gson();
             while (true) {
                 Socket clientSocket = serverSocket.accept(); // <-- Espera aquí
-
-
 
                 System.out.println("\n"+AnsiColors.YELLOW+"[MAINSERVER]"+AnsiColors.RESET+" Conectado cliente en: "+clientSocket.getInetAddress()+"\n");
 
