@@ -27,30 +27,20 @@ public class MainServer {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
             Gson gson = new Gson();
-            while (running) {
+            while (true) {
                 Socket clientSocket = serverSocket.accept(); // <-- Espera aquí
 
-                BufferedReader in = new BufferedReader( //objeto para leer lo que ha llegado
-                        new InputStreamReader(clientSocket.getInputStream())
-                );
-                String line = in.readLine();
 
-                Request req = gson.fromJson(line, Request.class);
 
-                if (!req.code.matches("-1")) { //NO apagado
+                System.out.println("\n"+AnsiColors.YELLOW+"[MAINSERVER]"+AnsiColors.RESET+" Conectado cliente en: "+clientSocket.getInetAddress()+"\n");
 
-                    System.out.println("\n"+AnsiColors.YELLOW+"[MAINSERVER]"+AnsiColors.RESET+" Conectado cliente en: "+clientSocket.getInetAddress()+"\n");
+                Client handler = new Client(clientSocket, clientSocket.getInetAddress()+"");
+                new Thread(handler).start();
+                System.out.println("thread creado");
 
-                    Client handler = new Client(clientSocket, clientSocket.getInetAddress()+"");
-                    new Thread(handler).start();
-                    System.out.println("thread creado");
-                } else {
-                    running = false;
-                }
 
             }
 
-            System.out.println(AnsiColors.YELLOW+"\n[MAINSERVER]"+AnsiColors.RED_BRIGHT+"SERVIDOR APAGADO");
 
         } catch (Exception e) {
             LogWriter.logError(e);
