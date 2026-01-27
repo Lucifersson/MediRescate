@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.*;
 import java.net.Socket;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 
 public class Client implements Runnable {
@@ -70,7 +71,7 @@ public class Client implements Runnable {
 
 
 
-    private Response processRequestCode(Request req, Connection conn) {
+    private Response processRequestCode(Request req, Connection conn) throws SQLException {
         
         return switch (req.code) {
             case "100" -> Operations.operation100();
@@ -79,6 +80,7 @@ public class Client implements Runnable {
             case "2" -> Operations.operation2(conn, req);
             case "5" -> Operations.operation5(conn, req);
             case "6" -> Operations.operation6(conn, req);
+            case "7" -> Operations.operation7(conn, req);
 
 
             default -> {
