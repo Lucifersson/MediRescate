@@ -1,26 +1,26 @@
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
-import { Operario } from "@/types/types";
+import { NombreOperario } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons"; // Asegúrate de tenerlo instalado
 import React, { useState } from "react";
 import { Image, Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 // Ejemplo de datos
-const OPERARIOS_DATA = [
-  { id: '1', nombre: 'Juan Pérez' },
-  { id: '2', nombre: 'María García' },
-  { id: '3', nombre: 'Carlos Ruiz' },
+const OPERARIOS_DATA: NombreOperario[] = [
+  { id_operario: 1, nombre: 'Juan Pérez' },
+  { id_operario: 2, nombre: 'María García' },  //Lista operarios ficticia. TODO: RE¡emplazar por el array de operarios libres
+  { id_operario: 3, nombre: 'Carlos Ruiz' },
 ];
 
 const TeleoperadorScreen = () => {
-  const [titulo, setTitulo] = useState("");
-  const [operario, setOperario] = useState<Operario>();
-  const [mostrarUsuarios, setMostrarUsuarios] = useState(false);
+  const [titulo, setTitulo] = useState("");   //Titulo de la emergencia. Es solo un string por lo que el nombre y el uso que se le de se cambia rápidamente
+  const [operario, setOperario] = useState<NombreOperario | null>();  //Operario elegido de la lista de operarios libres, ya es tipo nombreOperario
+  const [mostrarUsuarios, setMostrarUsuarios] = useState(false);  //Booleana para mostrar y ocultar la lista
 
-  // const seleccionarOperario = (item) => {
-  //   setOperario(item);
-  //   setMostrarUsuarios(false); // Escondemos la lista al elegir
-  // };
+  const seleccionarOperario = (item: NombreOperario | null) => {  // Al hacer click sobre un operario lo guarda sobre la variable operario
+    setOperario(item);
+    setMostrarUsuarios(false);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -52,7 +52,7 @@ const TeleoperadorScreen = () => {
             value={titulo}
           />
 
-          
+
 
           <Text className="text-gray-500 font-semibold mb-2 ml-1">Asignar Operario</Text>
 
@@ -71,16 +71,31 @@ const TeleoperadorScreen = () => {
             />
           </Pressable>
 
-        {mostrarUsuarios && (
+          {mostrarUsuarios && (
             <View className="mt-2 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-lg">
-              {OPERARIOS_DATA.map((item) => (
-                <Pressable 
-                  key={item.id}
-                 // onPress={() => seleccionarOperario(item)}
+              {operario && (
+                 <Pressable
+                className="p-4 border-b border-gray-100 active:bg-red-50"
+                onPress={() => seleccionarOperario(null)}
+              >
+                <Text className="text-gray-400">Quitar selección</Text>
+              </Pressable>
+              )}
+             
+              {OPERARIOS_DATA.map((item) => (  //Mapeo de todos los objetos de la lista
+
+
+
+                <Pressable
+                  key={item.id_operario}
+                  onPress={() => { seleccionarOperario(item) }
+                  }
                   className="p-4 border-b border-gray-100 active:bg-red-50"
                 >
                   <Text className="text-gray-700">{item.nombre}</Text>
                 </Pressable>
+
+
               ))}
             </View>
           )}
@@ -101,40 +116,7 @@ const TeleoperadorScreen = () => {
     </SafeAreaView>
   );
 
-  return (
-    <SafeAreaView className="flex-1">
-      <View className="flex-1 bg-gray-50">
-        {/* Cabecera con acción */}
-        <View className="p-4 flex-row justify-between items-center">
-          <Text className="text-gray-500 font-black uppercase text-xs tracking-widest">
-            Personal Libre
-          </Text>
-          <Pressable
-            onPress={solicitarOperarios}
-            className="bg-blue-600 px-4 py-2 rounded-full active:opacity-80"
-          >
-            <Text className="text-white text-xs font-bold">Actualizar</Text>
-          </Pressable>
-        </View>
 
-        <FlatList
-          data={operarios}
-          // Usamos idOperario según tu interface NombreOperario
-          keyExtractor={(item) => item.id_operario.toString()}
-          renderItem={renderOperario}
-          ListEmptyComponent={() => (
-            <View className="mt-20 items-center justify-center px-10">
-              <Ionicons name="people-outline" size={48} color="#d1d5db" />
-              <Text className="text-center text-gray-400 mt-4 font-medium">
-                No hay operarios disponibles en este momento o pulsa actualizar.
-              </Text>
-            </View>
-          )}
-          contentContainerStyle={{ paddingBottom: 20 }}
-        />
-      </View>
-    </SafeAreaView>
-  );
 };
 
 export default TeleoperadorScreen;
