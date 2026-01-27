@@ -12,13 +12,11 @@ public class Client implements Runnable {
     private final Socket socket;
     private final Gson gson = new Gson();
     private final String inet;
-    private final Request req;
+    private Request req = null;
 
-
-    public Client(Socket socket, String inet, Request req) {
+    public Client(Socket socket, String inet) {
         this.socket = socket;
         this.inet = inet;
-        this.req = req;
     }
 
 
@@ -35,40 +33,46 @@ public class Client implements Runnable {
                 )
         ) {
 
-//            while ((line = in.readLine()) != null) {
+            String line;
+            while ((line = in.readLine()) != null) {
                 System.out.println("Comprobacion");
 
-                System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON recibido "+AnsiColors.GREEN_BRIGHT+"[<<] "+AnsiColors.RESET + req);
+                System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON recibido "+AnsiColors.GREEN_BRIGHT+"[<<] "+AnsiColors.RESET);
 
                 // Parseo JSON
-//                Request req = gson.fromJson(line, Request.class);
+                req = gson.fromJson(line, Request.class);
 
                 // Procesar
-                Response resp = processRequestCode(req, conn);
+                if (!req.code.matches("-1")) {
 
-                System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + gson.toJson(resp));
+                    Response resp = processRequestCode(req, conn);
 
-                // Responder
-                out.println(gson.toJson(resp));
-//            }
+                    System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + gson.toJson(resp));
+
+                    // Responder
+                    out.println(gson.toJson(resp));
+                }
+
+            }
 
         } catch (Exception e) {
             LogWriter.logError(e);
         } finally {
             try {
-                System.out.printf("Sdas");
                 socket.close();
             } catch (IOException ignored) {}
         }
+        if (!req.code.matches("-1")) {
+            System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RED+" Conexión cerrada"+AnsiColors.RESET);
 
-        System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RED+" Conexión cerrada"+AnsiColors.RESET);
+        }
     }
 
 
 
 
     private Response processRequestCode(Request req, Connection conn) {
-
+        
         return switch (req.code) {
             case "100" -> Operations.operation100();
             case "101" -> Operations.operation101(conn);
