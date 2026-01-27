@@ -35,7 +35,6 @@ public class Client implements Runnable {
 
             String line;
             while ((line = in.readLine()) != null) {
-                System.out.println("Comprobacion");
 
                 System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON recibido "+AnsiColors.GREEN_BRIGHT+"[<<] "+AnsiColors.RESET+line);
 

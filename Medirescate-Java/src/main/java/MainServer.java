@@ -36,7 +36,6 @@ public class MainServer {
 
                 Client handler = new Client(clientSocket, clientSocket.getInetAddress()+"");
                 new Thread(handler).start();
-                System.out.println("thread creado");
 
 
             }
