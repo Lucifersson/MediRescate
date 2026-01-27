@@ -31,3 +31,8 @@ export interface ApiResponse<T> {
 export interface EstadoOperario {
   newState: "libre" | "ocupado" | "en_marcha";
 }
+
+export interface NombreOperario {
+  id_operario: number;
+  nombre: string;
+}
