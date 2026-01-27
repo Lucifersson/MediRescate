@@ -32,6 +32,7 @@ export interface EstadoOperario {
   newState: "libre" | "ocupado" | "en_marcha";
 }
 
+//NOTE: este es el tipo
 export interface NombreOperario {
   id_operario: number;
   nombre: string;
