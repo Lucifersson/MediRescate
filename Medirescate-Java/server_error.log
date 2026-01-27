@@ -124,3 +124,4 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 2026-01-27T11:45:33.138394245 - Conexión rehusada
 2026-01-27T11:46:31.152584442 - Conexión rehusada
 2026-01-27T11:49:23.278300953 - Conexión rehusada
+2026-01-27T18:31:17.290436163 - Cannot invoke "com.google.gson.JsonElement.getAsString()" because the return value of "com.google.gson.JsonObject.get(String)" is null

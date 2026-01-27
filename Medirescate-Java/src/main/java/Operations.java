@@ -1,5 +1,6 @@
 import BdClasses.Usuario;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.net.ConnectException;
@@ -166,33 +167,44 @@ public class Operations {
         }
     }
     // operarios libres
-//    public static Response operation6(Connection conn, Request req) {
-//        String sql = """
-//                SELECT o.id_operario, u.nombre
-//                FROM Operario o
-//                JOIN Usuario u ON u.id_usuario = o.id_operario
-//                WHERE o.estado = ?;
-//            """;
-//
-//        String estado = req.data.get("estado").getAsString();
-//
-//        JsonObject json = new JsonObject();
-//
-//        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setString(1, estado);
-//            ResultSet rs = ps.executeQuery();
-//
-//            if (rs.next()) {
-//
-//            }
-//        } catch (SQLException e) {
-//            LogWriter.logError(e);
-//            JsonObject errorData = new JsonObject();
-//            errorData.addProperty("message", "Error conectando con la base de datos");
-//            return new ResponseDATA("error", errorData);
-//        }
-//    }
+    public static Response operation6(Connection conn, Request req) {
+        String sql = """
+                SELECT o.id_operario, u.nombre
+                FROM Operario o
+                JOIN Usuario u ON u.id_usuario = o.id_operario
+                WHERE o.estado = ?;
+            """;
+
+        String estado = req.data.get("estado").getAsString();
+
+        JsonObject data = new JsonObject();
+        JsonArray users = new JsonArray();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, estado);
+            ResultSet rs = ps.executeQuery();
+
+
+            while (rs.next()) {
+                JsonObject operario = new JsonObject();
+                operario.addProperty("id_operario", rs.getString(1));
+                operario.addProperty("nombre", rs.getString(2));
+
+                users.add(operario);
+            }
+
+            data.add("users", users);
+
+            String status = "success";
+            return new ResponseDATA(status, data);
+        } catch (SQLException e) {
+            LogWriter.logError(e);
+            JsonObject errorData = new JsonObject();
+            errorData.addProperty("message", "Error conectando con la base de datos");
+            return new ResponseDATA("error", errorData);
+        }
+    }
 
     //EMERGENCY OPERATIONS
     public static Response operation200(Connection conn, Request request) {
