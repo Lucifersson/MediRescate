@@ -14,7 +14,6 @@ const OPERARIOS_DATA = [
 
 const TeleoperadorScreen = () => {
   const [titulo, setTitulo] = useState("");
-  const [descripcion, setDescripcion] = useState("");
   const [operario, setOperario] = useState<Operario>();
   const [mostrarUsuarios, setMostrarUsuarios] = useState(false);
 
@@ -53,17 +52,7 @@ const TeleoperadorScreen = () => {
             value={titulo}
           />
 
-          <Text className="text-gray-500 font-semibold mb-2 ml-1">Descripción de la emergencia</Text>
-          <TextInput
-            className="bg-gray-100 p-4 rounded-xl mb-4 text-gray-800 border border-gray-200"
-            placeholder="Detalles..."
-            multiline
-            numberOfLines={4}
-            textAlignVertical="top"
-            style={{ minHeight: 80 }}
-            onChangeText={setDescripcion}
-            value={descripcion}
-          />
+          
 
           <Text className="text-gray-500 font-semibold mb-2 ml-1">Asignar Operario</Text>
 
@@ -82,6 +71,19 @@ const TeleoperadorScreen = () => {
             />
           </Pressable>
 
+        {mostrarUsuarios && (
+            <View className="mt-2 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-lg">
+              {OPERARIOS_DATA.map((item) => (
+                <Pressable 
+                  key={item.id}
+                 // onPress={() => seleccionarOperario(item)}
+                  className="p-4 border-b border-gray-100 active:bg-red-50"
+                >
+                  <Text className="text-gray-700">{item.nombre}</Text>
+                </Pressable>
+              ))}
+            </View>
+          )}
         </View>
       </View>
 
