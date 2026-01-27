@@ -23,6 +23,7 @@ public class FakeClient implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("asdasd");
         if (silent<1) { // Cuenta atrás
             System.out.println(AnsiColors.PURPLE_BRIGHT+"[FakeClient]"+AnsiColors.RESET+" Enviando petición en\n"+AnsiColors.PURPLE_BRIGHT+"[FakeClient]"+AnsiColors.RESET+" 3...");
             try {
@@ -63,6 +64,7 @@ public class FakeClient implements Runnable {
             }
 
             if (!json.isEmpty()) {
+                System.out.println("sasdawdqwdqwasd");
                 if (silent<2) {
                     System.out.println(AnsiColors.PURPLE_BRIGHT+"[FakeClient]"+AnsiColors.RESET+" Enviando "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + json);
                 }
@@ -77,6 +79,7 @@ public class FakeClient implements Runnable {
 
 
         } catch (Exception e) {
+            System.out.printf("asdasdasdasdasdasdasdasdasdasdasdas");
             LogWriter.logError(e);
         }
     }

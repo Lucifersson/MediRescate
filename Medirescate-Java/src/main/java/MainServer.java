@@ -36,8 +36,10 @@ public class MainServer {
                 String line = in.readLine();
 
                 Request req = gson.fromJson(line, Request.class);
+                System.out.printf("check");
 
                 if (!req.code.matches("-1")) { //NO apagado
+                    System.out.printf("checasdasdk");
 
                     System.out.println("\n"+AnsiColors.YELLOW+"[MAINSERVER]"+AnsiColors.RESET+" Conectado cliente en: "+clientSocket.getInetAddress()+"\n");
 

@@ -68,7 +68,7 @@ public class Lanzador {
                         "6) Salir" + AnsiColors.CYAN_BRIGHT + "                                   ║\n" +
 
                         "╠══ " + AnsiColors.BLUE +
-                        "7) Pantalla Administrador" + AnsiColors.CYAN_BRIGHT + "                                   ║\n" +
+                        "7) Terminales" + AnsiColors.CYAN_BRIGHT + "                                   ║\n" +
 
                         "║                                              ║\n" +
                         "╠══════════════════════════════════════════════╣\n" +
@@ -95,6 +95,7 @@ public class Lanzador {
             case "4" -> stopServers();
             case "5" -> resetServers();
             case "6" -> exit();
+            case "7" -> openTerminals();
             default -> System.out.println("Opción no válida");
         }
     }
@@ -106,13 +107,16 @@ public class Lanzador {
     private static void startServers() throws IOException {
         if (!mainServerUp) {
             launchMainServer();
-            openLogTail("logs/mainserver.log", "MainServer LOG");
 
         }
         if (!secServerUp) {
             launchSecServer();
-            openLogTail("logs/secserver.log", "SecondaryServer LOG");
         }
+    }
+
+    private static void openTerminals() {
+        openLogTail("logs/mainserver.log", "MainServer LOG");
+        openLogTail("logs/secserver.log", "SecondaryServer LOG");
     }
 
     private static void stopServers() throws InterruptedException {
