@@ -3,7 +3,7 @@ import { NombreOperario } from "@/types/types";
 import { useEffect, useState } from "react";
 
 interface ArrayOperarios {
-  operarios: NombreOperario[];
+  users: NombreOperario[];
 }
 
 export const useOperariosDisponibles = () => {
@@ -19,10 +19,14 @@ export const useOperariosDisponibles = () => {
   useEffect(() => {
     if (response) {
       if (response.status === "success") {
-        setOperarios(response.data.operarios);
+        setOperarios(response.data.users);
       }
     }
   }, [response]);
+
+  useEffect(() => {
+    console.log("Contenido de array operarios: ", operarios);
+  }, [operarios]);
 
   return {
     solicitarOperarios,
