@@ -252,14 +252,45 @@ public class Lanzador {
     }
 
     private static void openLogTail(String logFile, String title) {
-        try {
-            new ProcessBuilder(
-                    "sh", "-c",
-                    "x-terminal-emulator -T \"" + title +
-                            "\" -e sh -c \"tail -f " + logFile + "\""
-            ).start();
-        } catch (IOException e) {
-            System.out.println("No se pudo abrir terminal para " + logFile);
+        String[] terminals = {
+                "kitty -e",
+                // GNOME / GTK
+                "gnome-terminal --",
+                "kgx --",                 // GNOME Console (nuevo en GNOME)
+                "tilix -e",
+                "guake -e",
+                "tilda -c",
+
+                // KDE
+                "konsole -e",
+                "yakuake -e",
+
+                // XFCE / LXQt / ligeros
+                "xfce4-terminal -e",
+                "lxterminal -e",
+                "qterminal -e",
+                "mate-terminal -e",
+
+                // Genéricas / clásicas
+                "alacritty -e",
+                "terminator -e",
+                "urxvt -e",
+                "rxvt -e",
+
+                // Muy básicas / casi siempre presentes
+                "xterm -e",
+                "eterm -e"
+        };
+
+
+        for (String term : terminals) {
+            try {
+                new ProcessBuilder(
+                        "sh", "-c",
+                        term + " sh -c \"tail -f " + logFile + "\""
+                ).start();
+                break; // si funciona, salimos
+            } catch (IOException ignored) {}
         }
     }
 
