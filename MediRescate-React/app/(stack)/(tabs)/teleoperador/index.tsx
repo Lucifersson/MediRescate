@@ -100,6 +100,41 @@ const TeleoperadorScreen = () => {
       </View>
     </SafeAreaView>
   );
+
+  return (
+    <SafeAreaView className="flex-1">
+      <View className="flex-1 bg-gray-50">
+        {/* Cabecera con acción */}
+        <View className="p-4 flex-row justify-between items-center">
+          <Text className="text-gray-500 font-black uppercase text-xs tracking-widest">
+            Personal Libre
+          </Text>
+          <Pressable
+            onPress={solicitarOperarios}
+            className="bg-blue-600 px-4 py-2 rounded-full active:opacity-80"
+          >
+            <Text className="text-white text-xs font-bold">Actualizar</Text>
+          </Pressable>
+        </View>
+
+        <FlatList
+          data={operarios}
+          // Usamos idOperario según tu interface NombreOperario
+          keyExtractor={(item) => item.id_operario.toString()}
+          renderItem={renderOperario}
+          ListEmptyComponent={() => (
+            <View className="mt-20 items-center justify-center px-10">
+              <Ionicons name="people-outline" size={48} color="#d1d5db" />
+              <Text className="text-center text-gray-400 mt-4 font-medium">
+                No hay operarios disponibles en este momento o pulsa actualizar.
+              </Text>
+            </View>
+          )}
+          contentContainerStyle={{ paddingBottom: 20 }}
+        />
+      </View>
+    </SafeAreaView>
+  );
 };
 
 export default TeleoperadorScreen;

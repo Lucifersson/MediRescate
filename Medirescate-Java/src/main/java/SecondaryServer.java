@@ -7,10 +7,16 @@
  * Si yo no estoy encendido mal vamos.
  */
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SecondaryServer {
+    private static volatile boolean running = true;
+
     public static void main(String[] args) {
         int port = ConfigLoader.getSecPort();
         System.out.println(AnsiColors.YELLOW+"[SEC.SERVER]"+AnsiColors.RESET+" Escuchando en puerto: "+port+"...");
@@ -19,12 +25,27 @@ public class SecondaryServer {
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
-            while (true) {
+            Gson gson = new Gson();
+            while (running) {
                 Socket clientSocket = serverSocket.accept(); // <-- Espera aquí
-                System.out.println("\n"+AnsiColors.YELLOW+"[SEC.SERVER]"+AnsiColors.RESET+" Conectado cliente en: "+clientSocket.getInetAddress()+"\n");
 
-                Client handler = new Client(clientSocket, clientSocket.getInetAddress()+"");
-                new Thread(handler).start();
+                BufferedReader in = new BufferedReader( //objeto para leer lo que ha llegado
+                        new InputStreamReader(clientSocket.getInputStream())
+                );
+                String line = in.readLine();
+
+                Request req = gson.fromJson(line, Request.class);
+
+                if (!req.code.matches("-1")) { //NO apagado
+
+                    System.out.println("\n"+AnsiColors.YELLOW+"[SEC.SERVER]"+AnsiColors.RESET+" Conectado cliente en: "+clientSocket.getInetAddress()+"\n");
+
+                    Client handler = new Client(clientSocket, clientSocket.getInetAddress()+"");
+                    new Thread(handler).start();
+                } else {
+                    running = false;
+                }
+
             }
 
         } catch (Exception e) {
