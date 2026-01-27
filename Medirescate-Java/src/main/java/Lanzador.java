@@ -68,7 +68,7 @@ public class Lanzador {
                         "6) Salir" + AnsiColors.CYAN_BRIGHT + "                                   ║\n" +
 
                         "╠══ " + AnsiColors.BLUE +
-                        "7) Terminales" + AnsiColors.CYAN_BRIGHT + "                                   ║\n" +
+                        "7) Terminales" + AnsiColors.CYAN_BRIGHT + "                              ║\n" +
 
                         "║                                              ║\n" +
                         "╠══════════════════════════════════════════════╣\n" +
@@ -200,20 +200,7 @@ public class Lanzador {
                 .start();
     }
 
-//    private static void stopProcess(Process process, String name) {
-//        if (process == null || !process.isAlive()) return;
-//
-//        process.destroy();
-//        try {
-//            if (!process.waitFor(3, TimeUnit.SECONDS)) {
-//                process.destroyForcibly();
-//            }
-//            System.out.println(name + " detenido");
-//        } catch (InterruptedException e) {
-//            process.destroyForcibly();
-//            Thread.currentThread().interrupt();
-//        }
-//    }
+
 
     private static String buildJavaCommand(String mainClass) {
         String userHome = System.getProperty("user.home");
