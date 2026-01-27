@@ -1,5 +1,6 @@
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useOperariosDisponibles } from "@/hooks/useOperariosDisponibles";
+import { useRegistrarEmergencia } from "@/hooks/useRegistrarEmergencia"; // 🚀 Importamos el nuevo hook
 import { NombreOperario } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
@@ -19,8 +20,14 @@ const TeleoperadorScreen = () => {
   const [operario, setOperario] = useState<NombreOperario | null>(null);
   const [mostrarUsuarios, setMostrarUsuarios] = useState(false);
 
-  // Importamos el hook con la función de llamada y los datos del socket
   const { operarios, solicitarOperarios } = useOperariosDisponibles();
+
+  // 🚀 Inicializamos el registro
+  const {
+    registrarEmergencia,
+    registroExitoso,
+    loading: enviando,
+  } = useRegistrarEmergencia();
 
   useEffect(() => {
     if (mostrarUsuarios) {
@@ -28,14 +35,38 @@ const TeleoperadorScreen = () => {
     }
   }, [mostrarUsuarios]);
 
+  // Limpiar formulario si el registro fue ok
+  useEffect(() => {
+    if (registroExitoso) {
+      setTitulo("");
+      setOperario(null);
+      // Opcional: ocultar el mensaje después de 3 segundos
+    }
+  }, [registroExitoso]);
+
   const seleccionarOperario = (item: NombreOperario | null) => {
     setOperario(item);
-    console.log("La id del operario seleccionado es: ", item?.id_operario);
     setMostrarUsuarios(false);
+  };
+
+  const manejarEnvio = () => {
+    if (operario && titulo) {
+      registrarEmergencia(operario.id_operario, titulo);
+    }
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {/* 🟢 INDICADOR VISUAL DE ÉXITO */}
+      {registroExitoso && (
+        <View className="bg-green-500 mx-4 mt-2 p-3 rounded-xl flex-row items-center justify-center shadow-lg">
+          <Ionicons name="checkmark-circle" size={20} color="white" />
+          <Text className="text-white font-bold ml-2">
+            Emergencia registrada correctamente
+          </Text>
+        </View>
+      )}
+
       <View className="flex-1">
         {/* Header */}
         <View className="mx-4 mt-4 flex-row justify-between bg-red-500 p-4 items-center rounded-2xl shadow-md">
@@ -68,15 +99,15 @@ const TeleoperadorScreen = () => {
             placeholder="Ej: Accidente de tráfico"
             onChangeText={setTitulo}
             value={titulo}
+            editable={!enviando} // Bloquear mientras envía
           />
 
           <Text className="text-gray-500 font-semibold mb-2 ml-1">
             Asignar Operario Libre
           </Text>
 
-          {/* BOTÓN SELECTOR DE OPERARIO */}
           <Pressable
-            onPress={() => setMostrarUsuarios(!mostrarUsuarios)}
+            onPress={() => !enviando && setMostrarUsuarios(!mostrarUsuarios)}
             className="flex-row justify-between items-center bg-gray-100 p-4 rounded-xl border border-gray-200 active:bg-gray-200"
           >
             <Text
@@ -96,17 +127,6 @@ const TeleoperadorScreen = () => {
           {/* LISTA DESPLEGABLE */}
           {mostrarUsuarios && (
             <View className="mt-2 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-lg max-h-60">
-              {operario && (
-                <Pressable
-                  className="p-4 border-b border-gray-100 bg-gray-50 active:bg-red-50"
-                  onPress={() => seleccionarOperario(null)}
-                >
-                  <Text className="text-red-500 font-bold text-center">
-                    Quitar selección actual
-                  </Text>
-                </Pressable>
-              )}
-
               <FlatList
                 data={operarios}
                 keyExtractor={(item) => item.id_operario.toString()}
@@ -117,9 +137,7 @@ const TeleoperadorScreen = () => {
                     className="p-4 border-b border-gray-50 active:bg-blue-50 flex-row justify-between items-center"
                   >
                     <View className="flex-row items-center flex-1">
-                      {/* Indicador de estado libre (Punto verde) */}
-                      <View className="w-3 h-3 bg-green-500 rounded-full mr-3 shadow-sm shadow-green-500/50" />
-
+                      <View className="w-3 h-3 bg-green-500 rounded-full mr-3" />
                       <View>
                         <Text className="text-gray-700 font-medium">
                           {item.nombre}
@@ -129,19 +147,10 @@ const TeleoperadorScreen = () => {
                         </Text>
                       </View>
                     </View>
-
                     <Text className="text-gray-300 text-xs">
                       ID: {item.id_operario}
                     </Text>
                   </Pressable>
-                )}
-                ListEmptyComponent={() => (
-                  <View className="p-8 items-center">
-                    <ActivityIndicator size="small" color="#9ca3af" />
-                    <Text className="text-center text-gray-400 italic mt-2">
-                      Buscando operarios libres...
-                    </Text>
-                  </View>
                 )}
               />
             </View>
@@ -152,16 +161,26 @@ const TeleoperadorScreen = () => {
       {/* BOTÓN INFERIOR */}
       <View className="px-4 pb-6">
         <Pressable
-          className={`rounded-2xl py-4 shadow-lg active:opacity-90 ${
-            operario && titulo ? "bg-red-500" : "bg-gray-300"
+          className={`rounded-2xl py-4 shadow-lg flex-row justify-center items-center ${
+            operario && titulo && !enviando
+              ? "bg-red-500 active:opacity-90"
+              : "bg-gray-300"
           }`}
-          disabled={!operario || !titulo}
-          onPress={() =>
-            console.log("Registrando emergencia para:", operario?.nombre)
-          }
+          disabled={!operario || !titulo || enviando}
+          onPress={manejarEnvio}
         >
-          <Text className="text-lg font-bold text-white text-center">
-            Registrar Emergencia
+          {enviando ? (
+            <ActivityIndicator color="white" className="mr-2" />
+          ) : (
+            <Ionicons
+              name="paper-plane"
+              size={20}
+              color="white"
+              className="mr-2"
+            />
+          )}
+          <Text className="text-lg font-bold text-white text-center ml-2">
+            {enviando ? "Enviando..." : "Registrar Emergencia"}
           </Text>
         </Pressable>
       </View>
