@@ -128,49 +128,81 @@ const TeleoperadorScreen = () => {
           {/* LISTA DESPLEGABLE */}
           {mostrarUsuarios && (
             <View className="mt-2 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-lg max-h-60">
-              {!operario &&(
+              {operario && (
                 <Pressable
-                    onPress={() => seleccionarOperario(null)}
-                    className="p-4 border-b border-gray-50 active:bg-blue-50 flex-row justify-between items-center"
-                  >
-                    <View className="flex-row items-center flex-1">
-                      <View className="w-3 h-3 bg-green-500 rounded-full mr-3" />
-                      <View>
-                        <Text className="text-gray-400 font-medium">
-                          Eliminar selección
-                        </Text>                     
-                      </View>
+                  onPress={() => seleccionarOperario(null)}
+                  className="p-4 border-b border-gray-50 active:bg-blue-50 flex-row justify-between items-center"
+                >
+                  <View className="flex-row items-center flex-1">
+                    <View className="w-3 h-3 bg-red-400 rounded-full mr-3" />
+                    <View>
+                      <Text className="text-red-300 font-medium">
+                        Eliminar selección
+                      </Text>
                     </View>
-                  </Pressable>
+                  </View>
+                </Pressable>
               )}
               <FlatList
                 data={operarios}
                 keyExtractor={(item) => item.id_operario.toString()}
                 nestedScrollEnabled={true}
-                renderItem={({ item }) => (
-                  <Pressable
-                    onPress={() => seleccionarOperario(item)}
-                    className="p-4 border-b border-gray-50 active:bg-blue-50 flex-row justify-between items-center"
-                  >
-                    <View className="flex-row items-center flex-1">
-                      <View className="w-3 h-3 bg-green-500 rounded-full mr-3" />
-                      <View className="flex-row">
-                        <Text className="text-gray-700 font-medium">
-                          {item.nombre}
-                        </Text>
-                        {operario?.id_operario === item.id_operario && (
-                          <Ionicons name="checkmark-outline" color={'green'} />
-                        )}
-                        <Text className="text-[10px] text-green-600 uppercase font-bold">
-                          Disponible
+                // Separador más limpio que usar bordes en los items
+                ItemSeparatorComponent={() => (
+                  <View className="h-[1px] bg-gray-100 mx-4" />
+                )}
+                renderItem={({ item }) => {
+                  const isSelected = operario?.id_operario === item.id_operario;
+
+                  return (
+                    <Pressable
+                      onPress={() => seleccionarOperario(item)}
+                      // Cambiamos el fondo si está seleccionado para dar feedback
+                      className={`p-4 flex-row justify-between items-center active:bg-gray-50 ${
+                        isSelected ? "bg-blue-50/50" : ""
+                      }`}
+                    >
+                      <View className="flex-row items-center flex-1">
+                        {/* Indicador de estado con efecto de brillo */}
+                        <View className="relative mr-3">
+                          <View className="w-3 h-3 bg-green-500 rounded-full" />
+                          <View className="w-3 h-3 bg-green-500 rounded-full absolute animate-ping opacity-20" />
+                        </View>
+
+                        <View className="flex-1">
+                          <View className="flex-row items-center">
+                            <Text
+                              className={`text-base ${isSelected ? "text-blue-700 font-bold" : "text-gray-700 font-medium"}`}
+                            >
+                              {item.nombre}
+                            </Text>
+                            {isSelected && (
+                              <View className="ml-2 bg-green-100 rounded-full p-0.5">
+                                <Ionicons
+                                  name="checkmark"
+                                  size={12}
+                                  color="#166534"
+                                />
+                              </View>
+                            )}
+                          </View>
+
+                          {/* Tag de estado mejorado */}
+                          <Text className="text-[10px] text-green-600 font-bold tracking-wider">
+                            ● DISPONIBLE
+                          </Text>
+                        </View>
+                      </View>
+
+                      {/* Badge para el ID */}
+                      <View className="bg-gray-100 px-2 py-1 rounded-md">
+                        <Text className="text-gray-400 text-[10px] font-mono">
+                          #{item.id_operario}
                         </Text>
                       </View>
-                    </View>
-                    <Text className="text-gray-300 text-xs">
-                      ID: {item.id_operario}
-                    </Text>
-                  </Pressable>
-                )}
+                    </Pressable>
+                  );
+                }}
               />
             </View>
           )}
