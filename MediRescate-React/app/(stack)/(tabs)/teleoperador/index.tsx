@@ -154,10 +154,13 @@ const TeleoperadorScreen = () => {
                   >
                     <View className="flex-row items-center flex-1">
                       <View className="w-3 h-3 bg-green-500 rounded-full mr-3" />
-                      <View>
+                      <View className="flex-row">
                         <Text className="text-gray-700 font-medium">
                           {item.nombre}
                         </Text>
+                        {operario?.id_operario === item.id_operario && (
+                          <Ionicons name="checkmark-outline" color={'green'} />
+                        )}
                         <Text className="text-[10px] text-green-600 uppercase font-bold">
                           Disponible
                         </Text>
