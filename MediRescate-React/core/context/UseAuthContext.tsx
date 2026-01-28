@@ -1,4 +1,5 @@
 import { Operario } from "@/types/types";
+import { router } from "expo-router";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextProps {
@@ -17,7 +18,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [user]);
 
   const login = (userData: Operario) => setUser(userData);
-  const logout = () => setUser(null);
+  const logout = () => {
+    console.log("Cerrando sesion del usuario global.");
+    setUser(null);
+    router.replace("/(stack)/login");
+  };
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

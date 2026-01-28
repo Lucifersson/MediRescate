@@ -18,14 +18,17 @@ export const useAuth = () => {
   const [errorCamposVacios, setErrorCamposVacios] = useState<string>();
   const [errorUsuario, setErrorUsuario] = useState<string>();
 
-  const logOut = (operario: Operario | null) => {   // Cuando exista tipo user hay que cambiarlo, de momento solo está hecho con operario
+  // NOTE: se comenta para implementar version del context
 
-    if (operario) {
-      const {cambioEstado} = useOperario({operario});
-      cambioEstado("ocupado");
-    }
-    router.replace("/(stack)/login");
-  }
+  // const logOut = (operario: Operario | null) => {
+  //   // Cuando exista tipo user hay que cambiarlo, de momento solo está hecho con operario
+  //
+  //   if (operario) {
+  //     const { cambioEstado } = useOperario({ operario });
+  //     cambioEstado("ocupado");
+  //   }
+  //   router.replace("/(stack)/login");
+  // };
 
   // 1. Manejo de la respuesta del servidor
   useEffect(() => {
@@ -99,9 +102,9 @@ export const useAuth = () => {
     errorCamposVacios,
     errorUsuario,
     loading,
+
     setUsernameValue: setUsername,
     setPasswordValue: setPassword,
     onLoginPress,
-    logOut,
   };
 };

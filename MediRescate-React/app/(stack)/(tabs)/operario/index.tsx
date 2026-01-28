@@ -5,10 +5,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "@/hooks/useAuth";
 
 const OperarioScreen = () => {
   const { user } = useAuthContext();
   const { estado, color, cambioEstado } = useOperario({ operario: user });
+  const { logout } = useAuthContext();
 
   //TEST: probando si funciona el campo de estado asi
   useEffect(() => {
@@ -16,6 +18,12 @@ const OperarioScreen = () => {
       cambioEstado("libre");
     }
   }, [user?.idUsuario]);
+
+  const logOutHandler = () => {
+    cambioEstado("ocupado");
+    console.log("Se va a ejecutar funcion de logout del context.");
+    logout();
+  };
 
   return (
     <SafeAreaView className={`flex-1 bg-gray-50 border${color}`}>
@@ -44,7 +52,7 @@ const OperarioScreen = () => {
           </Text>
         </View>
 
-        <LogOutComponent onPress={() => cambioEstado("ocupado")} />
+        <LogOutComponent onPress={logOutHandler} />
       </View>
 
       {/* Datos de la emergencia (Tarjeta Central) */}

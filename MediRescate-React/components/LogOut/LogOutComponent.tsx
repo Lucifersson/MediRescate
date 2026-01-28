@@ -14,16 +14,10 @@ const LogOutComponent = ({ onPress }: Props) => {
 
   //NOTE: posible cambio de componente logout
   return (
-    <Pressable
-      onPress={() => {
-        onPress();
-        router.replace("/(stack)/login");
-      }}
-    >
+    <Pressable onPress={onPress}>
       <Ionicons name="person-circle-outline" size={50} color="white" />
     </Pressable>
   );
 };
 
 export default LogOutComponent;
-
