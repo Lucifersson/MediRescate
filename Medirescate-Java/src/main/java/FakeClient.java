@@ -8,13 +8,17 @@ public class FakeClient implements Runnable {
     private final String host;
     private final int port;
     private final int code;
-    int silent;
+    private final int silent;
 
-    public FakeClient(int code, int silent) {
+    public FakeClient(int code, int silent, int server) {
         this.silent=silent;
         this.host = "localhost";
-        this.port = ConfigLoader.getPort();
         this.code = code;
+        if (server==1) {
+            this.port = ConfigLoader.getPort();
+        } else {
+            this.port = ConfigLoader.getSecPort();
+        }
     }
 
     @Override
@@ -51,6 +55,12 @@ public class FakeClient implements Runnable {
                         json = "{\"code\":\"2\",\"data\":{\"id_empleado\":\"1\"}}";
                 case 5 ->
                         json = "{\"code\":\"5\",\"data\":{\"id_operario\":1,\"prevState\":\"libre\",\"newState\":\"ocupado\"}}";
+                case 6 ->
+                        json = "{\"code\":\"6\",\"data\":{\"estado\":\"libre\"}}";
+                case 7 ->
+                        json = "{\"code\":\"7\",\"data\":{\"id_operario\":1, \"descripcion\":\"emergencia de prueba\"}}";
+                case -1 ->
+                        json = "{\"code\":\"-1\"}";
 
                 default ->
                         LogWriter.logError(new Exception(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + " Codigo de operación no encontrado"));

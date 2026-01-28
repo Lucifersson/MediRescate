@@ -1,7 +1,9 @@
 import BdClasses.Usuario;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.math.BigDecimal;
 import java.net.ConnectException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -46,6 +48,7 @@ public class Operations {
 
 
     //APP OPERATIONS
+    // LOGIN
     public static Response operation1(Connection conn, Request req) {
         String sql = """
             SELECT usu.*
@@ -107,10 +110,12 @@ public class Operations {
 
         } catch (SQLException e) {
             LogWriter.logError(e);
-            throw new RuntimeException(e);
+            JsonObject errorData = new JsonObject();
+            errorData.addProperty("message", "Error conectando con la base de datos");
+            return new ResponseDATA("error", errorData);
         }
     }
-
+    // devolver estado
     public static Response operation2(Connection conn, Request req) {
 
         String idGotten = req.data.get("id_empleado").getAsString();
@@ -132,11 +137,12 @@ public class Operations {
         data.addProperty("message", msg);
         return new ResponseDATA(status, data);
     }
-
+    // update estado
     public static Response operation5(Connection conn, Request req) {
         String idGotten = req.data.get("id_operario").getAsString();
         String prevState = req.data.get("prevState").getAsString();
         String newState = req.data.get("newState").getAsString();
+
 
         String sql = """
                 UPDATE Operario
@@ -159,6 +165,89 @@ public class Operations {
         } catch (SQLException e) {
             LogWriter.logError(e);
             return new ResponseMSG("error", "Error al actualizar el estado del operario");
+        }
+    }
+    // operarios libres
+    public static Response operation6(Connection conn, Request req) {
+        String sql = """
+                SELECT o.id_operario, u.nombre
+                FROM Operario o
+                JOIN Usuario u ON u.id_usuario = o.id_operario
+                WHERE o.estado = ?;
+            """;
+
+        String estado = req.data.get("estado").getAsString();
+
+        JsonObject data = new JsonObject();
+        JsonArray users = new JsonArray();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, estado);
+            ResultSet rs = ps.executeQuery();
+
+
+            while (rs.next()) {
+                JsonObject operario = new JsonObject();
+                operario.addProperty("id_operario", rs.getString(1));
+                operario.addProperty("nombre", rs.getString(2));
+
+                users.add(operario);
+            }
+
+            data.add("users", users);
+
+            String status = "success";
+            return new ResponseDATA(status, data);
+        } catch (SQLException e) {
+            LogWriter.logError(e);
+            JsonObject errorData = new JsonObject();
+            errorData.addProperty("message", "Error conectando con la base de datos");
+            return new ResponseDATA("error", errorData);
+        }
+    }
+
+    public static Response operation7(Connection conn, Request req) throws SQLException {
+        String sql = """
+                INSERT INTO Emergencia (emergencia, latitud, longitud, hora_emergencia, estado, id_teleoperador)
+                VALUES (?, ?, ?, ?, ?, ?);
+                """;
+
+        String sql2 = """
+                INSERT INTO AsignarEmergencia (id_emergencia, id_operario)
+                VALUES (?, ?);
+                """;
+
+        try (PreparedStatement ps = conn.prepareStatement(
+                sql, Statement.RETURN_GENERATED_KEYS
+        );
+             PreparedStatement ps2 = conn.prepareStatement(sql2)) {
+
+            ps.setString(1, req.data.get("descripcion").getAsString());
+            ps.setBigDecimal(2, BigDecimal.ONE);
+            ps.setBigDecimal(3, BigDecimal.ONE);
+            ps.setTimestamp(4, Timestamp.valueOf("2000-01-01 00:00:00"));
+            ps.setString(5, "activa");
+            ps.setInt(6, 2);
+
+            ps.executeUpdate();
+
+            int idEmergencia = -1;
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    idEmergencia = rs.getInt(1);
+                }
+            }
+
+            ps2.setInt(1, idEmergencia);
+            ps2.setInt(2, req.data.get("id_operario").getAsInt());
+
+            ps2.executeUpdate();
+
+            String status = "success";
+            JsonObject data = new JsonObject();
+
+            return new ResponseDATA(status, data);
         }
     }
 

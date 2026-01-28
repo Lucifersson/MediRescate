@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.*;
 import java.net.Socket;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 
 public class Client implements Runnable {
@@ -12,7 +13,7 @@ public class Client implements Runnable {
     private final Socket socket;
     private final Gson gson = new Gson();
     private final String inet;
-
+    private Request req = null;
 
     public Client(Socket socket, String inet) {
         this.socket = socket;
@@ -35,18 +36,23 @@ public class Client implements Runnable {
 
             String line;
             while ((line = in.readLine()) != null) {
-                System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON recibido "+AnsiColors.GREEN_BRIGHT+"[<<] "+AnsiColors.RESET + line);
+
+                System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON recibido "+AnsiColors.GREEN_BRIGHT+"[<<] "+AnsiColors.RESET+line);
 
                 // Parseo JSON
-                Request req = gson.fromJson(line, Request.class);
+                req = gson.fromJson(line, Request.class);
 
                 // Procesar
-                Response resp = processRequestCode(req, conn);
+                if (!req.code.matches("-1")) {
 
-                System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + gson.toJson(resp));
+                    Response resp = processRequestCode(req, conn);
 
-                // Responder
-                out.println(gson.toJson(resp));
+                    System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + gson.toJson(resp));
+
+                    // Responder
+                    out.println(gson.toJson(resp));
+                }
+
             }
 
         } catch (Exception e) {
@@ -56,21 +62,25 @@ public class Client implements Runnable {
                 socket.close();
             } catch (IOException ignored) {}
         }
+        if (!req.code.matches("-1")) {
+            System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RED+" Conexión cerrada"+AnsiColors.RESET);
 
-        System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RED+" Conexión cerrada"+AnsiColors.RESET);
+        }
     }
 
 
 
 
-    private Response processRequestCode(Request req, Connection conn) {
-
+    private Response processRequestCode(Request req, Connection conn) throws SQLException {
+        
         return switch (req.code) {
             case "100" -> Operations.operation100();
             case "101" -> Operations.operation101(conn);
             case "1" -> Operations.operation1(conn, req);
             case "2" -> Operations.operation2(conn, req);
             case "5" -> Operations.operation5(conn, req);
+            case "6" -> Operations.operation6(conn, req);
+            case "7" -> Operations.operation7(conn, req);
 
 
             default -> {
