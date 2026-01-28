@@ -46,6 +46,7 @@ const TeleoperadorScreen = () => {
 
   const seleccionarOperario = (item: NombreOperario | null) => {
     setOperario(item);
+    console.log("Id de empleado seleccionado: ", item?.id_operario);
     setMostrarUsuarios(false);
   };
 
