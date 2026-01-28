@@ -15,7 +15,7 @@ export const useTcpSocket = <T>() => {
 
     const options = {
       port: 7878,
-      host: "172.30.77.43",
+      host: "192.168.217.173",
       reuseAddress: true,
     };
 

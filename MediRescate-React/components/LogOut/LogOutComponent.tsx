@@ -11,15 +11,17 @@ interface Props {
 }
 
 const LogOutComponent = ({ onPress }: Props) => {
-
-  const { user, logout } = useAuthContext()
+  const { user, logout } = useAuthContext();
 
   //NOTE: posible cambio de componente logout
   return (
     <Pressable onPress={logout} className="items-center">
-      <Ionicons name="person-circle-outline" size={50} className="text-white/80" />
+      <Ionicons
+        name="person-circle-outline"
+        size={50}
+        className="text-white/80"
+      />
       <Text className="text-white/80 font-bold">Cerrar Sesión</Text>
-
     </Pressable>
   );
 };
