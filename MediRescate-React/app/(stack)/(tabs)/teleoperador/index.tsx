@@ -3,7 +3,7 @@ import { useOperariosDisponibles } from "@/hooks/useOperariosDisponibles";
 import { useRegistrarEmergencia } from "@/hooks/useRegistrarEmergencia"; // 🚀 Importamos el nuevo hook
 import { NombreOperario } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -128,6 +128,21 @@ const TeleoperadorScreen = () => {
           {/* LISTA DESPLEGABLE */}
           {mostrarUsuarios && (
             <View className="mt-2 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-lg max-h-60">
+              {!operario &&(
+                <Pressable
+                    onPress={() => seleccionarOperario(null)}
+                    className="p-4 border-b border-gray-50 active:bg-blue-50 flex-row justify-between items-center"
+                  >
+                    <View className="flex-row items-center flex-1">
+                      <View className="w-3 h-3 bg-green-500 rounded-full mr-3" />
+                      <View>
+                        <Text className="text-gray-400 font-medium">
+                          Eliminar selección
+                        </Text>                     
+                      </View>
+                    </View>
+                  </Pressable>
+              )}
               <FlatList
                 data={operarios}
                 keyExtractor={(item) => item.id_operario.toString()}
