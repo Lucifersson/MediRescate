@@ -20,6 +20,7 @@ public class MainServer {
         int port = ConfigLoader.getPort();
         System.out.println(AnsiColors.YELLOW+"\n[MAINSERVER]"+AnsiColors.GREEN_BRIGHT+"SERVIDOR ENCENDIDO Escuchando en puerto: "+port+"...");
 
+
         new Thread(new FakeClient(7, 1, 1)).start();
 
 
