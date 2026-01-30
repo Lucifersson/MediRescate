@@ -58,7 +58,7 @@ public class FakeClient implements Runnable {
                 case 6 ->
                         json = "{\"code\":\"6\",\"data\":{\"estado\":\"libre\"}}";
                 case 7 ->
-                        json = "{\"code\":\"7\",\"data\":{\"id_operario\":1, \"descripcion\":\"emergencia de prueba\"}}";
+                        json = "{\"code\":\"7\",\"data\":{\"id_operario\":1, \"descripcion\":\"emergencia de prueba\", \"teleoperador\":2}}";
                 case -1 ->
                         json = "{\"code\":\"-1\"}";
 

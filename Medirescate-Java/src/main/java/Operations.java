@@ -228,7 +228,7 @@ public class Operations {
             ps.setBigDecimal(3, BigDecimal.ONE);
             ps.setTimestamp(4, Timestamp.valueOf("2000-01-01 00:00:00"));
             ps.setString(5, "activa");
-            ps.setInt(6, 2);
+            ps.setInt(6, req.data.get("teleoperador").getAsInt());
 
             ps.executeUpdate();
 

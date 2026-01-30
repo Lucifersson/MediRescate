@@ -13,7 +13,7 @@ public class Client implements Runnable {
     private final Socket socket;
     private final Gson gson = new Gson();
     private final String inet;
-    private Request req = null;
+    private Request req = new Request();
 
     public Client(Socket socket, String inet) {
         this.socket = socket;

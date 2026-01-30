@@ -155,11 +155,7 @@ public class Lanzador {
     private static void launchSecServer() throws IOException {
         String command = buildJavaCommand("SecondaryServer");
 
-        secServerProcess = launchWithLogs(
-                command,
-                "logs/secserver.log",
-                "logs/secserver.err"
-        );
+        secServerProcess = launchWithLogs(command,"logs/secserver.log","logs/secserver.err");
 
         secServerUp = true;
         System.out.println("Servidor secundario arrancado");
@@ -168,8 +164,8 @@ public class Lanzador {
     private static void stopMainServer() throws InterruptedException {
 //        stopProcess(mainServerProcess, "Servidor principal");
         Thread t = new Thread(new FakeClient(-1, 1, 1));
-        t.join();
         t.start();
+        t.join();
         mainServerProcess = null;
         mainServerUp = false;
     }
@@ -188,8 +184,7 @@ public class Lanzador {
        UTILIDADES
        ========================= */
 
-    private static Process launchWithLogs(String command, String outLog, String errLog)
-            throws IOException {
+    private static Process launchWithLogs(String command, String outLog, String errLog) throws IOException {
 
         File logsDir = new File("logs");
         if (!logsDir.exists()) logsDir.mkdirs();
@@ -276,7 +271,7 @@ public class Lanzador {
                         "sh", "-c",
                         term + " sh -c \"tail -f " + logFile + "\""
                 ).start();
-                break; // si funciona, salimos
+                break;
             } catch (IOException ignored) {}
         }
     }
