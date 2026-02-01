@@ -8,13 +8,14 @@ const TabsLayout = () => {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: "red",
-        tabBarShowLabel: true,
+        tabBarShowLabel: false,
         headerShown: false,
       }}
     >
       <Tabs.Screen
         name="operario/index"
         options={{
+          href: null,
           title: "Operario",
           tabBarIcon: ({ color }) => (
             <Ionicons size={28} name="medical-outline" color={color} />
@@ -24,6 +25,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="admin/index"
         options={{
+          href: null,
           title: "Administrador",
           tabBarIcon: ({ color }) => (
             <Ionicons size={28} name="clipboard-outline" color={color} />
@@ -33,6 +35,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="teleoperador/index"
         options={{
+          href: null,
           title: "Teleoperador",
           tabBarIcon: ({ color }) => (
             <Ionicons size={28} name="headset-outline" color={color} />

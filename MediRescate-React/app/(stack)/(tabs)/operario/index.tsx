@@ -20,7 +20,7 @@ const OperarioScreen = () => {
   }, [user?.idUsuario]);
 
   const logOutHandler = () => {
-    cambioEstado("ocupado");
+    cambioEstado("offline");
     console.log("Se va a ejecutar funcion de logout del context.");
     logout();
   };
