@@ -1,11 +1,8 @@
+import { Redirect } from "expo-router";
 import { View, Text } from "react-native";
 
 const AdminScreen = () => {
-  return (
-    <View>
-      <Text>Admin</Text>
-    </View>
-  );
+  return <Redirect href={"/(stack)/(tabs)/admin/operarios"} />;
 };
 
 export default AdminScreen;

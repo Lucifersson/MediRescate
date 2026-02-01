@@ -1,45 +1,46 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
-import { View, Text } from "react-native";
 
 const TabsLayout = () => {
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: "red",
-        tabBarStyle: { display: "none" },
-        tabBarShowLabel: false,
+        tabBarShowLabel: true,
         headerShown: false,
       }}
     >
       <Tabs.Screen
-        name="operario/index"
+        name="index"
         options={{
           href: null,
-          title: "Operario",
+        }}
+      />
+      <Tabs.Screen
+        name="operarios/index"
+        options={{
+          title: "Operarios",
           tabBarIcon: ({ color }) => (
-            <Ionicons size={28} name="medical-outline" color={color} />
+            <Ionicons size={28} name="medical" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="admin/index"
+        name="emergencias/index"
         options={{
-          href: null,
-          title: "Administrador",
+          title: "Emergencias",
           tabBarIcon: ({ color }) => (
-            <Ionicons size={28} name="clipboard-outline" color={color} />
+            <Ionicons size={28} name="warning" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="teleoperador/index"
+        name="mapas/index"
         options={{
-          href: null,
-          title: "Teleoperador",
+          title: "Mapas",
           tabBarIcon: ({ color }) => (
-            <Ionicons size={28} name="headset-outline" color={color} />
+            <Ionicons size={28} name="map" color={color} />
           ),
         }}
       />
