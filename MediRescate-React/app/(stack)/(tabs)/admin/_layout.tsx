@@ -38,6 +38,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="mapas/index"
         options={{
+          href: null,
           title: "Mapas",
           tabBarIcon: ({ color }) => (
             <Ionicons size={28} name="map" color={color} />
