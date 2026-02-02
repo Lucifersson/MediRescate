@@ -39,7 +39,6 @@ public class SecondaryServer {
             LogWriter.logError(e);
         }
     }
-
 }
 
 
