@@ -6,16 +6,21 @@ import { useEffect } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/hooks/useAuth";
+import { useOperariosEscucha } from "@/hooks/useOperarioEscucha";
 
 const OperarioScreen = () => {
   const { user } = useAuthContext();
   const { estado, color, cambioEstado } = useOperario({ operario: user });
   const { logout } = useAuthContext();
+  const { emergencia, solicitarEmergencia } = useOperariosEscucha({
+    id: user?.idUsuario,
+  });
 
   //TEST: probando si funciona el campo de estado asi
   useEffect(() => {
     if (user?.idUsuario) {
       cambioEstado("libre");
+      solicitarEmergencia();
     }
   }, [user?.idUsuario]);
 
@@ -54,6 +59,8 @@ const OperarioScreen = () => {
 
         <LogOutComponent onPress={logOutHandler} />
       </View>
+
+      {/* TODO: crear componente emergencia y pasarle los datos de la emergencia ya desestructurada */}
 
       {/* Datos de la emergencia (Tarjeta Central) */}
       <View className="flex-1 justify-center px-6">

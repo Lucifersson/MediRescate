@@ -7,7 +7,7 @@ interface ArrayOperarios {
 }
 
 interface Props {
-  id: number;
+  id: number | undefined;
 }
 
 export const useOperariosEscucha = ({ id }: Props) => {
@@ -16,7 +16,7 @@ export const useOperariosEscucha = ({ id }: Props) => {
 
   const [emergencia, setEmergencia] = useState<OperariosAdmin[]>([]);
 
-  const solicitarOperariosTodos = () => {
+  const solicitarEmergencia = () => {
     enviarPeticion("200", { id: id });
   };
 
@@ -33,7 +33,7 @@ export const useOperariosEscucha = ({ id }: Props) => {
   }, [emergencia]);
 
   return {
-    solicitarOperariosTodos,
+    solicitarEmergencia,
 
     emergencia,
   };
