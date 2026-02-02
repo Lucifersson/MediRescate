@@ -29,23 +29,10 @@ public class SecondaryServer {
             while (running) {
                 Socket clientSocket = serverSocket.accept(); // <-- Espera aquí
 
-                BufferedReader in = new BufferedReader( //objeto para leer lo que ha llegado
-                        new InputStreamReader(clientSocket.getInputStream())
-                );
-                String line = in.readLine();
-
-                Request req = gson.fromJson(line, Request.class);
-
-                if (!req.code.matches("-1")) { //NO apagado
-
                     System.out.println("\n"+AnsiColors.YELLOW+"[SEC.SERVER]"+AnsiColors.RESET+" Conectado cliente en: "+clientSocket.getInetAddress()+"\n");
 
                     EmergencyHandler handler = new EmergencyHandler(clientSocket, clientSocket.getInetAddress()+"");
                     new Thread(handler).start();
-                } else {
-                    running = false;
-                }
-
             }
 
         } catch (Exception e) {
