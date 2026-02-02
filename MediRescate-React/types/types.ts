@@ -44,3 +44,9 @@ export interface OperariosAdmin {
   estado: string;
   ambulancia: string;
 }
+
+export interface EmercgenciaAdmin {
+  id_emergencia: number;
+  emergencia: string;
+  completado: boolean;
+}
