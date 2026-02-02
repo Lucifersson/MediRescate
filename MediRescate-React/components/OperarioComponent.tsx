@@ -30,7 +30,7 @@ const OperarioComponent = ({ operario }: Props) => {
     const status = getStatusConfig();
 
     return (
-<View className="bg-white rounded-2xl p-4 mb-4 shadow-sm border border-gray-100 flex-row justify-between items-center">
+        <View className="bg-white rounded-2xl p-4 mb-4 shadow-sm border border-gray-100 flex-row justify-between items-center">
 
             <View >
                 {/* Header */}
