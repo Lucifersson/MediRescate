@@ -1,120 +1,39 @@
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import OperarioComponent from "@/components/OperarioComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
+import { useOperarios } from "@/hooks/useOperarios";
 import { OperariosAdmin } from "@/types/types";
 import { router } from "expo-router";
+import { useEffect } from "react";
 import { FlatList, Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const AdminOperariosScreen = () => {
   const { logout } = useAuthContext();
+
+  const { operarios, solicitarOperariosTodos } = useOperarios();
+
+  //HACK: forma provisional de actualizar los datos de la vista empleado
+  //NOTE: comentar para que funcione unicamente front
+  useEffect(() => {
+    // Llamada inicial inmediata para no esperar 5 segundos al abrir la pantalla
+    solicitarOperariosTodos();
+
+    const intervalo = setInterval(() => {
+      console.log("Actualizando lista de operarios...");
+      solicitarOperariosTodos();
+    }, 5000); // 5000ms = 5 segundos
+
+    // 3. LIMPIEZA: Muy importante para que no siga llamando al salir de la pantalla
+    return () => clearInterval(intervalo);
+  }, []);
+
   const logOutHandler = () => {
     router.replace("/(stack)/login");
     logout();
   };
 
   //Traer arraylist de operarios,
-
-  //const [operarios, setOperarios ] = useState<OperariosAdmin[]>()
-
-  const operarios: OperariosAdmin[] = [
-    {
-      id_operario: 1,
-      nombre: "Juan Pérez",
-      estado: "libre",
-      ambulancia: "AMB-101",
-    },
-    {
-      id_operario: 2,
-      nombre: "María Gómez",
-      estado: "en_marcha",
-      ambulancia: "AMB-102",
-    },
-    {
-      id_operario: 3,
-      nombre: "Carlos Rodríguez",
-      estado: "ocupado",
-      ambulancia: "AMB-103",
-    },
-    {
-      id_operario: 4,
-      nombre: "Lucía Fernández",
-      estado: "libre",
-      ambulancia: "AMB-104",
-    },
-    {
-      id_operario: 1,
-      nombre: "Juan Pérez",
-      estado: "libre",
-      ambulancia: "AMB-101",
-    },
-    {
-      id_operario: 2,
-      nombre: "María Gómez",
-      estado: "en_marcha",
-      ambulancia: "AMB-102",
-    },
-    {
-      id_operario: 3,
-      nombre: "Carlos Rodríguez",
-      estado: "ocupado",
-      ambulancia: "AMB-103",
-    },
-    {
-      id_operario: 4,
-      nombre: "Lucía Fernández",
-      estado: "libre",
-      ambulancia: "AMB-104",
-    },
-    {
-      id_operario: 1,
-      nombre: "Juan Pérez",
-      estado: "libre",
-      ambulancia: "AMB-101",
-    },
-    {
-      id_operario: 2,
-      nombre: "María Gómez",
-      estado: "en_marcha",
-      ambulancia: "AMB-102",
-    },
-    {
-      id_operario: 3,
-      nombre: "Carlos Rodríguez",
-      estado: "ocupado",
-      ambulancia: "AMB-103",
-    },
-    {
-      id_operario: 4,
-      nombre: "Lucía Fernández",
-      estado: "libre",
-      ambulancia: "AMB-104",
-    },
-    {
-      id_operario: 1,
-      nombre: "Juan Pérez",
-      estado: "libre",
-      ambulancia: "AMB-101",
-    },
-    {
-      id_operario: 2,
-      nombre: "María Gómez",
-      estado: "en_marcha",
-      ambulancia: "AMB-102",
-    },
-    {
-      id_operario: 3,
-      nombre: "Carlos Rodríguez",
-      estado: "ocupado",
-      ambulancia: "AMB-103",
-    },
-    {
-      id_operario: 4,
-      nombre: "Lucía Fernández",
-      estado: "libre",
-      ambulancia: "AMB-104",
-    },
-  ];
 
   return (
     <SafeAreaView className="flex-1">
