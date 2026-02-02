@@ -221,6 +221,7 @@ public class Operations {
         }
     }
 
+    //crear emergencia
     public static Response operation7(Connection conn, Request req) throws SQLException {
         String sql = """
                 INSERT INTO Emergencia (emergencia, latitud, longitud, hora_emergencia, estado, id_teleoperador)
@@ -260,6 +261,8 @@ public class Operations {
 
             String status = "success";
             JsonObject data = new JsonObject();
+
+            OperariosManager.getOut(req.data.get("id_operario").getAsString()).println("prueba");
 
             return new ResponseDATA(status, data);
 
