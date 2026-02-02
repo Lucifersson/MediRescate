@@ -30,6 +30,11 @@ const OperarioScreen = () => {
     logout();
   };
 
+  const libreHandler = () => {
+    cambioEstado("libre");
+    solicitarEmergencia();
+  };
+
   return (
     <SafeAreaView className={`flex-1 bg-gray-50 border${color}`}>
       {/* Header con Perfil y Logo */}
@@ -109,7 +114,7 @@ const OperarioScreen = () => {
 
           <Pressable
             className="bg-green-600 w-[48%] h-24 rounded-2xl items-center justify-center shadow-lg shadow-green-900/40 border-r-4 border-b-4 border-green-800 active:opacity-80"
-            onPress={() => cambioEstado("libre")}
+            onPress={() => libreHandler()}
           >
             <Ionicons name="checkmark-circle" size={24} color="white" />
             <Text className="text-white font-black text-base uppercase mt-1">
