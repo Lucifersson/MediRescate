@@ -40,7 +40,7 @@ public class SecondaryServer {
 
                     System.out.println("\n"+AnsiColors.YELLOW+"[SEC.SERVER]"+AnsiColors.RESET+" Conectado cliente en: "+clientSocket.getInetAddress()+"\n");
 
-                    Client handler = new Client(clientSocket, clientSocket.getInetAddress()+"");
+                    EmergencyHandler handler = new EmergencyHandler(clientSocket, clientSocket.getInetAddress()+"");
                     new Thread(handler).start();
                 } else {
                     running = false;
