@@ -3,11 +3,11 @@ import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperario } from "@/hooks/useOperario";
 import { useOperariosEscucha } from "@/hooks/useOperarioEscucha";
+import { Emergencia } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { Text, View, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Emergencia } from "@/types/types";
 
 const OperarioScreen = () => {
   const { user } = useAuthContext();
@@ -22,8 +22,9 @@ const OperarioScreen = () => {
   // NOTE: emergencia de prueba, hay que comentar
 
   const emergencia: Emergencia = {
-    id_emergencia: 1,
-    emergencia: "Accidente de tráfico",
+    id_operario: 1,
+    descripcion: "Accidente de tráfico",
+    nombre_operario: "Paco",
   };
 
   //TEST: probando si funciona el campo de estado asi
@@ -46,7 +47,9 @@ const OperarioScreen = () => {
   };
 
   return (
-    <SafeAreaView className={`flex-1 bg-gray-50 border${color}`}>
+    <SafeAreaView
+      className={`flex-1 bg-gray-50 border${color} justify-between`}
+    >
       {/* Header con Perfil y Logo */}
       <View
         className={`mx-4 mt-4 flex-row justify-between bg${color} p-4 items-center rounded-2xl shadow-md`}
@@ -79,7 +82,9 @@ const OperarioScreen = () => {
 
       {/* Datos de la emergencia (Tarjeta Central) */}
 
-      <EmergenciaComponent emergencia={emergencia} />
+      <View className="place-content-around">
+        <EmergenciaComponent emergencia={emergencia} />
+      </View>
 
       {/* TODO: Implementar campo de error */}
 

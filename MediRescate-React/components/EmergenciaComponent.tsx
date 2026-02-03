@@ -1,36 +1,48 @@
-import { EmergenciaAdmin } from "@/types/types";
+import { Emergencia } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "react-native";
 
 interface Props {
-    emergencia: EmergenciaAdmin;
+  emergencia: Emergencia;
 }
 
 const EmergenciaComponent = ({ emergencia }: Props) => {
-    return (
-        <View className="bg-white rounded-2xl p-4 mb-4 shadow-sm border border-gray-100 flex-row items-center">
-            {/* 1. Cambiamos items-center por items-start para que el icono y el operario no bajen si el texto es largo */}
+  return (
+    <View className="bg-white rounded-[40px] p-8 mx-6 shadow-xl shadow-black/10 border border-gray-100 items-center justify-center aspect-square">
+      {/* Icono de Alerta Destacado */}
+      <View className="bg-orange-50 p-6 rounded-full mb-6">
+        <Ionicons name="warning" color={"#f97316"} size={60} />
+      </View>
 
-            <View className="mr-4">
-                <Ionicons name="warning-outline" color={'orange'} size={24} />
-            </View>
+      {/* Título/Descripción Central */}
+      <View className="items-center mb-6">
+        <Text className="text-gray-400 font-black text-xs uppercase tracking-[3px] mb-2">
+          Aviso de Emergencia
+        </Text>
+        <Text className="text-2xl font-black text-gray-900 text-center leading-tight">
+          {emergencia.descripcion}
+        </Text>
+      </View>
 
-            {/* 2. Texto emergencia: Mantiene el flex-1 para empujar al operario a la derecha */}
-            <View className="flex-1 pr-3 justify-center">
-                <Text className="text-base font-semibold text-gray-800">
-                    {emergencia.emergencia}
-                </Text>
-            </View>
+      {/* Separador sutil */}
+      <View className="w-full h-[1px] bg-gray-100 mb-6" />
 
-            {/* 3. Bloque Operario: Alineación a la derecha y ancho fijo */}
-            <View className="w-28 items-end">
-                <Text className="text-gray-400 text-[10px] uppercase font-medium">Operario</Text>
-                <Text className="text-gray-900 text-sm text-right font-medium">
-                    {emergencia.operario}
-                </Text>
-            </View>
+      {/* Datos del Operario Inferiores */}
+      <View className="items-center">
+        <Text className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
+          Operario Asignado
+        </Text>
+        <Text className="text-lg font-bold text-blue-600">
+          {emergencia.nombre_operario}
+        </Text>
+        <View className="bg-gray-100 px-3 py-1 rounded-full mt-2">
+          <Text className="text-[10px] font-black text-gray-500 uppercase">
+            Unidad ID: {emergencia.id_operario}
+          </Text>
         </View>
-    );
+      </View>
+    </View>
+  );
 };
 
 export default EmergenciaComponent;
