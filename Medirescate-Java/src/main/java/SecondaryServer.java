@@ -46,13 +46,6 @@ public class SecondaryServer {
             LogWriter.logError(e);
         }
     }
-
-    public static void notifyOperario(String id, String msg) {
-        PrintWriter out = OperariosManager.operarios.get(id);
-        if (out != null) {
-            out.println(msg);
-        }
-    }
 }
 
 

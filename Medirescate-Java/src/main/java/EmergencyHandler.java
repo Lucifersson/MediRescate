@@ -1,5 +1,6 @@
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
 import java.io.*;
@@ -37,11 +38,30 @@ public class EmergencyHandler implements Runnable {
                 req = gson.fromJson(line, Request.class);
             }
 
-            String id = req.data.get("id").getAsString();
+            String jsonMSG;
+            String status = "success";
+            if (req.code.equals("201")) { //llamada de mainserver
+                PrintWriter outOper = OperariosManager.getOut(req.data.get("id").getAsString());
 
-            OperariosManager.addOut(id, out);
+                outOper.println("Prueba exitosa ou yeah");
+                
+                jsonMSG =  "Emergencia enviada";
+            } else { //llamada de operario
+                String id = req.data.get("id").getAsString();
+                OperariosManager.addOut(id, out);
 
-            out.println(AnsiColors.BLUE+"[EmergencyHandler "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + "{\"status\":\"success\",\"data\":{}");
+                jsonMSG =  "Conexión creada exitosamente";
+            }
+            JsonObject data = new JsonObject();
+            data.addProperty("msg", jsonMSG);
+            ResponseDATA resp = new ResponseDATA(status, data);
+            out.println(gson.toJson(resp));
+
+            if (req.code.equals("201")) { //llamada de mainserver
+                out.close();
+            }
+
+            System.out.println(AnsiColors.BLUE+"[EmergencyHandler "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + jsonMSG);
 
             while ((line = in.readLine()) != null) {
                 // mensajes posteriores
