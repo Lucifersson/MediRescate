@@ -25,16 +25,20 @@ export const useEmergenciasAdmin = () => {
     if (response) {
       if (response.status === "success") {
         // Asignamos el array de EmergenciaAdmin al estado
+        console.log(
+          "Valor de emergencias recibidas: ",
+          response.data.emergencias,
+        );
         setListaEmergencias(response.data.emergencias);
       }
     }
   }, [response]);
 
-  useEffect(() => {
-    if (error) {
-      console.error("Error al obtener emergencias admin:", error);
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     console.error("Error al obtener emergencias admin:", error);
+  //   }
+  // }, [error]);
 
   return {
     solicitarEmergenciasAdmin,
