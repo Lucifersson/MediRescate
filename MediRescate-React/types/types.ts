@@ -46,9 +46,9 @@ export interface OperariosAdmin {
 }
 
 export interface EmergenciaAdmin {
-  id_emergencia: number;
-  emergencia: string;
-  operario: string;
+  id_operario: number;
+  nombre_operario: string;
+  descripcion: string;
 }
 
 export interface Emergencia {

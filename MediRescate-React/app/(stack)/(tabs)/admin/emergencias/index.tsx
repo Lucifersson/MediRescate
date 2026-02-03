@@ -1,57 +1,41 @@
 import EmergenciaComponent from "@/components/EmergenciaComponent";
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
-import { EmergenciaAdmin } from "@/types/types";
+import { useEmergenciasAdmin } from "@/hooks/useEmergenciasAdmin"; // Importamos el hook
 import { router } from "expo-router";
+import { useEffect } from "react"; // Necesario para el polling
 import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const AdminOperariosScreen = () => {
+const AdminEmergenciasScreen = () => {
+  const { logout } = useAuthContext();
 
-  const { logout } = useAuthContext()
+  // 1. Usamos el hook para obtener la data y la función de petición
+  const { listaEmergencias, solicitarEmergenciasAdmin, loading } =
+    useEmergenciasAdmin();
+
   const logOutHandler = () => {
-    router.replace("/(stack)/login")
-    logout()
-  }
+    router.replace("/(stack)/login");
+    logout();
+  };
 
-  //Traer arraylist de operarios,
+  // 2. Configuramos la actualización automática cada 5 segundos
+  useEffect(() => {
+    // Llamada inmediata al cargar
+    solicitarEmergenciasAdmin();
 
-  //const [operarios, setOperarios ] = useState<OperariosAdmin[]>()
+    const intervalo = setInterval(() => {
+      console.log("Admin: Sincronizando emergencias...");
+      solicitarEmergenciasAdmin();
+    }, 5000);
 
-  const emergencias: EmergenciaAdmin[] = [
-
-    {
-      id_emergencia: 1,
-      emergencia: "Accidente de tráfico con heridos leves",
-      operario: "Luis Martinez"
-    },
-    {
-      id_emergencia: 2,
-      emergencia: "Paciente inconsciente en domicilio",
-      operario: "Marta Díaz"
-    },
-    {
-      id_emergencia: 3,
-      emergencia: "Caída de persona mayor en vía pública",
-      operario: "Fernando Alonso"
-    },
-    {
-      id_emergencia: 4,
-      emergencia: "Dolor torácico agudo",
-      operario: "Fermín Aldeguer"
-    },
-    {
-      id_emergencia: 5,
-      emergencia: "Crisis asmática",
-      operario: "Otro Operario"
-    },
-
-  ]
-
-
+    // Limpieza al salir de la pantalla
+    return () => clearInterval(intervalo);
+  }, []);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="flex-1 bg-gray-50">
+      {/* Header */}
       <View className="mx-4 mt-4 flex-row justify-between bg-red-500 p-4 items-center rounded-2xl shadow-md mb-5">
         <View className="bg-white/80 p-2 rounded-xl">
           <Image
@@ -72,16 +56,24 @@ const AdminOperariosScreen = () => {
         <LogOutComponent onPress={() => logOutHandler()} />
       </View>
 
-
-      <FlatList data={emergencias}
-        className="m-3"
-        keyExtractor={(item) => item.id_emergencia.toString()}
-        renderItem={({ item }) => <EmergenciaComponent emergencia={item} />} />
-
-
-
+      {/* 3. Listado con los datos del Hook */}
+      <FlatList
+        data={listaEmergencias}
+        className="px-3"
+        // Usamos el index como acordamos si no hay un ID robusto
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => <EmergenciaComponent emergencia={item} />}
+        // Opcional: Mostrar mensaje si no hay datos
+        ListEmptyComponent={() => (
+          <View className="mt-10 items-center opacity-50">
+            <Text className="text-gray-500 font-bold">
+              No hay emergencias registradas
+            </Text>
+          </View>
+        )}
+      />
     </SafeAreaView>
   );
 };
 
-export default AdminOperariosScreen;
+export default AdminEmergenciasScreen;
