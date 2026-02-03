@@ -7,11 +7,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { Text, View, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Emergencia } from "@/types/types";
 
 const OperarioScreen = () => {
   const { user } = useAuthContext();
   const { estado, color, cambioEstado } = useOperario({ operario: user });
   const { logout } = useAuthContext();
+
   //NOTE: importar emergencia en caso de no usar la de prueba
   const { solicitarEmergencia } = useOperariosEscucha({
     id: user?.idUsuario,

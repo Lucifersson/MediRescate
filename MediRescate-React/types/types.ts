@@ -48,11 +48,10 @@ export interface OperariosAdmin {
 export interface EmergenciaAdmin {
   id_emergencia: number;
   emergencia: string;
-  operario: string,
+  operario: string;
 }
 
-
 export interface Emergencia {
-  id_emergencia: number,
-  emergencia: string
+  id_emergencia: number;
+  emergencia: string;
 }
