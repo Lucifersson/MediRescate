@@ -50,52 +50,54 @@ const OperarioScreen = () => {
     <SafeAreaView
       className={`flex-1 bg-gray-50 border${color} justify-between`}
     >
-      {/* Header con Perfil y Logo */}
+      {/* Header */}
       <View
         className={`mx-4 mt-4 flex-row justify-between bg${color} p-4 items-center rounded-2xl shadow-md`}
       >
         <View className="bg-white/80 p-2 rounded-xl">
           <Image
             source={require("@/assets/images/logo_MediRescate.png")}
-            className="w-[60px] h-[60px]" // Traducido estilo inline a NativeWind
-            resizeMode="contain"
             style={{ height: 60, width: 60, transform: [{ scale: 2 }] }}
+            resizeMode="contain"
           />
         </View>
-
         <View className="flex-1 mx-4 my-8 ">
           <Text className="text-white font-bold text-lg leading-5">
-            {user?.nombre || "Nombre operario"}
+            {user?.nombre || "Operario"}
           </Text>
           <Text className="text-white/90 text-xs uppercase tracking-widest font-semibold">
-            {user?.cargo || "Ambulancia Operario"}
+            {user?.cargo || "Unidad"}
           </Text>
           <Text className="text-white/90 text-xs uppercase tracking-widest font-semibold">
-            {estado || "Estado no disponible"}
+            {estado}
           </Text>
         </View>
-
         <LogOutComponent onPress={logOutHandler} />
       </View>
 
-      {/* TODO: crear componente emergencia y pasarle los datos de la emergencia ya desestructurada */}
-
-      {/* Datos de la emergencia (Tarjeta Central) */}
-
-      <View className="place-content-around">
-        <EmergenciaComponent emergencia={emergencia} />
+      {/* BLOQUE CENTRAL CONDICIONAL */}
+      <View className="flex-1 justify-center items-center px-4">
+        {emergencia ? (
+          <EmergenciaComponent emergencia={emergencia} />
+        ) : (
+          <View className="items-center opacity-40">
+            <Ionicons name="shield-checkmark-outline" size={80} color="gray" />
+            <Text className="text-gray-500 font-bold mt-4 text-center">
+              No hay emergencias activas{"\n"}
+              en tu zona
+            </Text>
+          </View>
+        )}
       </View>
 
-      {/* TODO: Implementar campo de error */}
-
-      {/* Botones cambio de estado */}
+      {/* Footer: Botones cambio de estado */}
       <View className="p-6 bg-white rounded-t-[40px] shadow-2xl elevation-20">
         <Text className="text-center text-gray-400 font-bold mb-4 uppercase text-xs">
-          Cambiar mi estado actual
+          Mi estado actual
         </Text>
 
         <Pressable
-          className="bg-red-600 w-full h-24 mb-4 rounded-2xl flex-row items-center justify-center shadow-lg shadow-red-900/40 border-r-4 border-b-4 border-red-800 active:opacity-80"
+          className="bg-red-600 w-full h-24 mb-4 rounded-2xl flex-row items-center justify-center border-r-4 border-b-4 border-red-800 active:opacity-80"
           onPress={() => cambioEstado("ocupado")}
         >
           <Ionicons name="close-circle" size={28} color="white" />
@@ -106,7 +108,7 @@ const OperarioScreen = () => {
 
         <View className="flex-row justify-between">
           <Pressable
-            className="bg-orange-500 w-[48%] h-24 rounded-2xl items-center justify-center shadow-lg shadow-orange-900/40 border-r-4 border-b-4 border-orange-800 active:opacity-80"
+            className="bg-orange-500 w-[48%] h-24 rounded-2xl items-center justify-center border-r-4 border-b-4 border-orange-800 active:opacity-80"
             onPress={() => cambioEstado("en_marcha")}
           >
             <Ionicons name="navigate" size={24} color="white" />
@@ -116,7 +118,7 @@ const OperarioScreen = () => {
           </Pressable>
 
           <Pressable
-            className="bg-green-600 w-[48%] h-24 rounded-2xl items-center justify-center shadow-lg shadow-green-900/40 border-r-4 border-b-4 border-green-800 active:opacity-80"
+            className="bg-green-600 w-[48%] h-24 rounded-2xl items-center justify-center border-r-4 border-b-4 border-green-800 active:opacity-80"
             onPress={() => libreHandler()}
           >
             <Ionicons name="checkmark-circle" size={24} color="white" />

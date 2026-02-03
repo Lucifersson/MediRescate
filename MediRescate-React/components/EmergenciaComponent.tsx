@@ -8,7 +8,7 @@ interface Props {
 
 const EmergenciaComponent = ({ emergencia }: Props) => {
   return (
-    <View className="bg-white rounded-[40px] p-8 mx-6 shadow-xl shadow-black/10 border border-gray-100 items-center justify-center aspect-square">
+    <View className="bg-white rounded-3xl p-8 mx-6 border-neutral-300 border-b-8 border-r-8 items-center justify-center aspect-square">
       {/* Icono de Alerta Destacado */}
       <View className="bg-orange-50 p-6 rounded-full mb-6">
         <Ionicons name="warning" color={"#f97316"} size={60} />
