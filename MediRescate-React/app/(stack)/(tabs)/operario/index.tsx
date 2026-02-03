@@ -1,16 +1,22 @@
+import EmergenciaComponent from "@/components/EmergenciaOperarioComponent";
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperario } from "@/hooks/useOperario";
+import { Emergencia } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "@/hooks/useAuth";
 
 const OperarioScreen = () => {
   const { user } = useAuthContext();
   const { estado, color, cambioEstado } = useOperario({ operario: user });
   const { logout } = useAuthContext();
+
+  const emergencia : Emergencia = {
+    id_emergencia: 1,
+    emergencia: "Accidente de tráfico"
+  }
 
   //TEST: probando si funciona el campo de estado asi
   useEffect(() => {
@@ -56,20 +62,9 @@ const OperarioScreen = () => {
       </View>
 
       {/* Datos de la emergencia (Tarjeta Central) */}
-      <View className="flex-1 justify-center px-6">
-        <View
-          // Traducido cardShadow: shadow-black, shadow-offset, opacity, radius y elevation
-          className="bg-white h-72 w-full rounded-3xl items-center justify-center border border-gray-100 shadow-xl shadow-black/10 elevation-10"
-        >
-          <Ionicons name="warning-outline" size={40} color="#374151" />
-          <Text className="text-gray-400 font-medium mt-2 uppercase tracking-tighter">
-            Sin avisos activos
-          </Text>
-          <Text className="text-gray-800 text-center font-bold text-xl px-4 mt-2">
-            Datos de la emergencia
-          </Text>
-        </View>
-      </View>
+
+      
+      <EmergenciaComponent emergencia={emergencia}/>
 
       {/* TODO: Implementar campo de error */}
 

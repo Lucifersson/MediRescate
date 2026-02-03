@@ -1,7 +1,7 @@
 import EmergenciaComponent from "@/components/EmergenciaComponent";
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
-import { EmercgenciaAdmin } from "@/types/types";
+import { EmergenciaAdmin } from "@/types/types";
 import { router } from "expo-router";
 import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,7 +18,7 @@ const AdminOperariosScreen = () => {
 
   //const [operarios, setOperarios ] = useState<OperariosAdmin[]>()
 
-  const emergencias: EmercgenciaAdmin[] = [
+  const emergencias: EmergenciaAdmin[] = [
 
     {
       id_emergencia: 1,
