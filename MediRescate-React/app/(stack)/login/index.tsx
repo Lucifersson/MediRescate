@@ -103,7 +103,7 @@ const LoginScreen = () => {
               <Pressable
                 className="mt-4 bg-red-500 rounded-2xl py-4 shadow-md active:opacity-80"
                 onPress={onLoginPress}
-                onLongPress={() => router.replace("/operario")}
+                onLongPress={() => router.replace("/admin/emergencias")}
               >
                 <Text className="text-lg font-semibold text-white text-center">
                   Entrar

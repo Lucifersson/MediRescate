@@ -48,5 +48,5 @@ export interface OperariosAdmin {
 export interface EmercgenciaAdmin {
   id_emergencia: number;
   emergencia: string;
-  completado: boolean;
+  operario: string,
 }

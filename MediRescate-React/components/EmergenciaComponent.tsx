@@ -1,4 +1,5 @@
 import { EmercgenciaAdmin } from "@/types/types";
+import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "react-native";
 
 interface Props {
@@ -6,50 +7,29 @@ interface Props {
 }
 
 const EmergenciaComponent = ({ emergencia }: Props) => {
-    const getStatusConfig = () => {
-        switch (emergencia.completada) {
-            case false:
-                return {
-                    color: "#dc2626",
-                    label: "PENDIENTE",
-                };
-            case true:
-            default:
-                return {
-                    color: "#16a34a",
-                    label: "COMPLETADA",
-                };
-        }
-    };
-
-    const status = getStatusConfig();
-
     return (
         <View className="bg-white rounded-2xl p-4 mb-4 shadow-sm border border-gray-100 flex-row items-center">
+            {/* 1. Cambiamos items-center por items-start para que el icono y el operario no bajen si el texto es largo */}
 
-            {/* Texto emergencia */}
-            <View className="flex-1 pr-3">
+            <View className="mr-4">
+                <Ionicons name="warning-outline" color={'orange'} size={24} />
+            </View>
+
+            {/* 2. Texto emergencia: Mantiene el flex-1 para empujar al operario a la derecha */}
+            <View className="flex-1 pr-3 justify-center">
                 <Text className="text-base font-semibold text-gray-800">
                     {emergencia.emergencia}
                 </Text>
             </View>
 
-            {/* Estado */}
-            <View className="flex-row items-center gap-2">
-                <View
-                    style={{ backgroundColor: status.color }}
-                    className="w-3 h-3 rounded-full"
-                />
-                <Text
-                    style={{ color: status.color }}
-                    className="text-xs font-bold uppercase"
-                >
-                    {status.label}
+            {/* 3. Bloque Operario: Alineación a la derecha y ancho fijo */}
+            <View className="w-28 items-end">
+                <Text className="text-gray-400 text-[10px] uppercase font-medium">Operario</Text>
+                <Text className="text-gray-900 text-sm text-right font-medium">
+                    {emergencia.operario}
                 </Text>
             </View>
-
         </View>
-
     );
 };
 

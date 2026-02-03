@@ -23,27 +23,27 @@ const AdminOperariosScreen = () => {
     {
       id_emergencia: 1,
       emergencia: "Accidente de tráfico con heridos leves",
-      completada: false,
+      operario: "Luis Martinez"
     },
     {
       id_emergencia: 2,
       emergencia: "Paciente inconsciente en domicilio",
-      completada: false,
+      operario: "Marta Díaz"
     },
     {
       id_emergencia: 3,
       emergencia: "Caída de persona mayor en vía pública",
-      completada: true,
+      operario: "Fernando Alonso"
     },
     {
       id_emergencia: 4,
       emergencia: "Dolor torácico agudo",
-      completada: false,
+      operario: "Fermín Aldeguer"
     },
     {
       id_emergencia: 5,
       emergencia: "Crisis asmática",
-      completada: true,
+      operario: "Otro Operario"
     },
 
   ]
