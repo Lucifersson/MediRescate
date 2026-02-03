@@ -11,17 +11,24 @@ import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SecondaryServer {
     private static volatile boolean running = true;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         int port = ConfigLoader.getSecPort();
         System.out.println(AnsiColors.YELLOW+"[SEC.SERVER]"+AnsiColors.RESET+" Escuchando en puerto: "+port+"...");
 
-//        new Thread(new FakeClient(1, 1)).start();
+
+        new Thread(new FakeClient(200, 1,2)).start();
+
+
+        new Thread(new FakeClient(7, 1,1)).start();
+
+
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
@@ -29,23 +36,10 @@ public class SecondaryServer {
             while (running) {
                 Socket clientSocket = serverSocket.accept(); // <-- Espera aquí
 
-                BufferedReader in = new BufferedReader( //objeto para leer lo que ha llegado
-                        new InputStreamReader(clientSocket.getInputStream())
-                );
-                String line = in.readLine();
-
-                Request req = gson.fromJson(line, Request.class);
-
-                if (!req.code.matches("-1")) { //NO apagado
-
                     System.out.println("\n"+AnsiColors.YELLOW+"[SEC.SERVER]"+AnsiColors.RESET+" Conectado cliente en: "+clientSocket.getInetAddress()+"\n");
 
-                    Client handler = new Client(clientSocket, clientSocket.getInetAddress()+"");
+                    EmergencyHandler handler = new EmergencyHandler(clientSocket, clientSocket.getInetAddress()+"");
                     new Thread(handler).start();
-                } else {
-                    running = false;
-                }
-
             }
 
         } catch (Exception e) {
@@ -53,6 +47,12 @@ public class SecondaryServer {
         }
     }
 
+    public static void notifyOperario(String id, String msg) {
+        PrintWriter out = OperariosManager.operarios.get(id);
+        if (out != null) {
+            out.println(msg);
+        }
+    }
 }
 
 

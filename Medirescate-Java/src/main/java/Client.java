@@ -13,7 +13,7 @@ public class Client implements Runnable {
     private final Socket socket;
     private final Gson gson = new Gson();
     private final String inet;
-    private Request req = null;
+    private Request req = new Request();
 
     public Client(Socket socket, String inet) {
         this.socket = socket;
@@ -81,6 +81,7 @@ public class Client implements Runnable {
             case "5" -> Operations.operation5(conn, req);
             case "6" -> Operations.operation6(conn, req);
             case "7" -> Operations.operation7(conn, req);
+            case "8" -> Operations.operation8(conn, req);
 
 
             default -> {

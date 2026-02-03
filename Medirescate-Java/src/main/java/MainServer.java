@@ -21,7 +21,7 @@ public class MainServer {
         System.out.println(AnsiColors.YELLOW+"\n[MAINSERVER]"+AnsiColors.GREEN_BRIGHT+"SERVIDOR ENCENDIDO Escuchando en puerto: "+port+"...");
 
 
-        new Thread(new FakeClient(6, 1, 1)).start();
+        new Thread(new FakeClient(8, 1, 1)).start();
 
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
@@ -41,11 +41,6 @@ public class MainServer {
             LogWriter.logError(e);
         }
     }
-
-    public static void emergencyCreated() {
-
-    }
-
 }
 
 

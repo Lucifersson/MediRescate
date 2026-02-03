@@ -221,6 +221,7 @@ public class Operations {
         }
     }
 
+    //crear emergencia
     public static Response operation7(Connection conn, Request req) throws SQLException {
         String sql = """
                 INSERT INTO Emergencia (emergencia, latitud, longitud, hora_emergencia, estado, id_teleoperador)
@@ -242,7 +243,7 @@ public class Operations {
             ps.setBigDecimal(3, BigDecimal.ONE);
             ps.setTimestamp(4, Timestamp.valueOf("2000-01-01 00:00:00"));
             ps.setString(5, "activa");
-            ps.setInt(6, 2);
+            ps.setInt(6, req.data.get("teleoperador").getAsInt());
 
             ps.executeUpdate();
 
@@ -261,8 +262,54 @@ public class Operations {
             String status = "success";
             JsonObject data = new JsonObject();
 
+            System.out.println("Operarios conectados: " + OperariosManager.operarios.keySet());
+
+            String idOp = req.data.get("id_operario").getAsString();
+            System.out.println("Buscando operario con id = " + idOp);
+            OperariosManager.getOut(req.data.get(idOp).getAsString()).println("prueba");
+
             return new ResponseDATA(status, data);
         }
+    }
+    //listar emergencias
+    public static Response operation8(Connection conn, Request req) {
+        String sql = """
+                SELECT e.emergencia, o.id_operario, u.nombre
+                FROM Emergencia e
+                JOIN AsignarEmergencia ae ON e.id_emergencia = ae.id_emergencia
+                JOIN Operario o ON ae.id_operario = o.id_operario
+                JOIN Usuario u ON o.id_operario = u.id_usuario
+                WHERE e.estado != 'cerrada';
+                """;
+
+        JsonObject data = new JsonObject();
+        JsonArray emergencias = new JsonArray();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+
+
+            while (rs.next()) {
+                JsonObject emergencia = new JsonObject();
+                emergencia.addProperty("id_operario", rs.getInt(2));
+                emergencia.addProperty("nombre_operario", rs.getString(3));
+                emergencia.addProperty("descripcion", rs.getString(1));
+
+                emergencias.add(emergencia);
+            }
+
+            data.add("emergencias", emergencias);
+            String status = "success";
+            return new ResponseDATA(status, data);
+
+        } catch (SQLException e) {
+            LogWriter.logError(e);
+            JsonObject errorData = new JsonObject();
+            errorData.addProperty("message", "Error conectando con la base de datos");
+            return new ResponseDATA("error", errorData);
+        }
+
     }
 
     //EMERGENCY OPERATIONS
