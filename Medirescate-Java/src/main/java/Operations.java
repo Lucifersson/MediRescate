@@ -3,8 +3,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.net.ConnectException;
+import java.net.Socket;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -262,11 +264,14 @@ public class Operations {
             String status = "success";
             JsonObject data = new JsonObject();
 
-            System.out.println("Operarios conectados: " + OperariosManager.operarios.keySet());
-
             String idOp = req.data.get("id_operario").getAsString();
-            System.out.println("Buscando operario con id = " + idOp);
-            OperariosManager.getOut(req.data.get(idOp).getAsString()).println("prueba");
+            try (Socket socket = new Socket("localhost", 7979);) {
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                String json = "{\"code\":\"201\",\"data\":{\"id\":\""+idOp+"\"}}"; //json que le envio al otro server con la id del usuario que tiene la emergengia TODO añadir el resto de info de la emergencia
+                out.println(json);
+            } catch (Exception e){
+                LogWriter.logError(e);
+            }
 
             return new ResponseDATA(status, data);
         }

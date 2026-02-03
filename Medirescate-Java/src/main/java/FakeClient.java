@@ -84,7 +84,20 @@ public class FakeClient implements Runnable {
                 if (silent<2) {
                     System.out.println(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + " Respuesta " + AnsiColors.GREEN_BRIGHT + "[<<] " + AnsiColors.RESET + response);
                 }
+
+                if (code == 200) {
+
+                    String line;
+                    while (true) {
+                        System.out.println("ESCUCHANDO");
+                        while ((line = in.readLine()) != null) {
+                            System.out.println(line);
+                        }
+                        Thread.sleep(3000);
+                    }
+                }
             }
+            System.out.println(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + "Fake client fuera");
 
 
         } catch (Exception e) {

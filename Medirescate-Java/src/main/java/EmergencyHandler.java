@@ -44,7 +44,7 @@ public class EmergencyHandler implements Runnable {
                 PrintWriter outOper = OperariosManager.getOut(req.data.get("id").getAsString());
 
                 outOper.println("Prueba exitosa ou yeah");
-                
+                //TODO pues el código de enviar la emergencia y tal
                 jsonMSG =  "Emergencia enviada";
             } else { //llamada de operario
                 String id = req.data.get("id").getAsString();
@@ -57,15 +57,12 @@ public class EmergencyHandler implements Runnable {
             ResponseDATA resp = new ResponseDATA(status, data);
             out.println(gson.toJson(resp));
 
+            System.out.println(AnsiColors.BLUE+"[EmergencyHandler "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + jsonMSG);
+
             if (req.code.equals("201")) { //llamada de mainserver
                 out.close();
             }
 
-            System.out.println(AnsiColors.BLUE+"[EmergencyHandler "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + jsonMSG);
-
-            while ((line = in.readLine()) != null) {
-                // mensajes posteriores
-            }
         } catch (Exception e) {
             LogWriter.logError(e);
         } finally {
