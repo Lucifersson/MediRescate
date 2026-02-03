@@ -30,12 +30,11 @@ public class EmergencyHandler implements Runnable {
             PrintWriter out = new PrintWriter( //objeto para enviar información
                     socket.getOutputStream(), true
             );
-            String line;
+            String line = in.readLine();
             Request req = null;
-            while ((line = in.readLine()) != null) {
-                System.out.println(AnsiColors.BLUE+"[EmergencyHandler "+inet+"]"+AnsiColors.RESET+" JSON recibido "+AnsiColors.GREEN_BRIGHT+"[<<] "+AnsiColors.RESET + line);
-                // Parseo JSON
-                 req = gson.fromJson(line, Request.class);
+            if (line != null) {
+                System.out.println(AnsiColors.BLUE+"[EmergencyHandler "+inet+"]"+AnsiColors.RESET+"JSON recibido: " + line);
+                req = gson.fromJson(line, Request.class);
             }
 
             String id = req.data.get("id").getAsString();
@@ -44,6 +43,9 @@ public class EmergencyHandler implements Runnable {
 
             out.println(AnsiColors.BLUE+"[EmergencyHandler "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + "{\"status\":\"success\",\"data\":{}");
 
+            while ((line = in.readLine()) != null) {
+                // mensajes posteriores
+            }
         } catch (Exception e) {
             LogWriter.logError(e);
         } finally {

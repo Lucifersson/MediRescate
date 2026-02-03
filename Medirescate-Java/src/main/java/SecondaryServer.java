@@ -11,17 +11,24 @@ import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SecondaryServer {
     private static volatile boolean running = true;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         int port = ConfigLoader.getSecPort();
         System.out.println(AnsiColors.YELLOW+"[SEC.SERVER]"+AnsiColors.RESET+" Escuchando en puerto: "+port+"...");
 
-//        new Thread(new FakeClient(1, 1)).start();
+
+        new Thread(new FakeClient(200, 1,2)).start();
+
+
+        new Thread(new FakeClient(7, 1,1)).start();
+
+
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
@@ -37,6 +44,13 @@ public class SecondaryServer {
 
         } catch (Exception e) {
             LogWriter.logError(e);
+        }
+    }
+
+    public static void notifyOperario(String id, String msg) {
+        PrintWriter out = OperariosManager.operarios.get(id);
+        if (out != null) {
+            out.println(msg);
         }
     }
 }

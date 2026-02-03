@@ -262,11 +262,13 @@ public class Operations {
             String status = "success";
             JsonObject data = new JsonObject();
 
-            OperariosManager.getOut(req.data.get("id_operario").getAsString()).println("prueba");
+            System.out.println("Operarios conectados: " + OperariosManager.operarios.keySet());
+
+            String idOp = req.data.get("id_operario").getAsString();
+            System.out.println("Buscando operario con id = " + idOp);
+            OperariosManager.getOut(req.data.get(idOp).getAsString()).println("prueba");
 
             return new ResponseDATA(status, data);
-
-            //Llamar
         }
     }
 
