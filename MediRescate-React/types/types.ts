@@ -41,8 +41,8 @@ export interface NombreOperario {
 export interface OperariosAdmin {
   id_operario: number;
   nombre: string;
-  estado: string;
   ambulancia: string;
+  estado: string;
 }
 
 export interface EmergenciaAdmin {

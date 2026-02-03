@@ -1,27 +1,34 @@
-import EmergenciaComponent from "@/components/EmergenciaOperarioComponent";
+import EmergenciaComponent from "@/components/EmergenciaComponent";
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperario } from "@/hooks/useOperario";
-import { Emergencia } from "@/types/types";
+import { useOperariosEscucha } from "@/hooks/useOperarioEscucha";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Text, View, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const OperarioScreen = () => {
   const { user } = useAuthContext();
   const { estado, color, cambioEstado } = useOperario({ operario: user });
   const { logout } = useAuthContext();
+  //NOTE: importar emergencia en caso de no usar la de prueba
+  const { solicitarEmergencia } = useOperariosEscucha({
+    id: user?.idUsuario,
+  });
 
-  const emergencia : Emergencia = {
+  // NOTE: emergencia de prueba, hay que comentar
+
+  const emergencia: Emergencia = {
     id_emergencia: 1,
-    emergencia: "Accidente de tráfico"
-  }
+    emergencia: "Accidente de tráfico",
+  };
 
   //TEST: probando si funciona el campo de estado asi
   useEffect(() => {
     if (user?.idUsuario) {
       cambioEstado("libre");
+      solicitarEmergencia();
     }
   }, [user?.idUsuario]);
 
@@ -29,6 +36,11 @@ const OperarioScreen = () => {
     cambioEstado("offline");
     console.log("Se va a ejecutar funcion de logout del context.");
     logout();
+  };
+
+  const libreHandler = () => {
+    cambioEstado("libre");
+    solicitarEmergencia();
   };
 
   return (
@@ -61,10 +73,11 @@ const OperarioScreen = () => {
         <LogOutComponent onPress={logOutHandler} />
       </View>
 
+      {/* TODO: crear componente emergencia y pasarle los datos de la emergencia ya desestructurada */}
+
       {/* Datos de la emergencia (Tarjeta Central) */}
 
-      
-      <EmergenciaComponent emergencia={emergencia}/>
+      <EmergenciaComponent emergencia={emergencia} />
 
       {/* TODO: Implementar campo de error */}
 
@@ -97,7 +110,7 @@ const OperarioScreen = () => {
 
           <Pressable
             className="bg-green-600 w-[48%] h-24 rounded-2xl items-center justify-center shadow-lg shadow-green-900/40 border-r-4 border-b-4 border-green-800 active:opacity-80"
-            onPress={() => cambioEstado("libre")}
+            onPress={() => libreHandler()}
           >
             <Ionicons name="checkmark-circle" size={24} color="white" />
             <Text className="text-white font-black text-base uppercase mt-1">

@@ -23,6 +23,7 @@ public class Operations {
         String sql = """
             SELECT nombre, cargo
             FROM Usuario
+            WHERE cargo = 'operario';
             """;
 
         try (PreparedStatement ps = conn.prepareStatement(sql);
@@ -167,36 +168,49 @@ public class Operations {
             return new ResponseMSG("error", "Error al actualizar el estado del operario");
         }
     }
-    // operarios libres
+    // operarios
     public static Response operation6(Connection conn, Request req) {
+
+
         String sql = """
-                SELECT o.id_operario, u.nombre
+                SELECT o.id_operario, u.nombre, ua.id_ambulancia, o.estado
                 FROM Operario o
                 JOIN Usuario u ON u.id_usuario = o.id_operario
-                WHERE o.estado = ?;
+                LEFT JOIN UsaAmbulancia ua ON ua.id_operario = o.id_operario
+                WHERE o.estado = ? OR ? IS NULL;
             """;
 
         String estado = req.data.get("estado").getAsString();
+        boolean filtrar = !estado.equalsIgnoreCase("NULL");
 
         JsonObject data = new JsonObject();
         JsonArray users = new JsonArray();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, estado);
+            if (filtrar) {
+                ps.setString(1, estado);
+                ps.setString(2, estado);
+            } else {
+                ps.setNull(1, Types.VARCHAR);
+                ps.setNull(2, Types.VARCHAR);
+            }
             ResultSet rs = ps.executeQuery();
-
 
             while (rs.next()) {
                 JsonObject operario = new JsonObject();
                 operario.addProperty("id_operario", rs.getString(1));
                 operario.addProperty("nombre", rs.getString(2));
 
+                if (!filtrar) {
+                    operario.addProperty("ambulancia", rs.getInt(3));
+                    operario.addProperty("estado", rs.getString(4));
+                }
+
                 users.add(operario);
             }
 
             data.add("users", users);
-
             String status = "success";
             return new ResponseDATA(status, data);
         } catch (SQLException e) {
