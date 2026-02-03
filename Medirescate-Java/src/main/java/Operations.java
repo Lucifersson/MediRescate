@@ -271,6 +271,46 @@ public class Operations {
             return new ResponseDATA(status, data);
         }
     }
+    //listar emergencias
+    public static Response operation8(Connection conn, Request req) {
+        String sql = """
+                SELECT e.emergencia, o.id_operario, u.nombre
+                FROM Emergencia e
+                JOIN AsignarEmergencia ae ON e.id_emergencia = ae.id_emergencia
+                JOIN Operario o ON ae.id_operario = o.id_operario
+                JOIN Usuario u ON o.id_operario = u.id_usuario
+                WHERE e.estado != 'cerrada';
+                """;
+
+        JsonObject data = new JsonObject();
+        JsonArray emergencias = new JsonArray();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+
+
+            while (rs.next()) {
+                JsonObject emergencia = new JsonObject();
+                emergencia.addProperty("id_operario", rs.getInt(2));
+                emergencia.addProperty("nombre_operario", rs.getString(3));
+                emergencia.addProperty("descripcion", rs.getString(1));
+
+                emergencias.add(emergencia);
+            }
+
+            data.add("emergencias", emergencias);
+            String status = "success";
+            return new ResponseDATA(status, data);
+
+        } catch (SQLException e) {
+            LogWriter.logError(e);
+            JsonObject errorData = new JsonObject();
+            errorData.addProperty("message", "Error conectando con la base de datos");
+            return new ResponseDATA("error", errorData);
+        }
+
+    }
 
     //EMERGENCY OPERATIONS
     public static Response operation200(Connection conn, Request request) {
