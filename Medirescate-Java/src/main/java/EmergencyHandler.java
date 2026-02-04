@@ -41,11 +41,15 @@ public class EmergencyHandler implements Runnable {
             String status = "success";
             if (req.code.equals("201")) { //llamada de mainserver
                 PrintWriter outOper = OperariosManager.getOut(req.data.get("id").getAsString());
-                System.out.println(outOper);
+                JsonObject data = new JsonObject();
+                data.addProperty("id", req.data.get("id_emergencia").getAsString());
+                data.addProperty("descripcion", req.data.get("descripcion").getAsString());
+                System.out.println("prueba"+data);
+                ResponseDATA resp = new ResponseDATA(status, data);
 
-                outOper.println(req.data);
-                //TODO pues el código de enviar la emergencia y tal
-                jsonMSG =  "Emergencia enviada";
+                outOper.println(gson.toJson(resp));
+
+                System.out.println("Emergencia enviada");
                 return;
             } else { //llamada de operario
 //                out.println("hoal bunas tarneds");

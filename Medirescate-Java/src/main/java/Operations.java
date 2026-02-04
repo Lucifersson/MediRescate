@@ -263,13 +263,14 @@ public class Operations {
 
             String status = "success";
             JsonObject data = new JsonObject();
-
             String idOp = req.data.get("id_operario").getAsString();
-            try (Socket socket = new Socket("localhost", 7979);) {
+            String descripcion = req.data.get("descripcion").getAsString();
+
+            try (Socket socket = new Socket("localhost", 7979)) {
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                String json = "{\"code\":\"201\",\"data\":{\"id\":\""+idOp+"\", \"descripcion\":\""+req.data.get("descripcion").getAsString()+"\"}}"; //json que le envio al otro server con la id del usuario que tiene la emergengia TODO añadir el resto de info de la emergencia
+                String json = "{\"code\":\"201\",\"data\":{\"id\":\""+idOp+"\", \"id_emergencia\":\""+idEmergencia+"\", \"descripcion\":\""+descripcion+"\"}}"; //json que le envio al otro server con la id del usuario que tiene la emergengia TODO añadir el resto de info de la emergencia
                 out.println(json);
-            } catch (Exception e){
+            } catch (Exception e) {
                 LogWriter.logError(e);
             }
 
@@ -319,7 +320,7 @@ public class Operations {
 
     public static Response operation9(Connection conn, Request req) {
         String sql = """
-                UPDATE Ambulancia
+                UPDATE Emergencia
                 SET estado = 'cerrada'
                 WHERE id_emergencia = ?
                 """;
@@ -341,8 +342,6 @@ public class Operations {
             return new ResponseMSG("error", "Error al actualizar el estado de la emergencia");
         }
     }
-
-    public
 
     //EMERGENCY OPERATIONS
     public static Response operation200(Connection conn, Request request) {
