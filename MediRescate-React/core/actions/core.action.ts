@@ -19,7 +19,7 @@ export const useTcpSocket = <T>({ altPort }: Props = {}) => {
 
     const options = {
       port: altPort ? 7979 : 7878,
-      host: "192.168.217.173",
+      host: "192.168.0.227",
       reuseAddress: true,
     };
 
