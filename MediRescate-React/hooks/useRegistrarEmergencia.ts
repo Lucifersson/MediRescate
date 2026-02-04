@@ -11,6 +11,7 @@ export const useRegistrarEmergencia = () => {
   const registrarEmergencia = (
     idOperario: number | string,
     descripcion: string,
+    id_teleoperador: number | undefined,
   ) => {
     setRegistroExitoso(false);
 
@@ -18,6 +19,7 @@ export const useRegistrarEmergencia = () => {
     enviarPeticion("7", {
       id_operario: idOperario,
       descripcion: descripcion,
+      teleoperador: id_teleoperador,
     });
   };
 
