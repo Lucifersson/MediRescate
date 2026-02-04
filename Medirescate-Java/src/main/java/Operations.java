@@ -285,7 +285,8 @@ public class Operations {
                 JOIN AsignarEmergencia ae ON e.id_emergencia = ae.id_emergencia
                 JOIN Operario o ON ae.id_operario = o.id_operario
                 JOIN Usuario u ON o.id_operario = u.id_usuario
-                WHERE e.estado != 'cerrada';
+                WHERE e.estado != 'cerrada'
+                AND e.estado != 'activa';
                 """;
 
         JsonObject data = new JsonObject();
