@@ -68,6 +68,8 @@ public class FakeClient implements Runnable {
                         json = "{\"code\":\"200\",\"data\":{\"id\":5}}";
                 case 8 ->
                         json = "{\"code\":\"8\",\"data\":{}}";
+                case 9 ->
+                        json = "{\"code\":\"9\",\"data\":{\"id_emergencia\":30003}}";
 
                 default ->
                         LogWriter.logError(new Exception(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + " Codigo de operación no encontrado"));
@@ -86,7 +88,6 @@ public class FakeClient implements Runnable {
                 }
 
                 if (code == 200) {
-
                     String line;
                     while (true) {
                         System.out.println("ESCUCHANDO");

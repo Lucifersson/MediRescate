@@ -23,11 +23,10 @@ public class EmergencyHandler implements Runnable {
     @Override
     public void run() {
 
-        try (
-                BufferedReader in = new BufferedReader( //objeto para leer lo que ha llegado
-                        new InputStreamReader(socket.getInputStream())
-                );
-        ) {
+        try{
+            BufferedReader in = new BufferedReader( //objeto para leer lo que ha llegado
+                    new InputStreamReader(socket.getInputStream())
+            );
             PrintWriter out = new PrintWriter( //objeto para enviar información
                     socket.getOutputStream(), true
             );
@@ -42,13 +41,17 @@ public class EmergencyHandler implements Runnable {
             String status = "success";
             if (req.code.equals("201")) { //llamada de mainserver
                 PrintWriter outOper = OperariosManager.getOut(req.data.get("id").getAsString());
+                System.out.println(outOper);
 
-                outOper.println("Prueba exitosa ou yeah");
+                outOper.println(req.data);
                 //TODO pues el código de enviar la emergencia y tal
                 jsonMSG =  "Emergencia enviada";
+                return;
             } else { //llamada de operario
+//                out.println("hoal bunas tarneds");
                 String id = req.data.get("id").getAsString();
                 OperariosManager.addOut(id, out);
+                System.out.println(out);
 
                 jsonMSG =  "Conexión creada exitosamente";
             }
