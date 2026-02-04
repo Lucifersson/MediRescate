@@ -26,7 +26,7 @@ export const useOperariosEscucha = ({ id }: Props) => {
   }, [response]);
 
   useEffect(() => {
-    console.log("Contenido de array operarios: ", emergencia);
+    console.log("Contenido de emergencia al llamar: ", emergencia);
   }, [emergencia]);
 
   return {

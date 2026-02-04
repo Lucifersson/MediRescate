@@ -32,6 +32,7 @@ const OperarioScreen = () => {
     if (user?.idUsuario) {
       cambioEstado("libre");
       solicitarEmergencia();
+      console.log("Valor emergencia: ", emergencia);
     }
   }, [user?.idUsuario]);
 
@@ -77,17 +78,7 @@ const OperarioScreen = () => {
 
       {/* BLOQUE CENTRAL CONDICIONAL */}
       <View className="flex-1 justify-center items-center px-4">
-        {emergencia ? (
-          <EmergenciaComponent emergencia={emergencia} />
-        ) : (
-          <View className="items-center opacity-40">
-            <Ionicons name="shield-checkmark-outline" size={80} color="gray" />
-            <Text className="text-gray-500 font-bold mt-4 text-center">
-              No hay emergencias activas{"\n"}
-              en tu zona
-            </Text>
-          </View>
-        )}
+        <EmergenciaComponent emergencia={emergencia} />
       </View>
 
       {/* Footer: Botones cambio de estado */}
