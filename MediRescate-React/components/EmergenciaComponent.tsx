@@ -1,10 +1,9 @@
-import { Emergencia, EmergenciaAdmin } from "@/types/types";
+import { EmergenciaAdmin } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "react-native";
 
 interface Props {
-  // Ahora permitimos explícitamente que la emergencia sea nula o indefinida
-  emergencia: EmergenciaAdmin;
+    emergencia: EmergenciaAdmin;
 }
 
 const EmergenciaComponent = ({ emergencia }: Props) => {
