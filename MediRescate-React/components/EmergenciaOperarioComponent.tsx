@@ -42,7 +42,7 @@ const EmergenciaOperarioComponent = ({ emergencia }: Props) => {
         {/* Sección Central: El mensaje (Máximo énfasis) */}
         <View className="px-8">
           <Text className="text-2xl font-black text-center text-gray-800 leading-tight">
-            {emergencia.emergencia}
+            {emergencia.descripcion}
           </Text>
         </View>
 
