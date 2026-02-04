@@ -23,10 +23,10 @@ public class SecondaryServer {
         System.out.println(AnsiColors.YELLOW+"[SEC.SERVER]"+AnsiColors.RESET+" Escuchando en puerto: "+port+"...");
 
 
-        //new Thread(new FakeClient(200, 1,2)).start();
+        new Thread(new FakeClient(200, 1,2)).start();
 
 
-        //new Thread(new FakeClient(7, 1,1)).start();
+        new Thread(new FakeClient(7, 1,1)).start();
 
 
 

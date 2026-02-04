@@ -58,7 +58,7 @@ public class FakeClient implements Runnable {
                 case 6 ->
                         json = "{\"code\":\"6\",\"data\":{\"estado\":\"null\"}}";
                 case 7 ->{
-                        Thread.sleep(5000);
+                        Thread.sleep(4000);
 
                         json = "{\"code\":\"7\",\"data\":{\"id_operario\":5, \"descripcion\":\"emergencia de prueba\", \"teleoperador\":2}}";
                 }
@@ -68,6 +68,8 @@ public class FakeClient implements Runnable {
                         json = "{\"code\":\"200\",\"data\":{\"id\":5}}";
                 case 8 ->
                         json = "{\"code\":\"8\",\"data\":{}}";
+                case 9 ->
+                        json = "{\"code\":\"9\",\"data\":{\"id_emergencia\":30003}}";
 
                 default ->
                         LogWriter.logError(new Exception(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + " Codigo de operación no encontrado"));
@@ -79,14 +81,7 @@ public class FakeClient implements Runnable {
                 }
                 out.println(json);
 
-
-                String response = in.readLine();
-                if (silent<2) {
-                    System.out.println(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + " Respuesta " + AnsiColors.GREEN_BRIGHT + "[<<] " + AnsiColors.RESET + response);
-                }
-
                 if (code == 200) {
-
                     String line;
                     while (true) {
                         System.out.println("ESCUCHANDO");
@@ -95,9 +90,14 @@ public class FakeClient implements Runnable {
                         }
                         Thread.sleep(3000);
                     }
+                } else {
+                    String response = in.readLine();
+                    if (silent<2) {
+                        System.out.println(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + " Respuesta " + AnsiColors.GREEN_BRIGHT + "[<<] " + AnsiColors.RESET + response);
+                    }
                 }
             }
-            System.out.println(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + "Fake client fuera");
+            System.out.println(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + " Fake client fuera");
 
 
         } catch (Exception e) {

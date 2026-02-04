@@ -2,11 +2,7 @@ import { useState, useCallback } from "react";
 import TcpSocket from "react-native-tcp-socket";
 import { ApiResponse } from "@/types/types";
 
-interface Props {
-  altPort?: boolean;
-}
-
-export const useTcpSocket = <T>({ altPort }: Props = {}) => {
+export const useTcpSocket = <T>() => {
   // El estado ahora espera una ApiResponse con el tipo de dato T
   const [response, setResponse] = useState<ApiResponse<T> | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +14,7 @@ export const useTcpSocket = <T>({ altPort }: Props = {}) => {
     setError(null);
 
     const options = {
-      port: altPort ? 7979 : 7878,
+      port: 7878,
       host: "192.168.217.173",
       reuseAddress: true,
     };
@@ -27,13 +23,11 @@ export const useTcpSocket = <T>({ altPort }: Props = {}) => {
       const payload = { code, data: dataBody };
       console.log("Enviando peticion...");
       client.write(JSON.stringify(payload) + "\n");
-      console.log("Peticion enviada en puerto: ", options.port);
+      console.log("Peticion enviada.");
     });
 
     client.on("data", (rawData) => {
       try {
-        console.log("RESPUESTA RECIBIDA: ", client.remotePort);
-        console.log("INFO RESPUESTA: ", rawData.toString());
         const parsed: ApiResponse<T> = JSON.parse(rawData.toString());
 
         if (parsed.status === "error") {
