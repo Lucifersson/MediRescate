@@ -1,20 +1,17 @@
 import { useTcpSocket } from "@/core/actions/core.action";
-import { OperariosAdmin } from "@/types/types";
+import { Emergencia, OperariosAdmin } from "@/types/types";
 import { useEffect, useState } from "react";
-
-interface ArrayOperarios {
-  users: OperariosAdmin[];
-}
 
 interface Props {
   id: number | undefined;
 }
 
 export const useOperariosEscucha = ({ id }: Props) => {
-  const { enviarPeticion, response, error, loading } =
-    useTcpSocket<ArrayOperarios>({ altPort: true });
+  const { enviarPeticion, response, error, loading } = useTcpSocket<Emergencia>(
+    { altPort: true },
+  );
 
-  const [emergencia, setEmergencia] = useState<OperariosAdmin[]>([]);
+  const [emergencia, setEmergencia] = useState<Emergencia>();
 
   const solicitarEmergencia = () => {
     enviarPeticion("200", { id: id });
@@ -23,7 +20,7 @@ export const useOperariosEscucha = ({ id }: Props) => {
   useEffect(() => {
     if (response) {
       if (response.status === "success") {
-        setEmergencia(response.data.users);
+        setEmergencia(response.data);
       }
     }
   }, [response]);
