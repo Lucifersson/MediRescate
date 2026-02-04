@@ -15,17 +15,17 @@ const OperarioScreen = () => {
   const { logout } = useAuthContext();
 
   //NOTE: importar emergencia en caso de no usar la de prueba
-  const { solicitarEmergencia } = useOperariosEscucha({
+  const { emergencia, solicitarEmergencia } = useOperariosEscucha({
     id: user?.idUsuario,
   });
 
   // NOTE: emergencia de prueba, hay que comentar
 
-  const emergencia: Emergencia = {
-    id_operario: 1,
-    descripcion: "Accidente de tráfico",
-    nombre_operario: "Paco",
-  };
+  // const emergencia: Emergencia = {
+  //   id_operario: 1,
+  //   descripcion: "Accidente de tráfico",
+  //   nombre_operario: "Paco",
+  // };
 
   //TEST: probando si funciona el campo de estado asi
   useEffect(() => {
