@@ -20,6 +20,7 @@ export const useOperariosEscucha = ({ id }: Props) => {
   useEffect(() => {
     if (response) {
       if (response.status === "success") {
+        console.log("REspuesta recibida: ", response.data);
         setEmergencia(response.data);
       }
     }
