@@ -52,7 +52,6 @@ export interface EmergenciaAdmin {
 }
 
 export interface Emergencia {
-  id_operario: number;
-  nombre_operario: string;
+  id: number;
   descripcion: string;
 }

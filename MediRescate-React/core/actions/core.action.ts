@@ -19,7 +19,7 @@ export const useTcpSocket = <T>({ altPort }: Props = {}) => {
 
     const options = {
       port: altPort ? 7979 : 7878,
-      host: "172.20.10.14",
+      host: "192.168.217.173",
       reuseAddress: true,
     };
 
@@ -27,11 +27,13 @@ export const useTcpSocket = <T>({ altPort }: Props = {}) => {
       const payload = { code, data: dataBody };
       console.log("Enviando peticion...");
       client.write(JSON.stringify(payload) + "\n");
-      console.log("Peticion enviada.");
+      console.log("Peticion enviada en puerto: ", options.port);
     });
 
     client.on("data", (rawData) => {
       try {
+        console.log("RESPUESTA RECIBIDA: ", client.remotePort);
+        console.log("INFO RESPUESTA: ", rawData.toString());
         const parsed: ApiResponse<T> = JSON.parse(rawData.toString());
 
         if (parsed.status === "error") {

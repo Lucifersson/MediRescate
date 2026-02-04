@@ -52,12 +52,9 @@ const EmergenciaComponent = ({ emergencia }: Props) => {
         <Text className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
           Operario Asignado
         </Text>
-        <Text className="text-lg font-bold text-blue-600">
-          {emergencia.nombre_operario}
-        </Text>
         <View className="bg-gray-100 px-3 py-1 rounded-full mt-2">
           <Text className="text-[10px] font-black text-gray-500 uppercase">
-            Unidad ID: {emergencia.id_operario}
+            ID Emergencia: {emergencia.id}
           </Text>
         </View>
       </View>

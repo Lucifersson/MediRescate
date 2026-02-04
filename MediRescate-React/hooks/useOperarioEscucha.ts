@@ -15,10 +15,12 @@ export const useOperariosEscucha = ({ id }: Props) => {
 
   const solicitarEmergencia = () => {
     enviarPeticion("200", { id: id });
+    console.log("Escuchando ///////////////////////////////");
   };
 
   useEffect(() => {
     if (response) {
+      console.log("MENSAJE RESPUESTA: ", response);
       if (response.status === "success") {
         console.log("REspuesta recibida: ", response.data);
         setEmergencia(response.data);
