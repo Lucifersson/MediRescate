@@ -1,4 +1,3 @@
-import EmergenciaComponent from "@/components/EmergenciaComponent";
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperario } from "@/hooks/useOperario";

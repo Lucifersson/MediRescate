@@ -15,14 +15,20 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthProvider, useAuthContext } from "@/core/context/UseAuthContext";
+import { router } from "expo-router";
 
 const TeleoperadorScreen = () => {
   const [titulo, setTitulo] = useState("");
   const [operario, setOperario] = useState<NombreOperario | null>(null);
   const [mostrarUsuarios, setMostrarUsuarios] = useState(false);
-  const { user } = useAuthContext();
+  const { user, logout } = useAuthContext();
 
   const { operarios, solicitarOperarios } = useOperariosDisponibles();
+
+  const logotHandler = () => {
+    router.push("/login");
+    logout();
+  };
 
   // Inicializamos el registro
   const {
@@ -89,7 +95,7 @@ const TeleoperadorScreen = () => {
               Gestión de Avisos
             </Text>
           </View>
-          <LogOutComponent onPress={() => null} />
+          <LogOutComponent onPress={logotHandler} />
         </View>
 
         {/* Formulario */}

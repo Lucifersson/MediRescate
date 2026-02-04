@@ -2,10 +2,9 @@ import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import OperarioComponent from "@/components/OperarioComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperarios } from "@/hooks/useOperarios";
-import { OperariosAdmin } from "@/types/types";
 import { router } from "expo-router";
 import { useEffect } from "react";
-import { FlatList, Image, ScrollView, Text, View } from "react-native";
+import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const AdminOperariosScreen = () => {
