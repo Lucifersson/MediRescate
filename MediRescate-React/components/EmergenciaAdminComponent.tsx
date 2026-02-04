@@ -6,7 +6,7 @@ interface Props {
   emergencia: EmergenciaAdmin;
 }
 
-const EmergenciaComponent = ({ emergencia }: Props) => {
+const EmergenciaAdminComponent = ({ emergencia }: Props) => {
   return (
     <View className="bg-white rounded-3xl p-4 mx-4 mb-3 shadow-sm border border-gray-100 flex-row items-center">
       {/* 1. Icono a la izquierda: Más pequeño y contenido */}
@@ -45,4 +45,4 @@ const EmergenciaComponent = ({ emergencia }: Props) => {
   );
 };
 
-export default EmergenciaComponent;
+export default EmergenciaAdminComponent;

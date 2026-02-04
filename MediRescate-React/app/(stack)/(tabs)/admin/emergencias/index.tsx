@@ -1,9 +1,9 @@
-import EmergenciaComponent from "@/components/EmergenciaComponent";
+import EmergenciaAdminComponent from "@/components/EmergenciaAdminComponent";
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useEmergenciasAdmin } from "@/hooks/useEmergenciasAdmin"; // Importamos el hook
 import { router } from "expo-router";
-import { useEffect } from "react"; // Necesario para el polling
+import React, { useEffect } from "react"; // Necesario para el polling
 import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -11,8 +11,7 @@ const AdminEmergenciasScreen = () => {
   const { logout } = useAuthContext();
 
   // 1. Usamos el hook para obtener la data y la función de petición
-  const { listaEmergencias, solicitarEmergenciasAdmin, loading } =
-    useEmergenciasAdmin();
+  const { listaEmergencias, solicitarEmergenciasAdmin } = useEmergenciasAdmin();
 
   const logOutHandler = () => {
     router.replace("/(stack)/login");
@@ -62,7 +61,9 @@ const AdminEmergenciasScreen = () => {
         className="px-3"
         // Usamos el index como acordamos si no hay un ID robusto
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <EmergenciaComponent emergencia={item} />}
+        renderItem={({ item }) => (
+          <EmergenciaAdminComponent emergencia={item} />
+        )}
         // Opcional: Mostrar mensaje si no hay datos
         ListEmptyComponent={() => (
           <View className="mt-10 items-center opacity-50">
