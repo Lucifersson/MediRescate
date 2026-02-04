@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { Text, View, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import EmergenciaOperarioComponent from "@/components/EmergenciaOperarioComponent";
 
 const OperarioScreen = () => {
   const { user } = useAuthContext();
@@ -82,7 +83,7 @@ const OperarioScreen = () => {
 
       {/* BLOQUE CENTRAL CONDICIONAL */}
       <View className="flex-1 justify-center items-center px-4">
-        <EmergenciaComponent emergencia={emergencia} />
+        <EmergenciaOperarioComponent emergencia={emergencia} />
       </View>
 
       {/* Footer: Botones cambio de estado */}
