@@ -1,6 +1,6 @@
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useOperariosDisponibles } from "@/hooks/useOperariosDisponibles";
-import { useRegistrarEmergencia } from "@/hooks/useRegistrarEmergencia"; // 🚀 Importamos el nuevo hook
+import { useRegistrarEmergencia } from "@/hooks/useRegistrarEmergencia"; // Importamos el nuevo hook
 import { NombreOperario } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
@@ -14,15 +14,17 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthProvider, useAuthContext } from "@/core/context/UseAuthContext";
 
 const TeleoperadorScreen = () => {
   const [titulo, setTitulo] = useState("");
   const [operario, setOperario] = useState<NombreOperario | null>(null);
   const [mostrarUsuarios, setMostrarUsuarios] = useState(false);
+  const { user } = useAuthContext();
 
   const { operarios, solicitarOperarios } = useOperariosDisponibles();
 
-  // 🚀 Inicializamos el registro
+  // Inicializamos el registro
   const {
     registrarEmergencia,
     registroExitoso,
@@ -52,7 +54,7 @@ const TeleoperadorScreen = () => {
 
   const manejarEnvio = () => {
     if (operario && titulo) {
-      registrarEmergencia(operario.id_operario, titulo);
+      registrarEmergencia(operario.id_operario, titulo, user?.idUsuario);
     }
   };
 
