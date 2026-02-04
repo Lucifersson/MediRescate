@@ -55,7 +55,7 @@ public class EmergencyHandler implements Runnable {
             JsonObject data = new JsonObject();
             data.addProperty("msg", jsonMSG);
             ResponseDATA resp = new ResponseDATA(status, data);
-            out.println(gson.toJson(resp));
+//            out.println(gson.toJson(resp)); MATAR
 
             System.out.println(AnsiColors.BLUE+"[EmergencyHandler "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + jsonMSG);
 
@@ -65,10 +65,6 @@ public class EmergencyHandler implements Runnable {
 
         } catch (Exception e) {
             LogWriter.logError(e);
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException ignored) {}
         }
     }
 
