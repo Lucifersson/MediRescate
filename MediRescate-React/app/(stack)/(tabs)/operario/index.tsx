@@ -36,6 +36,10 @@ const OperarioScreen = () => {
     }
   }, [user?.idUsuario]);
 
+  useEffect(() => {
+    cambioEstado("en_marcha");
+  }, [emergencia]);
+
   const logOutHandler = () => {
     cambioEstado("offline");
     console.log("Se va a ejecutar funcion de logout del context.");
