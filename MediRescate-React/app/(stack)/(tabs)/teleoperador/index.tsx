@@ -25,7 +25,7 @@ const TeleoperadorScreen = () => {
 
   const { operarios, solicitarOperarios } = useOperariosDisponibles();
 
-  const logotHandler = () => {
+  const logoutHandler = () => {
     router.push("/login");
     logout();
   };
@@ -95,7 +95,7 @@ const TeleoperadorScreen = () => {
               Gestión de Avisos
             </Text>
           </View>
-          <LogOutComponent onPress={logotHandler} />
+          <LogOutComponent onPress={logoutHandler} />
         </View>
 
         {/* Formulario */}
