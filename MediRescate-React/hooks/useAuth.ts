@@ -1,3 +1,14 @@
+/**
+ * HOOK: useAuth
+ * Propósito: Orquestar el proceso de autenticación completo.
+ * Funcionalidad:
+ * 1. Validación de entradas: Verifica que los campos no estén vacíos.
+ * 2. Seguridad: Hashea la contraseña en SHA-256 antes del envío (no viaja en texto plano).
+ * 3. Comunicación: Utiliza 'useTcpSocket' con el código de operación "1".
+ * 4. Redirección Basada en Roles: Deriva al usuario a su panel correspondiente (Admin/Operario/Teleoperador).
+ * 5. Gestión de Estado: Actualiza el Contexto Global tras un éxito.
+ */
+
 import { useTcpSocket } from "@/core/actions/core.action";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { Operario } from "@/types/types";
@@ -6,10 +17,10 @@ import { sha256 } from "js-sha256";
 import { useEffect, useState } from "react";
 
 export const useAuth = () => {
-  // Hook del Socket con el tipo Operario
+  // Hook del Socket instanciado con el tipo genérico 'Operario' para tipar la respuesta
   const { enviarPeticion, response, error, loading } = useTcpSocket<Operario>();
 
-  // Acceso al contexto global
+  // Acceso al método 'login' del Contexto Global
   const { login } = useAuthContext();
 
   const [username, setUsername] = useState("");
@@ -17,17 +28,21 @@ export const useAuth = () => {
   const [errorCamposVacios, setErrorCamposVacios] = useState<string>();
   const [errorUsuario, setErrorUsuario] = useState<string>();
 
-  // 1. Manejo de la respuesta del servidor
+  // --- 1. MANEJO DE LA RESPUESTA DEL SERVIDOR ---
   useEffect(() => {
     if (response) {
       if (response.status === "success") {
         const usuario = response.data;
 
-        // Guardamos los datos en el contexto global
+        // Persistencia en el estado global (Contexto)
         login(usuario);
         console.log("Login exitoso para:", usuario.nombre);
 
-        // Redirección dinámica según el cargo que viene del servidor
+        /**
+         * REDIRECCIÓN DINÁMICA POR ROL:
+         * El servidor devuelve el 'cargo'. Según este, movemos al usuario
+         * a su stack de navegación específico.
+         */
         if (usuario.cargo === "administrador") {
           router.replace("/(stack)/(tabs)/admin");
         } else if (usuario.cargo === "operario") {
@@ -35,12 +50,10 @@ export const useAuth = () => {
         } else if (usuario.cargo === "teleoperador") {
           router.replace("/(stack)/(tabs)/teleoperador");
         } else {
-          // Si no tiene un cargo definido, enviamos a una ruta por defecto
           router.replace("/(stack)/(tabs)/operario");
         }
       } else {
-        // El servidor devolvió un error (Usuario no encontrado, etc.)
-        // Convertimos 'data' a string ya que en caso de error el servidor envía el mensaje ahí
+        // Error de credenciales (Usuario no encontrado o clave errónea)
         setErrorUsuario(
           (response.data as unknown as string) || "Credenciales incorrectas",
         );
@@ -48,7 +61,7 @@ export const useAuth = () => {
     }
   }, [response]);
 
-  // 2. Manejo de errores de conexión TCP (Server caído, IP incorrecta)
+  // --- 2. MANEJO DE ERRORES DE RED ---
   useEffect(() => {
     if (error) {
       setErrorUsuario("Error de conexión con el servidor");
@@ -56,22 +69,28 @@ export const useAuth = () => {
     }
   }, [error]);
 
+  /**
+   * onLoginPress: Acción disparada por el botón 'Entrar'.
+   */
   const onLoginPress = () => {
-    // Limpieza de estados de error previos
+    // Reset de errores previos
     setErrorCamposVacios("");
     setErrorUsuario("");
 
-    // Validación de campos
+    // Validación básica de UI
     if (username.trim() === "" || password.trim() === "") {
       setErrorCamposVacios("Rellena usuario y contraseña");
       return;
     }
 
-    // Petición al servidor (Código "1" para Login)
-    console.log("Iniciando petición de login para:", username);
+    /**
+     * SEGURIDAD:
+     * Generamos un hash SHA-256 de la contraseña.
+     * El servidor comparará este hash con el almacenado en la DB.
+     */
     const hashedPass = sha256(password);
-    console.log(hashedPass);
 
+    // Envío de petición TCP con código "1" (Login)
     enviarPeticion("1", {
       user: username,
       password: hashedPass,
@@ -84,7 +103,6 @@ export const useAuth = () => {
     errorCamposVacios,
     errorUsuario,
     loading,
-
     setUsernameValue: setUsername,
     setPasswordValue: setPassword,
     onLoginPress,
