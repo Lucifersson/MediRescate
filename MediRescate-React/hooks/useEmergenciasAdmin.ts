@@ -34,12 +34,6 @@ export const useEmergenciasAdmin = () => {
     }
   }, [response]);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     console.error("Error al obtener emergencias admin:", error);
-  //   }
-  // }, [error]);
-
   return {
     solicitarEmergenciasAdmin,
     listaEmergencias,

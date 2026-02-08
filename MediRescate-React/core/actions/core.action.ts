@@ -7,7 +7,6 @@ interface Props {
 }
 
 export const useTcpSocket = <T>({ altPort }: Props = {}) => {
-  // El estado ahora espera una ApiResponse con el tipo de dato T
   const [response, setResponse] = useState<ApiResponse<T> | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,7 +36,6 @@ export const useTcpSocket = <T>({ altPort }: Props = {}) => {
         const parsed: ApiResponse<T> = JSON.parse(rawData.toString());
 
         if (parsed.status === "error") {
-          // Si el servidor avisa de un error en su lógica interna
           setError(parsed.data as unknown as string);
         }
 

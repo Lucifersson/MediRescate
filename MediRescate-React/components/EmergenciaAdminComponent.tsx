@@ -9,12 +9,9 @@ interface Props {
 const EmergenciaAdminComponent = ({ emergencia }: Props) => {
   return (
     <View className="bg-white rounded-3xl p-4 mx-4 mb-3 shadow-sm border border-gray-100 flex-row items-center">
-      {/* 1. Icono a la izquierda: Más pequeño y contenido */}
       <View className="bg-orange-50 p-3 rounded-2xl mr-4">
         <Ionicons name="warning" color={"#f97316"} size={28} />
       </View>
-
-      {/* 2. Bloque Central: Descripción (Flex-1 para que ocupe el espacio sobrante) */}
       <View className="flex-1 justify-center">
         <Text className="text-gray-400 font-black text-[9px] uppercase tracking-widest mb-0.5">
           Emergencia
@@ -26,11 +23,7 @@ const EmergenciaAdminComponent = ({ emergencia }: Props) => {
           {emergencia.descripcion}
         </Text>
       </View>
-
-      {/* 3. Separador Vertical Sutil */}
       <View className="w-[1px] h-10 bg-gray-100 mx-3" />
-
-      {/* 4. Bloque Derecho: Info Operario (Ancho fijo para mantener alineación) */}
       <View className="items-end w-24">
         <Text className="text-[9px] font-bold text-gray-400 uppercase mb-1">
           ID Operario

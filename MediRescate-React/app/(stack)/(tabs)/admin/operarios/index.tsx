@@ -12,10 +12,8 @@ const AdminOperariosScreen = () => {
 
   const { operarios, solicitarOperariosTodos } = useOperarios();
 
-  //HACK: forma provisional de actualizar los datos de la vista empleado
   //NOTE: comentar para que funcione unicamente front
   useEffect(() => {
-    // Llamada inicial inmediata para no esperar 5 segundos al abrir la pantalla
     solicitarOperariosTodos();
 
     const intervalo = setInterval(() => {
@@ -23,7 +21,6 @@ const AdminOperariosScreen = () => {
       solicitarOperariosTodos();
     }, 5000); // 5000ms = 5 segundos
 
-    // 3. LIMPIEZA: Muy importante para que no siga llamando al salir de la pantalla
     return () => clearInterval(intervalo);
   }, []);
 
@@ -31,8 +28,6 @@ const AdminOperariosScreen = () => {
     router.replace("/(stack)/login");
     logout();
   };
-
-  //Traer arraylist de operarios,
 
   return (
     <SafeAreaView className="flex-1">

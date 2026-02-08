@@ -29,12 +29,12 @@ const AdminEmergenciasScreen = () => {
     }, 5000);
 
     // Limpieza al salir de la pantalla
+    // TODO: hacer que funcione en el tabs
     return () => clearInterval(intervalo);
   }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
-      {/* Header */}
       <View className="mx-4 mt-4 flex-row justify-between bg-red-500 p-4 items-center rounded-2xl shadow-md mb-5">
         <View className="bg-white/80 p-2 rounded-xl">
           <Image
@@ -55,16 +55,13 @@ const AdminEmergenciasScreen = () => {
         <LogOutComponent onPress={() => logOutHandler()} />
       </View>
 
-      {/* 3. Listado con los datos del Hook */}
       <FlatList
         data={listaEmergencias}
         className="px-3"
-        // Usamos el index como acordamos si no hay un ID robusto
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <EmergenciaAdminComponent emergencia={item} />
         )}
-        // Opcional: Mostrar mensaje si no hay datos
         ListEmptyComponent={() => (
           <View className="mt-10 items-center opacity-50">
             <Text className="text-gray-500 font-bold">

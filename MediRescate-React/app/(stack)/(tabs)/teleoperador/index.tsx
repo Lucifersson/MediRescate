@@ -14,7 +14,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { AuthProvider, useAuthContext } from "@/core/context/UseAuthContext";
+import { useAuthContext } from "@/core/context/UseAuthContext";
 import { router } from "expo-router";
 
 const TeleoperadorScreen = () => {
@@ -30,7 +30,6 @@ const TeleoperadorScreen = () => {
     logout();
   };
 
-  // Inicializamos el registro
   const {
     registrarEmergencia,
     registroExitoso,
@@ -43,12 +42,10 @@ const TeleoperadorScreen = () => {
     }
   }, [mostrarUsuarios]);
 
-  // Limpiar formulario si el registro fue ok
   useEffect(() => {
     if (registroExitoso) {
       setTitulo("");
       setOperario(null);
-      // Opcional: ocultar el mensaje después de 3 segundos
     }
   }, [registroExitoso]);
 
@@ -155,7 +152,6 @@ const TeleoperadorScreen = () => {
                 data={operarios}
                 keyExtractor={(item) => item.id_operario.toString()}
                 nestedScrollEnabled={true}
-                // Separador más limpio que usar bordes en los items
                 ItemSeparatorComponent={() => (
                   <View className="h-[1px] bg-gray-100 mx-4" />
                 )}
