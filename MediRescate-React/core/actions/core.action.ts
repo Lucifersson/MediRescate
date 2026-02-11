@@ -29,7 +29,7 @@ export const useTcpSocket = <T>({ altPort }: Props = {}) => {
    * @param {dataBody} Objeto con la información necesaria para la operación.
    */
   const enviarPeticion = useCallback((code: string, dataBody: any) => {
-    console.log("Databody: ", dataBody);
+    console.log("Databody: ", dataBody, "\n");
     setLoading(true);
     setError(null);
 
@@ -44,20 +44,24 @@ export const useTcpSocket = <T>({ altPort }: Props = {}) => {
     const client = TcpSocket.createConnection(options, () => {
       // Estructura del protocolo definida: Código + Datos
       const payload = { code, data: dataBody };
-      console.log("Enviando peticion...");
+      console.log("Enviando peticion...\n");
 
       /** * IMPORTANTE: Se añade "\n" al final del string para que el servidor
        * sepa que el mensaje ha terminado (delimitador de línea).
        */
       client.write(JSON.stringify(payload) + "\n");
-      console.log("Peticion enviada en puerto: ", options.port);
+      console.log("Peticion enviada en puerto: ", options.port, "\n");
     });
 
     // --- MANEJO DE RESPUESTA ---
     client.on("data", (rawData) => {
       try {
-        console.log("RESPUESTA RECIBIDA: ", client.remotePort);
-        console.log("INFO RESPUESTA: ", rawData.toString());
+        console.log(
+          "\nRESPUESTA RECIBIDA DE PUERTO: ",
+          client.remotePort,
+          "\n",
+        );
+        console.log("\nINFO RESPUESTA RAW: ", rawData.toString(), "\n");
 
         // Parseo de la respuesta binaria a objeto JSON
         const parsed: ApiResponse<T> = JSON.parse(rawData.toString());

@@ -36,7 +36,7 @@ export const useAuth = () => {
 
         // Persistencia en el estado global (Contexto)
         login(usuario);
-        console.log("Login exitoso para:", usuario.nombre);
+        console.log("Login exitoso para:", usuario.nombre, "\n");
 
         /**
          * REDIRECCIÓN DINÁMICA POR ROL:
@@ -65,7 +65,7 @@ export const useAuth = () => {
   useEffect(() => {
     if (error) {
       setErrorUsuario("Error de conexión con el servidor");
-      console.error("TCP Error:", error);
+      console.error("TCP Error:", error, "\n");
     }
   }, [error]);
 

@@ -30,9 +30,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<Operario | null>(null);
 
   // Efecto de depuración para monitorizar cambios en el estado del usuario
-  useEffect(() => {
-    console.log("Valor idEmpleado al cargar AuthProvider", user?.idUsuario);
-  }, [user]);
+  // useEffect(() => {
+  //   console.log("Valor idEmpleado al cargar AuthProvider", user?.idUsuario);
+  // }, [user]);
 
   /**
    * login: Actualiza el estado global con los datos recibidos del servidor.
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
    * a una pantalla protegida mediante el botón físico del dispositivo.
    */
   const logout = () => {
-    console.log("Cerrando sesion del usuario global.");
+    console.log("Cerrando sesion del usuario global.\n");
     setUser(null);
     router.replace("/(stack)/login");
   };

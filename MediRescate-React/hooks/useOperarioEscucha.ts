@@ -38,28 +38,29 @@ export const useOperariosEscucha = ({ id }: Props) => {
   const solicitarEmergencia = () => {
     if (!id) return;
     enviarPeticion("200", { id: id });
-    console.log("Solicitando datos de emergencia para ID: ", id);
+    console.log("Solicitando datos de emergencia para ID: ", id, "\n");
   };
 
   // --- ESCUCHA DE ASIGNACIÓN ---
   useEffect(() => {
     if (response) {
-      console.log("MENSAJE RESPUESTA RECIBIDO: ", response);
+      // console.log("MENSAJE RESPUESTA RECIBIDO: ", response);
       if (response.status === "success") {
         /**
          * Si el servidor responde con éxito, se carga el objeto Emergencia
          * con la descripción y datos del incidente.
          */
-        console.log("Datos de emergencia cargados: ", response.data);
+        console.log("Datos de emergencia cargados: ", response.data, "\n");
         setEmergencia(response.data);
       }
     }
   }, [response]);
 
   // NOTE: Monitorización de cambios en el estado de la emergencia
-  useEffect(() => {
-    console.log("Estado de emergencia actualizado en el hook: ", emergencia);
-  }, [emergencia]);
+
+  // useEffect(() => {
+  //   console.log("Estado de emergencia actualizado en el hook: ", emergencia);
+  // }, [emergencia]);
 
   return {
     solicitarEmergencia, // Disparador para refrescar o forzar la escucha

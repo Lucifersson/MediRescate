@@ -42,10 +42,10 @@ export const useEmergenciasAdmin = () => {
     if (response) {
       if (response.status === "success") {
         // Log de depuración para verificar la integridad de los datos recibidos
-        console.log(
-          "Valor de emergencias recibidas: ",
-          response.data.emergencias,
-        );
+        // console.log(
+        //   "Valor de emergencias recibidas: ",
+        //   response.data.emergencias,
+        // );
 
         // Actualizamos el estado con el array proveniente del servidor
         setListaEmergencias(response.data.emergencias);

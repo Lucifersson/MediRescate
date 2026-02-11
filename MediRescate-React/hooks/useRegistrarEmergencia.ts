@@ -43,7 +43,7 @@ export const useRegistrarEmergencia = () => {
     if (response) {
       if (response.status === "success") {
         setRegistroExitoso(true);
-        console.log("Emergencia enviada correctamente al servidor.");
+        console.log("Emergencia enviada correctamente al servidor.\n");
       }
     }
   }, [response]);

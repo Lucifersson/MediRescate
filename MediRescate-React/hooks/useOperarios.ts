@@ -48,9 +48,10 @@ export const useOperarios = () => {
   }, [response]);
 
   // Log de depuración para seguimiento en consola del estado del array
-  useEffect(() => {
-    console.log("Contenido de array operarios actualizado: ", operarios);
-  }, [operarios]);
+
+  // useEffect(() => {
+  //   console.log("Contenido de array operarios actualizado: ", operarios);
+  // }, [operarios]);
 
   return {
     solicitarOperariosTodos, // Función para refrescar la lista (Pull-to-refresh)

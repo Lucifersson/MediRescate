@@ -46,7 +46,11 @@ const OperarioScreen = () => {
     if (user?.idUsuario) {
       cambioEstado("libre");
       solicitarEmergencia();
-      console.log("Valor emergencia: ", emergencia);
+      console.log(
+        "Se ha solicitado emergencia y se ha obtenido: ",
+        emergencia,
+        "\n",
+      );
     }
   }, [user?.idUsuario]);
 
@@ -65,7 +69,6 @@ const OperarioScreen = () => {
    */
   const logOutHandler = () => {
     cambioEstado("offline");
-    console.log("Se va a ejecutar funcion de logout del context.");
     logout();
   };
 

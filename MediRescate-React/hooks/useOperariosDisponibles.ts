@@ -49,7 +49,7 @@ export const useOperariosDisponibles = () => {
 
   // Log de control para verificar la disponibilidad de la flota en tiempo real
   useEffect(() => {
-    console.log("Operarios disponibles para asignar: ", operarios);
+    console.log("Operarios disponibles para asignar:\n ", operarios, "\n");
   }, [operarios]);
 
   return {

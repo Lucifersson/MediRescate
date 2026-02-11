@@ -35,7 +35,11 @@ export const useOperario = ({ operario }: Props) => {
   // Manejo de errores de conexión o protocolo
   useEffect(() => {
     if (error) {
-      console.error("Error en la petición de cambio de estado:", error);
+      console.error(
+        "\nError en la petición de cambio de estado: ",
+        error,
+        "\n",
+      );
     }
   }, [error]);
 

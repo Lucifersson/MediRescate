@@ -35,7 +35,10 @@ const AdminOperariosScreen = () => {
      * Refresca la lista de operarios cada 5 segundos para reflejar cambios de estado o nuevos registros.
      */
     const intervalo = setInterval(() => {
-      console.log("Actualizando lista de operarios...");
+      console.log(
+        "Actualizando lista de operarios en intervalo de 5 segundos.",
+        "\n",
+      );
       solicitarOperariosTodos();
     }, 5000);
 
