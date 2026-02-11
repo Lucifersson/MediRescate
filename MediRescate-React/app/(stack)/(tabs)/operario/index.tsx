@@ -12,7 +12,7 @@ import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperario } from "@/hooks/useOperario";
 import { useOperariosEscucha } from "@/hooks/useOperarioEscucha";
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Text, View, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EmergenciaOperarioComponent from "@/components/EmergenciaOperarioComponent";
@@ -39,6 +39,10 @@ const OperarioScreen = () => {
     id: user?.idUsuario,
   });
 
+  //NOTE: implementar el estado de deshabilitado a false cuando se cierra
+  //la emergencia y poner estado a ocupado
+  const [deshabilitado, setDeshabilitado] = useState(false);
+
   // --- EFECTOS DE INICIALIZACIÓN Y FLUJO ---
 
   useEffect(() => {
@@ -58,6 +62,7 @@ const OperarioScreen = () => {
     // Si el hook de escucha detecta una nueva emergencia, cambia automáticamente el estado.
     if (emergencia) {
       cambioEstado("en_marcha");
+      setDeshabilitado(true);
     }
   }, [emergencia]);
 
@@ -144,6 +149,7 @@ const OperarioScreen = () => {
           <Pressable
             className="bg-orange-500 w-[48%] h-24 rounded-2xl items-center justify-center border-r-4 border-b-4 border-orange-800 active:opacity-80"
             onPress={() => cambioEstado("en_marcha")}
+            disabled={deshabilitado}
           >
             <Ionicons name="navigate" size={24} color="white" />
             <Text className="text-white font-black text-base uppercase mt-1">
