@@ -21,7 +21,12 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.MediRescate"
+      "package": "com.mario.medirescate",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDIZ6GSEQ0k4Gnh5D3dzmCWD9TUTx9I_eA"
+        }
+      }
     },
     "web": {
       "output": "static",
@@ -46,6 +51,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f399d9d1-e2a7-4337-894d-7cf7eb990aa7"
+      }
     }
   }
 }

@@ -58,7 +58,6 @@ const TabsLayout = () => {
         name="mapas/index"
         options={{
           //NOTE: ocultado provisionalmente ya que no esta implementada
-          href: null,
           title: "Mapas",
           tabBarIcon: ({ color }) => (
             <Ionicons size={28} name="map" color={color} />
