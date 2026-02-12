@@ -10,6 +10,7 @@
 import EmergenciaOperarioComponent from "@/components/EmergenciaOperarioComponent";
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
+import { useFinalizarEmergencia } from "@/hooks/useFinalizarEmergencia";
 import { useOperario } from "@/hooks/useOperario";
 import { useOperariosEscucha } from "@/hooks/useOperarioEscucha";
 import { Ionicons } from "@expo/vector-icons";
@@ -35,13 +36,23 @@ const OperarioScreen = () => {
    * @returns {emergencia} Objeto con la información de la emergencia actual.
    * @returns {solicitarEmergencia} Función para forzar la búsqueda de una emergencia.
    */
-  const { emergencia, solicitarEmergencia, error } = useOperariosEscucha({
-    id: user?.idUsuario,
-  });
+  const { emergencia, solicitarEmergencia, setEmergencia, error } =
+    useOperariosEscucha({
+      id: user?.idUsuario,
+    });
 
   //NOTE: implementar el estado de deshabilitado a false cuando se cierra
   //la emergencia y poner estado a ocupado
   const [deshabilitado, setDeshabilitado] = useState(false);
+
+  const { finalizarEmergencia } = useFinalizarEmergencia(emergencia?.id);
+
+  const cerrarEmergenciaHandler = () => {
+    setEmergencia(undefined);
+    setDeshabilitado(false);
+    cambioEstado("ocupado");
+    finalizarEmergencia();
+  };
 
   // --- EFECTOS DE INICIALIZACIÓN Y FLUJO ---
 
@@ -65,7 +76,6 @@ const OperarioScreen = () => {
       setDeshabilitado(true);
     }
   }, [emergencia]);
-
 
   // --- MANEJO DE ERRORES ---
   //Creación de un contador para mostrar el error durante un tiempo limitado (7 segundos)
@@ -143,7 +153,6 @@ const OperarioScreen = () => {
       {/* En caso de error se muestra panel de error */}
       {mostrarError && error && (
         <View className="absolute top-28 left-4 right-4 bg-red-600 p-4 rounded-2xl shadow-2xl elevation-30 border-l-4 border-red-800">
-
           <Text className="text-white text-center font-extrabold">
             Error de conexión: {error}
           </Text>
@@ -153,7 +162,10 @@ const OperarioScreen = () => {
       {/* --- SECCIÓN: CUERPO (EMERGENCIA ASIGNADA) --- */}
       {/* Muestra la información de la emergencia si existe alguna activa */}
       <View className="flex-1 justify-center items-center px-4">
-        <EmergenciaOperarioComponent emergencia={emergencia} />
+        <EmergenciaOperarioComponent
+          emergencia={emergencia}
+          onPress={() => cerrarEmergenciaHandler()}
+        />
       </View>
 
       {/* --- SECCIÓN: FOOTER (CONTROL DE ESTADOS) --- */}

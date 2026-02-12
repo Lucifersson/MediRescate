@@ -64,6 +64,7 @@ export const useOperariosEscucha = ({ id }: Props) => {
 
   return {
     solicitarEmergencia, // Disparador para refrescar o forzar la escucha
+    setEmergencia,
     emergencia, // Objeto con la información de la alerta (o undefined)
     loading, // Estado de la conexión
     error, // Fallos en el puerto 7979

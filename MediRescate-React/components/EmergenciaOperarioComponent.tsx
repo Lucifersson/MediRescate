@@ -17,9 +17,10 @@ import { Pressable, Text, View } from "react-native";
  */
 interface Props {
   emergencia?: Emergencia;
+  onPress: () => void;
 }
 
-const EmergenciaOperarioComponent = ({ emergencia }: Props) => {
+const EmergenciaOperarioComponent = ({ emergencia, onPress }: Props) => {
   // --- ESTADO 1: SIN EMERGENCIAS ---
   // Se muestra cuando el operario está en espera o libre.
   if (!emergencia) {
@@ -64,6 +65,7 @@ const EmergenciaOperarioComponent = ({ emergencia }: Props) => {
         {/* TODO: implementar funcion de cerrar emergencia */}
         <Pressable
           className="bg-red-600 w-[85%] h-14 rounded-full items-center justify-center shadow-md shadow-red-900/40 active:bg-red-700"
+          onPress={onPress}
           style={({ pressed }) => [
             { transform: [{ scale: pressed ? 0.96 : 1 }] },
           ]}
