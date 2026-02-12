@@ -71,7 +71,7 @@ public class Client implements Runnable {
 
 
 
-    private Response processRequestCode(Request req, Connection conn) throws SQLException {
+    Response processRequestCode(Request req, Connection conn) throws SQLException {
         
         return switch (req.code) {
             case "100" -> Operations.operation100();

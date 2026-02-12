@@ -26,10 +26,6 @@ public class ConfigLoader {
         return Integer.parseInt(props.getProperty("server.port"));
     }
 
-    public static String getDbUrl() {
-        return props.getProperty("db.url");
-    }
-
     public static String getDbUser() {
         return props.getProperty("db.user");
     }
