@@ -1,7 +1,11 @@
+package util;
+
+import network.ConstantFlow;
+import network.FakeClient;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class Lanzador {
 
@@ -50,7 +54,7 @@ public class Lanzador {
                         "║                                              ║\n" +
 
                         "╠══ " + (!mainServerUp ? disabled : "") + AnsiColors.PURPLE +
-                        "1) Lanzar FakeClient" + reset + AnsiColors.CYAN_BRIGHT + "                       ║\n" +
+                        "1) Lanzar network.FakeClient" + reset + AnsiColors.CYAN_BRIGHT + "                       ║\n" +
 
                         "╠══ " + (!mainServerUp ? disabled : "") + AnsiColors.PURPLE +
                         "2) Lanzar prueba de carga" + reset + AnsiColors.CYAN_BRIGHT + "                  ║\n" +
@@ -115,8 +119,8 @@ public class Lanzador {
     }
 
     private static void openTerminals() {
-        openLogTail("logs/mainserver.log", "MainServer LOG");
-        openLogTail("logs/secserver.log", "SecondaryServer LOG");
+        openLogTail("logs/mainserver.log", "network.MainServer LOG");
+        openLogTail("logs/secserver.log", "network.SecondaryServer LOG");
     }
 
     private static void stopServers() throws InterruptedException {
@@ -140,7 +144,7 @@ public class Lanzador {
        ========================= */
 
     private static void launchMainServer() throws IOException {
-        String command = buildJavaCommand("MainServer");
+        String command = buildJavaCommand("network.MainServer");
 
         mainServerProcess = launchWithLogs(
                 command,
@@ -153,7 +157,7 @@ public class Lanzador {
     }
 
     private static void launchSecServer() throws IOException {
-        String command = buildJavaCommand("SecondaryServer");
+        String command = buildJavaCommand("network.SecondaryServer");
 
         secServerProcess = launchWithLogs(command,"logs/secserver.log","logs/secserver.err");
 

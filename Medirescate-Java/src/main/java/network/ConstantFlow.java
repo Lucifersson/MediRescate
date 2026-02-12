@@ -1,3 +1,7 @@
+package network;
+
+import util.AnsiColors;
+
 public class ConstantFlow implements Runnable{
     private int silent;
     private int totalPayload;

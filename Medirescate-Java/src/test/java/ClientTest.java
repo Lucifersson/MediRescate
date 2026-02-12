@@ -1,4 +1,9 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import models.Request;
+import models.Response;
+import models.ResponseMSG;
+import network.Client;
 import org.junit.jupiter.api.Test;
 import java.net.Socket;
 

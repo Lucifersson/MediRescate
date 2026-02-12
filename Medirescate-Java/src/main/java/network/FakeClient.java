@@ -1,3 +1,9 @@
+package network;
+
+import config.ConfigLoader;
+import util.AnsiColors;
+import util.LogWriter;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -24,12 +30,12 @@ public class FakeClient implements Runnable {
     @Override
     public void run() {
         if (silent<1) { // Cuenta atrás
-            System.out.println(AnsiColors.PURPLE_BRIGHT+"[FakeClient]"+AnsiColors.RESET+" Enviando petición en\n"+AnsiColors.PURPLE_BRIGHT+"[FakeClient]"+AnsiColors.RESET+" 3...");
+            System.out.println(AnsiColors.PURPLE_BRIGHT+"[network.FakeClient]"+AnsiColors.RESET+" Enviando petición en\n"+AnsiColors.PURPLE_BRIGHT+"[network.FakeClient]"+AnsiColors.RESET+" 3...");
             try {
                 Thread.sleep(1000);
-                System.out.println(AnsiColors.PURPLE_BRIGHT+"[FakeClient]"+AnsiColors.RESET+" 2..");
+                System.out.println(AnsiColors.PURPLE_BRIGHT+"[network.FakeClient]"+AnsiColors.RESET+" 2..");
                 Thread.sleep(1000);
-                System.out.println(AnsiColors.PURPLE_BRIGHT+"[FakeClient]"+AnsiColors.RESET+" 1.\n");
+                System.out.println(AnsiColors.PURPLE_BRIGHT+"[network.FakeClient]"+AnsiColors.RESET+" 1.\n");
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 LogWriter.logError(e);
@@ -72,12 +78,12 @@ public class FakeClient implements Runnable {
                         json = "{\"code\":\"9\",\"data\":{\"id_emergencia\":30003}}";
 
                 default ->
-                        LogWriter.logError(new Exception(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + " Codigo de operación no encontrado"));
+                        LogWriter.logError(new Exception(AnsiColors.PURPLE_BRIGHT + "[network.FakeClient]" + AnsiColors.RESET + " Codigo de operación no encontrado"));
             }
 
             if (!json.isEmpty()) {
                 if (silent<2) {
-                    System.out.println(AnsiColors.PURPLE_BRIGHT+"[FakeClient]"+AnsiColors.RESET+" Enviando "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + json);
+                    System.out.println(AnsiColors.PURPLE_BRIGHT+"[network.FakeClient]"+AnsiColors.RESET+" Enviando "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + json);
                 }
                 out.println(json);
 
@@ -93,11 +99,11 @@ public class FakeClient implements Runnable {
                 } else {
                     String response = in.readLine();
                     if (silent<2) {
-                        System.out.println(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + " Respuesta " + AnsiColors.GREEN_BRIGHT + "[<<] " + AnsiColors.RESET + response);
+                        System.out.println(AnsiColors.PURPLE_BRIGHT + "[network.FakeClient]" + AnsiColors.RESET + " Respuesta " + AnsiColors.GREEN_BRIGHT + "[<<] " + AnsiColors.RESET + response);
                     }
                 }
             }
-            System.out.println(AnsiColors.PURPLE_BRIGHT + "[FakeClient]" + AnsiColors.RESET + " Fake client fuera");
+            System.out.println(AnsiColors.PURPLE_BRIGHT + "[network.FakeClient]" + AnsiColors.RESET + " Fake client fuera");
 
 
         } catch (Exception e) {

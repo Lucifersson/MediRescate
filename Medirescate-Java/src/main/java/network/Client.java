@@ -1,5 +1,13 @@
+package network;
 
 import com.google.gson.Gson;
+import models.Request;
+import models.Response;
+import models.ResponseMSG;
+import repository.DBConnectionManager;
+import service.Operations;
+import util.AnsiColors;
+import util.LogWriter;
 
 import java.io.BufferedReader;
 import java.io.*;
@@ -24,12 +32,12 @@ public class Client implements Runnable {
     @Override
     public void run() {
 
-        try (   Connection conn = DBConnectionManager.getInstance().getConnection();
+        try (Connection conn = DBConnectionManager.getInstance().getConnection();
 
-                BufferedReader in = new BufferedReader( //objeto para leer lo que ha llegado
+             BufferedReader in = new BufferedReader( //objeto para leer lo que ha llegado
                         new InputStreamReader(socket.getInputStream())
                 );
-                PrintWriter out = new PrintWriter( //objeto para enviar información
+             PrintWriter out = new PrintWriter( //objeto para enviar información
                         socket.getOutputStream(), true
                 )
         ) {
@@ -37,7 +45,7 @@ public class Client implements Runnable {
             String line;
             while ((line = in.readLine()) != null) {
 
-                System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON recibido "+AnsiColors.GREEN_BRIGHT+"[<<] "+AnsiColors.RESET+line);
+                System.out.println(AnsiColors.BLUE+"[network.Client "+inet+"]"+AnsiColors.RESET+" JSON recibido "+AnsiColors.GREEN_BRIGHT+"[<<] "+AnsiColors.RESET+line);
 
                 // Parseo JSON
                 req = gson.fromJson(line, Request.class);
@@ -47,7 +55,7 @@ public class Client implements Runnable {
 
                     Response resp = processRequestCode(req, conn);
 
-                    System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + gson.toJson(resp));
+                    System.out.println(AnsiColors.BLUE+"[network.Client "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + gson.toJson(resp));
 
                     // Responder
                     out.println(gson.toJson(resp));
@@ -63,7 +71,7 @@ public class Client implements Runnable {
             } catch (IOException ignored) {}
         }
         if (!req.code.matches("-1")) {
-            System.out.println(AnsiColors.BLUE+"[Client "+inet+"]"+AnsiColors.RED+" Conexión cerrada"+AnsiColors.RESET);
+            System.out.println(AnsiColors.BLUE+"[network.Client "+inet+"]"+AnsiColors.RED+" Conexión cerrada"+AnsiColors.RESET);
 
         }
     }
@@ -71,7 +79,7 @@ public class Client implements Runnable {
 
 
 
-    Response processRequestCode(Request req, Connection conn) throws SQLException {
+    public Response processRequestCode(Request req, Connection conn) throws SQLException {
         
         return switch (req.code) {
             case "100" -> Operations.operation100();
@@ -86,8 +94,8 @@ public class Client implements Runnable {
 
 
             default -> {
-                LogWriter.logError(new Exception("[Client] - Codigo de operación no encontrado"));
-                yield new ResponseMSG("error", "[Client] - \"Codigo de operación no encontrado");
+                LogWriter.logError(new Exception("[network.Client] - Codigo de operación no encontrado"));
+                yield new ResponseMSG("error", "[network.Client] - \"Codigo de operación no encontrado");
             }
         };
 

@@ -1,4 +1,4 @@
-/*
+package network;/*
  * V.0.2.1201
  *
  * @author: Marcos Miquel
@@ -8,9 +8,11 @@
  */
 
 import com.google.gson.Gson;
+import config.ConfigLoader;
+import util.AnsiColors;
+import util.LogWriter;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 

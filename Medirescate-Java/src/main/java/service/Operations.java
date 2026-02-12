@@ -1,11 +1,13 @@
-import BdClasses.Usuario;
+package service;
+
+import models.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import util.LogWriter;
 
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.sql.*;
 import java.util.ArrayList;
@@ -74,7 +76,7 @@ public class Operations {
                 String passwordBD = rs.getString("password");
                 if (passwordBD.equals(passwordGotten)) {
 
-                    BdClasses.Usuario user = new Usuario(
+                    Usuario user = new Usuario(
                             rs.getInt("id_usuario"),
                             rs.getString("nombre"),
                             rs.getString("cargo"),

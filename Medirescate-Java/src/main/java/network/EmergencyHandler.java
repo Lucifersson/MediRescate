@@ -1,11 +1,16 @@
+package network;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import models.Request;
+import models.ResponseDATA;
+import service.OperariosManager;
+import util.AnsiColors;
+import util.LogWriter;
 
 import java.io.BufferedReader;
 import java.io.*;
 import java.net.Socket;
-import java.sql.Connection;
 
 
 public class EmergencyHandler implements Runnable {
@@ -33,7 +38,7 @@ public class EmergencyHandler implements Runnable {
             String line = in.readLine();
             Request req = null;
             if (line != null) {
-                System.out.println(AnsiColors.BLUE+"[EmergencyHandler "+inet+"]"+AnsiColors.RESET+"JSON recibido: " + line);
+                System.out.println(AnsiColors.BLUE+"[network.EmergencyHandler "+inet+"]"+AnsiColors.RESET+"JSON recibido: " + line);
                 req = gson.fromJson(line, Request.class);
             }
 
@@ -64,7 +69,7 @@ public class EmergencyHandler implements Runnable {
             ResponseDATA resp = new ResponseDATA(status, data);
 //            out.println(gson.toJson(resp)); MATAR
 
-            System.out.println(AnsiColors.BLUE+"[EmergencyHandler "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + jsonMSG);
+            System.out.println(AnsiColors.BLUE+"[network.EmergencyHandler "+inet+"]"+AnsiColors.RESET+" JSON respuesta "+AnsiColors.RED_BRIGHT+"[>>] "+ AnsiColors.RESET + jsonMSG);
 
             if (req.code.equals("201")) { //llamada de mainserver
                 out.close();

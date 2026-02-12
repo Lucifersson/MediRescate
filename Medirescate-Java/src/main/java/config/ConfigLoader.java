@@ -1,3 +1,7 @@
+package config;
+
+import util.LogWriter;
+
 import java.io.InputStream;
 import java.util.Properties;
 

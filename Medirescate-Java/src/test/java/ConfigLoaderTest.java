@@ -1,4 +1,6 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import config.ConfigLoader;
 import org.junit.jupiter.api.Test;
 
 public class ConfigLoaderTest {

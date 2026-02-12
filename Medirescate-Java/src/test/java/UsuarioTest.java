@@ -1,6 +1,6 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import BdClasses.Usuario;
+import models.Usuario;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;

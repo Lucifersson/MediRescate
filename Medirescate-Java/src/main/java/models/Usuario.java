@@ -1,4 +1,4 @@
-package BdClasses;
+package models;
 
 import java.sql.Timestamp;
 
