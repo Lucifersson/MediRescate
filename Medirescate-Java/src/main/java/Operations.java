@@ -175,7 +175,7 @@ public class Operations {
 
 
         String sql = """
-                SELECT o.id_operario, u.nombre, ua.id_ambulancia, o.estado
+                SELECT o.id_operario, u.nombre, ua.id_ambulancia, o.estado, o.longitud, o.latitud
                 FROM Operario o
                 JOIN Usuario u ON u.id_usuario = o.id_operario
                 LEFT JOIN UsaAmbulancia ua ON ua.id_operario = o.id_operario
@@ -203,6 +203,8 @@ public class Operations {
                 JsonObject operario = new JsonObject();
                 operario.addProperty("id_operario", rs.getString(1));
                 operario.addProperty("nombre", rs.getString(2));
+                operario.addProperty("longitud", rs.getString(5));
+                operario.addProperty("latitud", rs.getString(6));
 
                 if (!filtrar) {
                     operario.addProperty("ambulancia", rs.getInt(3));
