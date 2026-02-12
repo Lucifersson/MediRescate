@@ -39,6 +39,10 @@ const OperarioScreen = () => {
     id: user?.idUsuario,
   });
 
+  //NOTE: implementar el estado de deshabilitado a false cuando se cierra
+  //la emergencia y poner estado a ocupado
+  const [deshabilitado, setDeshabilitado] = useState(false);
+
   // --- EFECTOS DE INICIALIZACIÓN Y FLUJO ---
 
   useEffect(() => {
@@ -58,6 +62,7 @@ const OperarioScreen = () => {
     // Si el hook de escucha detecta una nueva emergencia, cambia automáticamente el estado.
     if (emergencia) {
       cambioEstado("en_marcha");
+      setDeshabilitado(true);
     }
   }, [emergencia]);
 
@@ -160,11 +165,23 @@ const OperarioScreen = () => {
 
         {/* Botón: Ocupado (Rojo) */}
         <Pressable
-          className="bg-red-600 w-full h-24 mb-4 rounded-2xl flex-row items-center justify-center border-r-4 border-b-4 border-red-800 active:opacity-80"
+          className={`w-full h-24 mb-4 rounded-2xl flex-row items-center justify-center border-r-4 border-b-4 
+      ${
+        deshabilitado
+          ? "bg-gray-300 border-gray-400 opacity-60"
+          : "bg-red-600 border-red-800 active:opacity-80"
+      }`}
           onPress={() => cambioEstado("ocupado")}
+          disabled={deshabilitado}
         >
-          <Ionicons name="close-circle" size={28} color="white" />
-          <Text className="text-white font-black text-xl ml-2 uppercase">
+          <Ionicons
+            name="close-circle"
+            size={28}
+            color={deshabilitado ? "#9CA3AF" : "white"}
+          />
+          <Text
+            className={`${deshabilitado ? "text-gray-500" : "text-white"} font-black text-xl ml-2 uppercase`}
+          >
             Ocupado
           </Text>
         </Pressable>
@@ -172,22 +189,46 @@ const OperarioScreen = () => {
         <View className="flex-row justify-between">
           {/* Botón: En camino (Naranja) */}
           <Pressable
-            className="bg-orange-500 w-[48%] h-24 rounded-2xl items-center justify-center border-r-4 border-b-4 border-orange-800 active:opacity-80"
+            className={`w-[48%] h-24 rounded-2xl items-center justify-center border-r-4 border-b-4 
+        ${
+          deshabilitado
+            ? "bg-gray-300 border-gray-400 opacity-60"
+            : "bg-orange-500 border-orange-800 active:opacity-80"
+        }`}
             onPress={() => cambioEstado("en_marcha")}
+            disabled={deshabilitado}
           >
-            <Ionicons name="navigate" size={24} color="white" />
-            <Text className="text-white font-black text-base uppercase mt-1">
+            <Ionicons
+              name="navigate"
+              size={24}
+              color={deshabilitado ? "#9CA3AF" : "white"}
+            />
+            <Text
+              className={`${deshabilitado ? "text-gray-500" : "text-white"} font-black text-base uppercase mt-1`}
+            >
               En camino
             </Text>
           </Pressable>
 
           {/* Botón: Libre (Verde) */}
           <Pressable
-            className="bg-green-600 w-[48%] h-24 rounded-2xl items-center justify-center border-r-4 border-b-4 border-green-800 active:opacity-80"
+            className={`w-[48%] h-24 rounded-2xl items-center justify-center border-r-4 border-b-4 
+        ${
+          deshabilitado
+            ? "bg-gray-300 border-gray-400 opacity-60"
+            : "bg-green-600 border-green-800 active:opacity-80"
+        }`}
             onPress={() => libreHandler()}
+            disabled={deshabilitado}
           >
-            <Ionicons name="checkmark-circle" size={24} color="white" />
-            <Text className="text-white font-black text-base uppercase mt-1">
+            <Ionicons
+              name="checkmark-circle"
+              size={24}
+              color={deshabilitado ? "#9CA3AF" : "white"}
+            />
+            <Text
+              className={`${deshabilitado ? "text-gray-500" : "text-white"} font-black text-base uppercase mt-1`}
+            >
               Libre
             </Text>
           </Pressable>
