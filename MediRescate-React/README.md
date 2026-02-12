@@ -25,6 +25,50 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Maps setup (Expo SDK 54)
+
+Se agregó `expo-maps` para Expo SDK 54 con la versión compatible (`~0.12.10`).
+
+### Instalación recomendada por Expo
+
+```bash
+npx expo install expo-maps
+```
+
+> Si tu entorno restringe acceso a la red/registro npm, usa la versión compatible fijada por Expo SDK 54:
+>
+> ```bash
+> npm install expo-maps@~0.12.10
+> ```
+
+### Configuración mínima (Android / iOS)
+
+Según la documentación oficial de `expo-maps` para SDK 54:
+
+- Usa un **development build** (no funciona en Expo Go).
+- Android requiere usar un emulador/dispositivo con Google Play Services para renderizado completo de mapas.
+- iOS usa Apple Maps por defecto y no requiere clave para el proveedor nativo.
+
+### Claves y permisos
+
+- Si utilizas un proveedor de Google Maps en Android, configura una API key en `app.json`:
+
+  ```json
+  {
+    "expo": {
+      "android": {
+        "config": {
+          "googleMaps": {
+            "apiKey": "TU_GOOGLE_MAPS_API_KEY"
+          }
+        }
+      }
+    }
+  }
+  ```
+
+- Solo agrega permisos de ubicación (`expo-location`) si tu funcionalidad de mapa necesita centrar en ubicación del usuario o tracking en tiempo real.
+
 ## Get a fresh project
 
 When you're ready, run:
