@@ -8,10 +8,12 @@
  */
 
 import LogOutComponent from "@/components/LogOut/LogOutComponent";
+import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperariosDisponibles } from "@/hooks/useOperariosDisponibles";
 import { useRegistrarEmergencia } from "@/hooks/useRegistrarEmergencia";
 import { NombreOperario } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -23,8 +25,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuthContext } from "@/core/context/UseAuthContext";
-import { router } from "expo-router";
 
 const TeleoperadorScreen = () => {
   // --- ESTADO LOCAL ---
@@ -51,6 +51,7 @@ const TeleoperadorScreen = () => {
     registrarEmergencia,
     registroExitoso,
     loading: enviando,
+    error,
   } = useRegistrarEmergencia();
 
   // --- EFECTOS (SIDE EFFECTS) ---
@@ -69,6 +70,27 @@ const TeleoperadorScreen = () => {
       setOperario(null);
     }
   }, [registroExitoso]);
+
+
+// --- MANEJO DE ERRORES ---
+  //Creación de un contador para mostrar el error durante un tiempo limitado (7 segundos)
+
+  const [mostrarError, setMostrarError] = useState(false);
+
+  // Por cada vez que cambie el estado de 'error', se activa el temporizador para mostrar el mensaje de error.
+
+  useEffect(() => {
+    if (error) {
+      setMostrarError(true);
+
+      const timer = setTimeout(() => {
+        setMostrarError(false);
+      }, 7000); // ⏱ 7 segundos (ajusta entre 5000–10000 si quieres)
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+  
 
   // --- MANEJADORES (HANDLERS) ---
 
@@ -106,6 +128,17 @@ const TeleoperadorScreen = () => {
           </Text>
         </View>
       )}
+
+      {/* --- Mostrado de error temporal --- */}
+      {error && mostrarError && (
+        <View className="bg-red-500 mx-4 mt-2 p-3 rounded-xl flex-row items-center justify-center shadow-lg">
+          <Ionicons name="alert-circle" size={20} color="white" />
+          <Text className="text-white font-bold ml-2">
+            Error al registrar la emergencia: {error}
+          </Text>
+        </View>
+      )}
+
 
       <View className="flex-1">
         {/* --- SECCIÓN: HEADER --- */}
@@ -235,11 +268,10 @@ const TeleoperadorScreen = () => {
       {/* --- SECCIÓN: BOTÓN DE ACCIÓN (REGISTRAR) --- */}
       <View className="px-4 pb-6">
         <Pressable
-          className={`rounded-2xl py-4 shadow-lg flex-row justify-center items-center ${
-            operario && titulo && !enviando
+          className={`rounded-2xl py-4 shadow-lg flex-row justify-center items-center ${operario && titulo && !enviando
               ? "bg-red-500 active:opacity-90"
               : "bg-gray-300"
-          }`}
+            }`}
           disabled={!operario || !titulo || enviando}
           onPress={manejarEnvio}
         >

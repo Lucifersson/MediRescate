@@ -9,7 +9,7 @@ import OperarioComponent from "@/components/OperarioComponent";
 import { useAuthContext } from "@/core/context/UseAuthContext";
 import { useOperarios } from "@/hooks/useOperarios";
 import { router } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -23,7 +23,7 @@ const AdminOperariosScreen = () => {
    * @returns {operarios} Lista de objetos con la información de cada operario.
    * @returns {solicitarOperariosTodos} Función para realizar el fetch de todos los operarios a la API.
    */
-  const { operarios, solicitarOperariosTodos } = useOperarios();
+  const { operarios, solicitarOperariosTodos, error } = useOperarios();
 
   // --- SINCRONIZACIÓN Y EFECTOS ---
   useEffect(() => {
@@ -48,6 +48,25 @@ const AdminOperariosScreen = () => {
     // TODO: hacer que sea especifico por pantallas
     return () => clearInterval(intervalo);
   }, []);
+
+  // --- MANEJO DE ERRORES ---
+    //Creación de un contador para mostrar el error durante un tiempo limitado (7 segundos)
+  
+    const [mostrarError, setMostrarError] = useState(false);
+  
+    // Por cada vez que cambie el estado de 'error', se activa el temporizador para mostrar el mensaje de error.
+  
+    useEffect(() => {
+      if (error) {
+        setMostrarError(true);
+  
+        const timer = setTimeout(() => {
+          setMostrarError(false);
+        }, 7000); // ⏱ 7 segundos (ajusta entre 5000–10000 si quieres)
+  
+        return () => clearTimeout(timer);
+      }
+    }, [error]);
 
   /**
    * Manejador de cierre de sesión.
@@ -86,6 +105,16 @@ const AdminOperariosScreen = () => {
         {/* Botón de Logout: Dispara la limpieza de sesión */}
         <LogOutComponent onPress={() => logOutHandler()} />
       </View>
+
+      {/* En caso de error se muestra panel de error */}
+      {mostrarError && error && (
+        <View className="absolute top-28 left-4 right-4 bg-red-600 p-4 rounded-2xl shadow-2xl elevation-30 border-l-4 border-red-800">
+
+          <Text className="text-white text-center font-extrabold">
+            Error de conexión: {error}
+          </Text>
+        </View>
+      )}
 
       {/* --- SECCIÓN: LISTADO DE PERSONAL --- */}
       {/* Renderizado eficiente de la lista de operarios mediante FlatList */}
