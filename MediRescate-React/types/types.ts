@@ -69,6 +69,8 @@ export interface EstadoOperario {
 export interface NombreOperario {
   id_operario: number;
   nombre: string;
+  longitud?: number;
+  latitud?: number;
 }
 
 // --- INTERFACES DE PRUEBA Y LEGACY ---
